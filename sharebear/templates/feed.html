@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<ol class="feed-list">
+{% for message in message_list %}
+	<li class="feed-message">
+		<div id='feed-profile'>
+			<span><a href="/users/{{ message.sender }}"><img src="{{ message.sender.profile.profile_image_url }}" width="30" height="30" /></a></span> 
+			<span id='feed-username'><a href="/users/{{ message.sender }}">{{ message.sender }}</a></span>
+		</div>
+		<div id='feed-body'>
+			{{ message.body|urlize }}
+		</div>
+		<div id='feed-timestamp'>
+			<time>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</time> 
+		</div>
+		<a href="{% url 'feed_reply' message.sender.id %}">Reply</a>
+	</li>
+{% endfor %}
+</ol>
+
+{% endblock %}

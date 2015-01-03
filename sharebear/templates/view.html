@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+    <div class="row subject">
+        <div class="col-md-12">
+        <h2>{{ message.subject }}</h2>
+        </div>
+    </div>
+    <div class="row sender-info">
+        <div class="col-md-8">
+            <a href="/users/{{ message.sender }}"><img src="{{ message.sender.profile.profile_image_url }}" width="50" height="50" /></a>
+            <a href="/users/{{ message.sender }}">{{ message.sender }}</a>
+        </div>
+        <div class="col-md-4">
+            <p><em>Sent at {{ message.sent_at|date:_("DATETIME_FORMAT")}}</em></p>
+        </div>
+    </div>
+    <div class='row message-body'>
+        <div class='col-md-12'>
+            <p>{{ message.body|urlize }}</p>
+            <a href="{% url 'messages_delete' message.id %}">Delete</a>
+        </div>
+    </div>
+
+{% if message.is_liked %}
+<p>Liked!</p>
+{% endif %}
+
+{% if like_form %}
+
+<form action="{% url 'messages_like' message.id %}" method="post">{% csrf_token %}
+<button type="submit" class="btn btn-default">Like or Unlike</button>
+</form>
+
+<p>Liking this message will pass it on to four other people!</p>
+
+{% endif %}
+
+{% if reply_form %}
+
+<h1>Compose Reply</h1>
+<form action="{% url 'messages_reply' message.id %}" method="post">{% csrf_token %}
+{% bootstrap_form reply_form %}
+<button type="submit" class='btn btn-default'>Send</button>
+</form>
+
+<p>Replying to this message will pass it on to ten other people!</p>
+
+{% endif %}
+{% endblock %}

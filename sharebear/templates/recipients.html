@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 style='padding-bottom: 20px'>Your message has been sent to...</h1>
+
+{% for m in meta_message.sub_messages.all %}
+<div class='col-md-3'>
+	<div class='meta-recipient'>
+	<a href="/users/{{ m.recipient}}">
+	<p><img src="{{ m.recipient.profile.profile_image_url }}" width="80" height="80" /></p>
+	<p>{{ m.recipient.first_name }} {{ m.recipient.last_name }}</p></a>
+	</div>
+</div>
+{% endfor %}
+
+{% endblock %}

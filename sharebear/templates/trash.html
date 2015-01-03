@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Deleted Messages</h1>
+{% if message_list %}
+<table class="table table-hover">
+	<thead>
+		<tr><th>Sender</th><th>Subject</th><th>Received</th><th>Action</th></tr>
+	</thead>
+	<tbody>
+	{% for message in message_list %}
+		<tr>
+			<td><a href="/users/{{ message.sender }}"><img src="{{ message.sender.profile.profile_image_url }}" width="30" height="30" /></a> <a href="/users/{{ message.sender }}">{{ message.sender }}</a></td>
+			<td>{{ message.subject }}</td>
+			<td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+			<td><a href="{% url 'messages_undelete' message.id %}">Restore</a></td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<p>No messages.</p>
+{% endif %}
+{% endblock %}

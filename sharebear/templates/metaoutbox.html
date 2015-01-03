@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Shares</h1>
+{% if message_list %}
+<table class="table table-hover">
+	<thead>
+		<tr><th>Recipients</th><th>Subject</th><th>Sent</th></tr>
+	</thead>
+	<tbody>
+	{% for message in message_list %}
+		<tr>
+			<td>
+			{% for sub_message in message.sub_messages.all %}
+				<a href="/users/{{ sub_message.recipient }}"><img src="{{ sub_message.recipient.profile.profile_image_url }}" height="30" width="30" title="{{ sub_message.recipient }}"/></a>
+			{% endfor %}
+			</td>
+			{% with message.sub_messages.all|first as sub_message %}
+			<td><a href="{{ message.get_absolute_url }}">{{ sub_message.subject }}</a></td>
+			<td>{{ sub_message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+			{% endwith %}
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<p>No messages.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block login %}
+
+	<form class ='navbar-form navbar-right' action='/login' method='post'>{% csrf_token %}
+		{% for field in auth_form %}
+		{{ field }}
+		{% endfor %}
+		<input type='submit' id='btnLogin' class='btn btn-large btn-primary' value='Log In'>
+		
+		Or
+		
+			<a href="/accounts/facebook/login/"><img src="/media/fblogo.jpg" height="50" width="50"></a>
+	
+	</form>
+{% endblock %}
+
+{% block flash %}
+
+{% if auth_form.non_field_errors or user_form.non_field_errors %}
+	{{ auth_form.non_field_errors }}
+	{{ user_form.non_field_errors }}
+{% endif %}
+
+{% endblock %}
+
+{% block homepage %}
+<div class='jumbotron'>
+	<div id='intro'>
+		<h1> Sharebear lets you make new friends around the world. </h1>
+	</div>
+	<div id='facebook-login' style='padding-top:20px'>
+		<a href="/accounts/facebook/login/"><img src="/media/facebook.jpg" height='50' width='366'></a>
+	</div>
+</div>
+{% endblock %}

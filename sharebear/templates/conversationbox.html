@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class="table table-hover">
+	<thead>
+		<tr><th>Sender</th><th>Latest Message</th><th>Sent</th></tr>
+	</thead>
+	<tbody>
+	{% for conversation in conversation_list %}
+		<tr>
+			<td><a href="/users/{{ conversation.1 }}"><img src="{{ conversation.1.profile.profile_image_url }}" width="30" height="30" /></a> 
+				<a href="/users/{{ conversation.1 }}">{{ conversation.1 }}</a> 
+			</td>
+			{% if conversation.2 == request.user %}
+			<td><a href="/conversation/{{ conversation.4 }}">Me: {{ conversation.0 }}</a></td>
+			{% else %}
+			<td><a href="/conversation/{{ conversation.4 }}">{{ conversation.2 }}: {{ conversation.0 }}</a></td>
+			{% endif %}
+			<td>{{ conversation.3 }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table> 
+
+{% endblock %}

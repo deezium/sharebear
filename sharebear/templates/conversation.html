@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+
+<ol class="conversation">
+
+{% for m in messages %}
+
+	{% if m.sender == request.user %}
+	<li class="self">
+		<div class="message">
+			<p>{{ m.body|urlize }}</p>
+			<time datetime="2014-12-21T12:00">{{ m.sender }} - {{ m.sent_at|date:_("DATETIME_FORMAT") }}</time>
+		</div>
+		<div class="avatar">
+			<img src="{{ m.sender.profile.profile_image_url }}" width="40" height="40"/>
+		</div>
+	</li>
+	{% endif %}
+
+	{% if m.sender != request.user %}
+	<li class="other">
+		<div class="avatar">
+			<img src="{{ m.sender.profile.profile_image_url }}" width="40" height="40"/>
+		</div>
+		<div class="message">
+			<p>{{ m.body|urlize }}</p>
+			<time datetime="2014-12-21T12:00">{{ m.sender }} - {{ m.sent_at|date:_("DATETIME_FORMAT") }}</time>
+		</div>
+	</li>
+	{% endif %}
+
+{% endfor %}
+
+</ol>
+
+<form action="{% url 'conversations_reply' conversation.id %}" method="post">{% csrf_token %}
+{% bootstrap_form reply_form %}
+<button type="submit" class='btn btn-default'>Send</button>
+</form>
+
+
+{% endblock %}

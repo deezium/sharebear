@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    {% with meta_message.sub_messages.all|first as message %}
+    <div class="row subject">
+        <div class='col-md-12'>
+            <h2>{{ message.subject }}</h2>
+        </div>
+    </div>
+    <div class="row sender-info">
+        <div class="col-md-8">
+        <img src="{{ message.sender.profile.profile_image_url }}" width="50" height="50" />
+            {{ message.sender }}
+        </div>
+        <div class="col-md-4">
+            <p><em>Sent at {{ message.sent_at|date:_("DATETIME_FORMAT")}}</em></p>
+        </div>
+    </div>
+
+    <div class='row message-body'>
+        <div class='col-md-12'>
+            <p>{{ message.body|urlize }}</p>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-12' style='padding-bottom: 20px'>
+            <h4>Seen By</h4>
+        </div>
+    </div>
+    <div class='row'>
+        {% for message in meta_message.sub_messages.all %}
+        <div class='col-md-3'>
+            <div class='meta-recipient'>
+            <a href='/users/{{ message.recipient.username }}'>
+            <p><img src="{{ message.recipient.profile.profile_image_url }}" width="80" height="80" /></p>
+            <p>{{ message.recipient.first_name }} {{ message.recipient.last_name }}</p>
+            </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class='row'>
+        <div class='col-md-12' style='padding-bottom: 20px'>
+            <h4>Liked by</h4>
+        </div>
+    </div>
+    <div class='row'>
+        {% for message in meta_message.sub_messages.all %}
+        {% if message.is_liked %}
+        <div class='col-md-3'>
+            <div class='meta-recipient'>
+            <a href='/users/{{ message.recipient.username }}'>
+            <p><img src="{{ message.recipient.profile.profile_image_url }}" width="80" height="80" /></p>
+            <p>{{ message.recipient.first_name }} {{ message.recipient.last_name }}</p>
+            </a>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+
+    {% endwith %}
+{% endblock %}

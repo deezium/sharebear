@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Inbox</h1>
+{% if message_list %}
+<table class="table table-hover">
+	<thead>
+		<tr><th>Sender</th><th>Subject</th><th>Received</th></tr>
+	</thead>
+	<tbody>
+	{% for message in message_list %}
+		{% if message.new %}
+		<tr class="info">
+		{% else %}
+		<tr>
+		{% endif %}
+			<td><a href="/users/{{ message.sender }}"><img src="{{ message.sender.profile.profile_image_url }}" width="30" height="30" /></a> 
+				<a href="/users/{{ message.sender }}">{{ message.sender }}</a> 
+			</td>
+			<td>
+				{% if message.new %}<strong>{% endif %}
+				<a href="{{ message.get_absolute_url }}">
+					<div style="height:100%;width100%">
+					{{ message.subject }}
+					</div>
+				</a>
+				{% if message.new %}</strong>{% endif %}
+			</td>
+							
+			<td>
+				{{ message.sent_at|date:_("DATETIME_FORMAT") }}
+			</td>
+			
+		</tr>
+	
+	{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<p>No messages.</p>
+{% endif %}
+{% endblock %}
