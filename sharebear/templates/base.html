@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 {% load bootstrap3 %}
+{% load staticfiles %}
 
 
 <html>
@@ -12,7 +13,7 @@
 		{% bootstrap_css %}
 		{% bootstrap_javascript %}
 
-		<link rel='stylesheet' href="/media/custom.css" />
+		<link rel='stylesheet' href="{{ MEDIA_URL }}custom.css" />
 
 		<meta name="viewport" content="width=device-width, inital-scale=1">
 	</head>
