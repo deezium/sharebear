@@ -41,92 +41,64 @@ class UserProfile(models.Model):
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
-class MetaMessageManager(models.Manager):
 
-	# def metaoutbox_for(self, user):
-	# 	s = self.model
-	# 	return self.filter(s=user, )
+# class MetaMessage(models.Model):
 
-	pass
+# 	objects = MetaMessageManager()
 
-class MetaMessage(models.Model):
-	#meta_sub = models.CharField("Meta Subject", max_length=140)
+# 	def __unicode__(self):
+# 		return str(self.id)
 
-	objects = MetaMessageManager()
-
-	def __unicode__(self):
-		return str(self.id)
-
-	def get_absolute_url(self):
-		return reverse('meta_messages_detail', args=[str(self.id)])
-
-class Conversation(models.Model):
-
-	def __unicode__(self):
-		return str(self.id)
+# 	def get_absolute_url(self):
+# 		return reverse('meta_messages_detail', args=[str(self.id)])
 
 
-class MessageManager(models.Manager):
+# class MessageManager(models.Manager):
 
-	def inbox_for(self, user):
-		return self.filter(recipient=user, recipient_deleted_at__isnull=True, )
+# 	def inbox_for(self, user):
+# 		return self.filter(recipient=user, recipient_deleted_at__isnull=True, )
 
-	def outbox_for(self, user):
-		return self.filter(sender=user, sender_deleted_at__isnull=True, )
+# 	def outbox_for(self, user):
+# 		return self.filter(sender=user, sender_deleted_at__isnull=True, )
 
-	def convo_outbox_for(self, user):
-		return self.filter(sender=user, sender_deleted_at__isnull=True, parent_msg__isnull=False, )
+# 	def convo_outbox_for(self, user):
+# 		return self.filter(sender=user, sender_deleted_at__isnull=True, parent_msg__isnull=False, )
 
-	def trash_for(self, user):
-		return self.filter(recipient=user, recipient_deleted_at__isnull=False, ) | self.filter(sender=user, sender_deleted_at__isnull=False, )
+# 	def trash_for(self, user):
+# 		return self.filter(recipient=user, recipient_deleted_at__isnull=False, ) | self.filter(sender=user, sender_deleted_at__isnull=False, )
 
-	def feed_for(self, user):
-		return self.filter(recipient=user)
+# 	def feed_for(self, user):
+# 		return self.filter(recipient=user)
 
 
 class Message(models.Model):
-	subject = models.CharField("Subject", max_length=140)
 	body = models.TextField("Body")
-	sender = models.ForeignKey(AUTH_USER_MODEL, related_name='sent_messages', verbose_name="Sender")
-	recipient = models.ForeignKey(AUTH_USER_MODEL, related_name='received_messages', verbose_name="Recipients")
-	parent_msg = models.ForeignKey('self', related_name='next_messages', null=True, blank=True, verbose_name="Parent Message")
-	meta_msg = models.ForeignKey(MetaMessage, related_name='sub_messages', blank=True, null=True)
-	conversation = models.ForeignKey(Conversation, related_name='convo_messages', verbose_name="Conversation", blank=True, null=True)
-	sent_at = models.DateTimeField("Sent at", null=True, blank=True)
-	read_at = models.DateTimeField("Read at", null=True, blank=True)
-	replied_at = models.DateTimeField("Replied at", null=True, blank=True)
-	sender_deleted_at = models.DateTimeField("Sender deleted at", null=True, blank=True)
-	recipient_deleted_at = models.DateTimeField("Recipient deleted at", null=True, blank=True)
-	is_liked = models.BooleanField("Liked", default=False)
+	creator = models.ForeignKey(AUTH_USER_MODEL, related_name='sent_messages', verbose_name="Sender")
+	creation_time = models.DateTimeField("Sent at", null=True, blank=True)
 
-	objects = MessageManager()
+	# objects = MessageManager()
 
 	def __unicode__(self):
-		return self.subject
-
-	def new(self):
-		if self.read_at is not None:
-			return False
-		return True
-
-	def replied(self):
-		if self.replied_at is not None:
-			return False
-		return True
+		return self.body
 
 	def get_absolute_url(self):
 		return reverse('messages_detail', args=[str(self.id)])
 
 	def save(self, **kwargs):
 		if not self.id:
-			self.sent_at = timezone.now()
+			self.creation_time = timezone.now()
 		super(Message, self).save(**kwargs)
 
 	class Meta:
-		ordering = ['-sent_at']
+		ordering = ['-creation_time']
 		verbose_name = "Message"
 		verbose_name_plural = "Messages"
 
-def inbox_count_for(user):
-	return Message.objects.filter(recipient=user, read_at__isnull=True, recipient_deleted_at__isnull=True)
+class FeedStory(models.Model):
+	user = models.ForeignKey(AUTH_USER_MODEL, related_name='feed_stories', verbose_name="Recipient")
+	msg = models.ForeignKey(Message, related_name='feed_messages')
+	is_liked = models.BooleanField("Liked", default=False)
+	ever_liked = models.BooleanField("Ever Liked", default=False)
 
+	def __unicode__(self):
+		return str(self.id)
