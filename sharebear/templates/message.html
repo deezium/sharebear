@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+    <div class="row sender-info">
+        <div class="col-md-8">
+            <a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="50" height="50" /></a>
+            <a href="/users/{{ message.creator }}">{{ message.creator }}</a>
+        </div>
+        <div class="col-md-4">
+            <p><em>Posted at {{ message.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
+        </div>
+    </div>
+    <div class='row message-body'>
+        <div class='col-md-12'>
+            <p>{{ message.body|urlize }}</p>
+        </div>
+    </div>
+
+    {% if user == message.creator %}
+
+    <div class='row message-stats'>
+        <div class='col-md-6'>
+            <p>People reached: {{ view_count }}</p>
+        </div>
+        <div class='col-md-6'>
+            <p>Props: {{ prop_count }}</p>
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+{% endblock %}

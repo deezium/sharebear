@@ -32,7 +32,7 @@ def login_view(request):
 		form = AuthenticateForm(data=request.POST)
 		if form.is_valid():
 			login(request, form.get_user())
-			return redirect('/inbox/')
+			return redirect('/feed/')
 		else:
 			return index(request, auth_form=form)
 	return redirect('/')
@@ -92,11 +92,11 @@ def users(request, username="", edit_form=None):
 		try:
 			profile_user = User.objects.get(username=username)
 			userprofile = UserProfile.objects.get_or_create(user=profile_user)
-			print profile_user
 		except User.DoesNotExist:
 			raise Http404
 		if profile_user == request.user:
 			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
+		print profile_user.feed_stories.all()
 		# if username == request.user.username:
 		# 	return redirect('/')
 		# 	return render(request, 'profile.html', {'user': user, 'visits': visits, 'visit_form': visit_form, })
@@ -310,6 +310,15 @@ def undelete(request, message_id, success_url=None):
 		messages.info(request, u"Message successfully recovered.")
 		return HttpResponseRedirect(success_url)
 	raise Http404
+
+@login_required
+def messageview(request, message_id):
+	user = request.user
+	message = get_object_or_404(Message, id=message_id)
+	view_count = message.feed_messages.count()
+	prop_count = message.feed_messages.filter(ever_liked=1).count()
+	
+	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, })
 
 @login_required
 def view(request, message_id, form_class=ComposeForm, like_form=None, subject_template=u"Re: %(subject)s"):

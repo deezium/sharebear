@@ -20,29 +20,47 @@
 		</div>
 
 		<div class='row'>
-			<h2>Liked messages</h2>
+			<h2>Shares</h2>
 		</div>
 
-		{% for message in profile_user.received_messages.all %}
-		{% if message.is_liked %}
+		{% for message in profile_user.sent_messages.all %}
 		
-		<div class="row subject">
-	        <div class="col-md-12">
-	        <h2>{{ message.subject }}</h2>
-	        </div>
-	    </div>
-	    <div class="row sender-info">
+		<div class="row sender-info">
 	        <div class="col-md-8">
-	            <a href="/users/{{ message.sender }}"><img src="{{ message.sender.profile.profile_image_url }}" width="50" height="50" /></a>
-	            <a href="/users/{{ message.sender }}">{{ message.sender }}</a>
+	            <a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="50" height="50" /></a>
+	            <a href="/users/{{ message.creator }}">{{ message.creator }}</a>
 	        </div>
 	        <div class="col-md-4">
-	            <p><em>Sent at {{ message.sent_at|date:_("DATETIME_FORMAT")}}</em></p>
+	            <p><em>Sent at {{ message.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
 	        </div>
 	    </div>
 	    <div class='row message-body'>
 	        <div class='col-md-12'>
 	            <p>{{ message.body|urlize }}</p>
+	        </div>
+	    </div>
+
+	    {% endfor %}
+
+		<div class='row'>
+			<h2>Liked messages</h2>
+		</div>
+
+		{% for story in profile_user.feed_stories.all %}
+		{% if story.is_liked %}
+		
+	    <div class="row sender-info">
+	        <div class="col-md-8">
+	            <a href="/users/{{ story.msg.creator }}"><img src="{{ story.msg.creator.profile.profile_image_url }}" width="50" height="50" /></a>
+	            <a href="/users/{{ story.msg.creator }}">{{ story.msg.creator }}</a>
+	        </div>
+	        <div class="col-md-4">
+	            <p><em>Sent at {{ story.msg.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
+	        </div>
+	    </div>
+	    <div class='row message-body'>
+	        <div class='col-md-12'>
+	            <p>{{ story.msg.body|urlize }}</p>
 	        </div>
 	    </div>
 	    {% endif %}
