@@ -41,10 +41,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'sharebear_app',
     'bootstrap3',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
+    'social.apps.django_app.default',
+    #'allauth',
+    #'allauth.account',
+    #'allauth.socialaccount',
+    #'allauth.socialaccount.providers.facebook',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,7 +82,9 @@ SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.twitter.TwitterOAuth',
     )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -91,6 +94,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'allauth.socialaccount.context_processors.socialaccount',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
     )
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -103,6 +108,13 @@ SOCIALACCOUNT_PROVIDERS = {
         'METHOD': 'js_sdk'
     }
 }
+
+SOCIAL_AUTH_FACEBOOK_KEY = '357482904425644'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'd72b3941e320be583285bb00a28aa226'
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'en_US'}
+
+SOCIAL_AUTH_TWITTER_KEY = 'nTMzosdNnUWk5H0PrA03JRLfX'
+SOCIAL_AUTH_TWITTER_SECRET = 'z0gNBwJ3NddeKfF06L8zDXgfrfMgqSwBhIk1jdVUVv7aPJWWvr'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
