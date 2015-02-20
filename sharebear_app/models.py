@@ -15,6 +15,9 @@ class UserProfile(models.Model):
 	pic = models.FileField(upload_to='avatars', default='avatars/finger.jpg')
 	aboutme = models.TextField(null=True, blank=True)
 	location = models.TextField(null=True, blank=True)
+	promoter_score = models.IntegerField(default=0)
+	promoter_score_last_updated = models.DateTimeField(null=True, blank=True)
+	promoter_score_update_level = models.IntegerField(default=0)
 
 	def __unicode__(self):
 		return self.user.username

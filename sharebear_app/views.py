@@ -238,21 +238,40 @@ def compose(request, form_class=ComposeForm, success_url=None):
 
 @login_required
 def like(request, feed_story_id):
+	user = request.user
+	profile = UserProfile.objects.get(user=user)
 	try:
 		feed_story=get_object_or_404(FeedStory, id=feed_story_id)
 	except:
 		pass
 	if request.method == "POST":
+		
 		feed_story.is_liked = not feed_story.is_liked
 		if feed_story.ever_liked == False:
 			feed_story.ever_liked = True
 			feed_story.save()
 
-			print feed_story
+			# Updating promoter score
+
+			if profile.promoter_score_last_updated is None:
+				profile.promoter_score_last_updated = timezone.now()
+				profile.save()
+
+			dt = timezone.now() - profile.promoter_score_last_updated
+			hours_since_update = dt.seconds / 60 / 60
+			
+			profile.promoter_score_update_level = profile.promoter_score_update_level - hours_since_update
+
+			if profile.promoter_score_update_level < 4:
+				profile.promoter_score_last_updated = timezone.now()
+				profile.promoter_score += 5
+				profile.promoter_score_update_level += 1
+
+				profile.save()
+
+			# Creating more feed stories
 
 			m = Message.objects.get(id=feed_story.msg.id)
-
-			print m
 
 			recipient_list = [User.objects.order_by('?')[i] for i in range(4)]
 
@@ -264,8 +283,10 @@ def like(request, feed_story_id):
 					)
 				new_feed_story.save()
 				print new_feed_story
+			
 		else:
 			feed_story.save()
+		
 	return redirect('/')
 
 @login_required

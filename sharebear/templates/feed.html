@@ -14,6 +14,7 @@
 		<div id='feed-timestamp'>
 			<time>{{ story.msg.creation_time|date:_("DATETIME_FORMAT") }}</time> 
 		</div>
+		{{ story }}
 
 		{% if story.is_liked %}
 		<p>Liked!</p>
