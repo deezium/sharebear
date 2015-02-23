@@ -3,6 +3,12 @@
 
 {% block content %}
 
+    <script>
+    function deleteConfirmation() {
+        confirm("Are you sure you want to delete this message?");
+    }
+    </script>
+
     <div class="row sender-info">
         <div class="col-md-8">
             <a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="50" height="50" /></a>
@@ -27,8 +33,16 @@
         <div class='col-md-6'>
             <p>Props: {{ prop_count }}</p>
         </div>
-
     </div>
+
+    <div class='row'>
+        <div class='col-md-12'>
+            <form action="{% url 'messages_delete' message.id %}" method="post">{% csrf_token %}
+                <button type="submit" onclick="deleteConfirmation()" class="btn btn-default">Delete</button>
+            </form>
+        </div>
+    </div>
+
 
     {% endif %}
 

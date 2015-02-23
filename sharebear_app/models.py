@@ -18,6 +18,7 @@ class UserProfile(models.Model):
 	promoter_score = models.IntegerField(default=0)
 	promoter_score_last_updated = models.DateTimeField(null=True, blank=True)
 	promoter_score_update_level = models.IntegerField(default=0)
+	relationships = models.ManyToManyField('self', through='Relationship', symmetrical=False, related_name='related_to')
 
 	def __unicode__(self):
 		return self.user.username
@@ -105,3 +106,15 @@ class FeedStory(models.Model):
 
 	def __unicode__(self):
 		return str(self.id)
+
+RELATIONSHIP_FOLLOWING = 1
+RELATIONSHIP_BLOCKED = 2
+RELATIONSHIP_STATUSES = (
+	(RELATIONSHIP_FOLLOWING, 'Following'),
+	(RELATIONSHIP_BLOCKED, 'Blocked')
+)
+
+class Relationship(models.Model):
+	from_person = models.ForeignKey(UserProfile, related_name='from_people')
+	to_person = models.ForeignKey(UserProfile, related_name='to_people')
+	status = models.IntegerField(choices=RELATIONSHIP_STATUSES)

@@ -24,22 +24,30 @@
 		</div>
 
 		{% for message in profile_user.sent_messages.all %}
-		
-		<div class="row sender-info">
-	        <div class="col-md-8">
-	            <a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="50" height="50" /></a>
-	            <a href="/users/{{ message.creator }}">{{ message.creator }}</a>
-	        </div>
-	        <div class="col-md-4">
-	            <p><em>Sent at {{ message.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
-	        </div>
-	    </div>
-	    <div class='row message-body'>
-	        <div class='col-md-12'>
-	            <p>{{ message.body|urlize }}</p>
-	        </div>
-	    </div>
+			<div class="row sender-info">
+		        <div class="col-md-8">
+		            <a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="50" height="50" /></a>
+		            <a href="/users/{{ message.creator }}">{{ message.creator }}</a>
+		        </div>
+		        <div class="col-md-4">
+		            <p><em>Sent at {{ message.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
+		        </div>
+		    </div>
 
+		    <div class='row'>
+		    	<div class='col-md-12'>
+		    		<a href="/message/{{ message.id }}">View</a>
+		    	</div>
+		    </div>
+
+		    <div class='row message-body'>
+		        <div class='col-md-12'>
+		            <p>{{ message.body|urlize }}</p>
+		        </div>
+		    </div>
+
+
+		
 	    {% endfor %}
 
 		<div class='row'>
@@ -58,6 +66,13 @@
 	            <p><em>Sent at {{ story.msg.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
 	        </div>
 	    </div>
+
+        <div class='row'>
+	    	<div class='col-md-12'>
+	    		<a href="/message/{{ story.msg.id }}">View</a>
+	    	</div>
+	    </div>
+
 	    <div class='row message-body'>
 	        <div class='col-md-12'>
 	            <p>{{ story.msg.body|urlize }}</p>

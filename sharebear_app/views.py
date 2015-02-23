@@ -290,26 +290,35 @@ def like(request, feed_story_id):
 	return redirect('/')
 
 @login_required
-def delete(request, message_id, success_url=None):
+def delete(request, message_id):
 	user = request.user
-	now = timezone.now()
 	message = get_object_or_404(Message, id=message_id)
-	deleted = False
-	if success_url is None:
-		success_url = reverse('messages_inbox')
-	if 'next' in request.GET:
-		success_url = request.GET['next']
-	if message.sender == user:
-		message.sender_deleted_at = now
-		deleted = True
-	if message.recipient == user:
-		message.recipient_deleted_at = now
-		deleted = True
-	if deleted:
-		message.save()
-		messages.info(request, u"Message successfully deleted.")
-		return HttpResponseRedirect(success_url)
-	raise Http404
+	if request.method == "POST":
+		message.delete()
+	return redirect('/')
+
+
+# @login_required
+# def delete(request, message_id, success_url=None):
+# 	user = request.user
+# 	now = timezone.now()
+# 	message = get_object_or_404(Message, id=message_id)
+# 	deleted = False
+# 	if success_url is None:
+# 		success_url = reverse('messages_inbox')
+# 	if 'next' in request.GET:
+# 		success_url = request.GET['next']
+# 	if message.sender == user:
+# 		message.sender_deleted_at = now
+# 		deleted = True
+# 	if message.recipient == user:
+# 		message.recipient_deleted_at = now
+# 		deleted = True
+# 	if deleted:
+# 		message.save()
+# 		messages.info(request, u"Message successfully deleted.")
+# 		return HttpResponseRedirect(success_url)
+# 	raise Http404
 
 @login_required
 def undelete(request, message_id, success_url=None):

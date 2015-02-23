@@ -231,6 +231,20 @@ body {
 	color: black;
 }
 
+.profile-message {
+	position: relative;
+}
+
+.profile-message a {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	text-decoration: none;
+	z-index: 10;
+}
+
 /*
 .navbar {
 	background-color: #2E608C;
