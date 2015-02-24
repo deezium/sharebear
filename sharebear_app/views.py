@@ -11,7 +11,7 @@ from django.conf import settings
 from datetime import datetime
 from collections import OrderedDict
 from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, FeedStoryLikeForm
-from sharebear_app.models import UserProfile, Message, FeedStory
+from sharebear_app.models import UserProfile, Message, FeedStory, Relationship
 from sharebear_app.utils import get_user_model, get_username_field
 from urllib2 import urlopen
 import json
@@ -88,6 +88,7 @@ def get_latest(user):
 
 def users(request, username="", edit_form=None):
 	user = request.user
+	following=False
 	if username:
 		try:
 			profile_user = User.objects.get(username=username)
@@ -96,11 +97,10 @@ def users(request, username="", edit_form=None):
 			raise Http404
 		if profile_user == request.user:
 			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
-		print profile_user.feed_stories.all()
-		# if username == request.user.username:
-		# 	return redirect('/')
-		# 	return render(request, 'profile.html', {'user': user, 'visits': visits, 'visit_form': visit_form, })
-		return render(request, 'profile.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, })
+		print user.profile.get_following()
+		if user.profile.is_following(userprofile[0]):
+			following=True
+		return render(request, 'profile.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'following': following, })
 	users = User.objects.all()
 	return redirect('/')
 	#return render(request, 'users.html', {'users': users, 'username': request.user.username, })
@@ -378,6 +378,20 @@ def recipients(request, message_id):
 	user = request.user
 	message = get_object_or_404(Message, id=message_id)
 	return render(request, 'recipients.html', {'user': user, 'message': message, })
+
+@login_required
+def follow(request, user_id):
+	user = request.user
+	followed_user = get_object_or_404(UserProfile, id=user_id)
+	if user.profile.is_following(followed_user):
+		user.profile.remove_relationship(to_person=followed_user, status=1)
+	else:
+		print Relationship.objects.filter(from_person=user.profile,status=1).count()
+		if Relationship.objects.filter(from_person=user.profile,status=1).count() >= 2:
+			print "You can only follow 2 artists at a time!"
+		else:
+			user.profile.add_relationship(to_person=followed_user, status=1)
+	return redirect('/')
 
 # @login_required
 # def metaoutbox(request):

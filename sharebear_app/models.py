@@ -7,8 +7,16 @@ from django.utils import timezone
 #from django.utils.encoding import python_2_unicode_compatible
 from allauth.socialaccount.models import SocialAccount
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+
+RELATIONSHIP_FOLLOWING = 1
+RELATIONSHIP_BLOCKED = 2
+RELATIONSHIP_STATUSES = (
+	(RELATIONSHIP_FOLLOWING, 'Following'),
+	(RELATIONSHIP_BLOCKED, 'Blocked')
+)
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User)
@@ -42,6 +50,39 @@ class UserProfile(models.Model):
 
 		return "No location specified"
 
+	def add_relationship(self, to_person, status):
+		relationship, created = Relationship.objects.get_or_create(
+			from_person=self,
+			to_person=to_person,
+			status=status)
+		return relationship
+
+	def remove_relationship(self, to_person, status):
+		Relationship.objects.filter(
+			from_person=self,
+			to_person=to_person,
+			status=status).delete()
+		return
+
+	def is_following(self, user):
+		if self.relationships.filter(
+			to_people__status=RELATIONSHIP_FOLLOWING,
+			to_people__to_person=user):
+			return True
+		return False
+
+	def get_relationships(self, status):
+		return self.relationships.filter(
+			to_people__status=status,
+			to_people__from_person=self)
+
+	def get_following(self):
+		return self.get_relationships(RELATIONSHIP_FOLLOWING)
+
+	# Not working for some reason
+
+	def get_followers(self):
+		return self.get_related_to(RELATIONSHIP_FOLLOWING)
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
@@ -107,14 +148,8 @@ class FeedStory(models.Model):
 	def __unicode__(self):
 		return str(self.id)
 
-RELATIONSHIP_FOLLOWING = 1
-RELATIONSHIP_BLOCKED = 2
-RELATIONSHIP_STATUSES = (
-	(RELATIONSHIP_FOLLOWING, 'Following'),
-	(RELATIONSHIP_BLOCKED, 'Blocked')
-)
-
 class Relationship(models.Model):
 	from_person = models.ForeignKey(UserProfile, related_name='from_people')
 	to_person = models.ForeignKey(UserProfile, related_name='to_people')
 	status = models.IntegerField(choices=RELATIONSHIP_STATUSES)
+

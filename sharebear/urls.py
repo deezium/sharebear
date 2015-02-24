@@ -44,6 +44,7 @@ urlpatterns = patterns('',
     #url(r'^random/$', 'sharebear_app.views.random', name='messages_random'),
     #url(r'^randomreply/(?P<meta_message_id>[\d]+)/$', 'sharebear_app.views.randomreply', name='messages_randomreply'),
     url(r'^like/(?P<feed_story_id>[\d]+)/$', 'sharebear_app.views.like', name='story_like'),
+    url(r'^follow/(?P<user_id>[\d]+)$', 'sharebear_app.views.follow', name='user_follow'),
     url('',include('social.apps.django_app.urls', namespace='social')),
     url('', include('django.contrib.auth.urls', namespace='auth')),
    ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
