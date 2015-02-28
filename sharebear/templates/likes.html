@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load humanize %}
+
+{% block content %}
+
+<div class='row'>
+	<div id = 'top-container' class='col-md-8 col-md-offset-2'>
+		<div class='row'>
+				<div id='profile-pic' style='padding-top: 20px'>
+				<img src="{{ profile_user.profile.profile_image_url }}" height="100" width="100"/>
+				</div>
+				<h2> {{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+		</div>
+		<div class='row'>
+			<p>{{ profile_user.profile.location }}</p>
+		</div>
+		<div class='row'>
+			<p>{{ profile_user.profile.aboutme }}</p>
+		</div>
+
+		<div class='row'>
+			<h2>Liked messages</h2>
+		</div>
+
+		{% for message in profile_user.user_likes.all %}
+		{% if message.is_liked %}
+		
+	    <div class="row sender-info">
+	        <div class="col-md-8">
+	            <a href="/users/{{ message.msg.creator }}"><img src="{{ message.msg.creator.profile.profile_image_url }}" width="50" height="50" /></a>
+	            <a href="/users/{{ message.msg.creator }}">{{ message.msg.creator }}</a>
+	        </div>
+	        <div class="col-md-4">
+	            <p><em>Sent at {{ message.msg.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
+	        </div>
+	    </div>
+
+        <div class='row'>
+	    	<div class='col-md-12'>
+	    		<a href="/message/{{ message.msg.id }}">View</a>
+	    	</div>
+	    </div>
+
+	    <div class='row message-body'>
+	        <div class='col-md-12'>
+	            <p>{{ message.msg.body|urlize }}</p>
+	        </div>
+	    </div>
+	    {% endif %}
+	    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
