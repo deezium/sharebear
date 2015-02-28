@@ -134,14 +134,20 @@ class Message(models.Model):
 			self.creation_time = timezone.now()
 		super(Message, self).save(**kwargs)
 
+	def is_liked_by_user(self, user):
+		like = self.message_likes.filter(user=user)
+		for i in like:
+			return i.is_liked
+		return False
+
 	class Meta:
 		ordering = ['-creation_time']
 		verbose_name = "Message"
 		verbose_name_plural = "Messages"
 
-class FeedStory(models.Model):
-	user = models.ForeignKey(AUTH_USER_MODEL, related_name='feed_stories', verbose_name="Recipient")
-	msg = models.ForeignKey(Message, related_name='feed_messages')
+class MessageLike(models.Model):
+	user = models.ForeignKey(AUTH_USER_MODEL, related_name='user_likes', verbose_name="Liking user")
+	msg = models.ForeignKey(Message, related_name='message_likes')
 	is_liked = models.BooleanField("Liked", default=False)
 	ever_liked = models.BooleanField("Ever Liked", default=False)
 
@@ -153,3 +159,9 @@ class Relationship(models.Model):
 	to_person = models.ForeignKey(UserProfile, related_name='to_people')
 	status = models.IntegerField(choices=RELATIONSHIP_STATUSES)
 
+class SpreadMessage(models.Model):
+	user = models.ForeignKey(AUTH_USER_MODEL, related_name='user_spreadmessages')
+	msg = models.ForeignKey(Message, related_name='message_spreadmessages')
+
+	def __unicode__(self):
+		return str(self.id)

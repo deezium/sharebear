@@ -2,7 +2,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django import forms
-from sharebear_app.models import UserProfile, FeedStory
+from sharebear_app.models import UserProfile, SpreadMessage, MessageLike
 from django.conf import settings
 from django.utils import timezone
 from sharebear_app.models import Message
@@ -41,12 +41,12 @@ class ComposeForm(forms.ModelForm):
 		fields = ['body']
 		model = Message
 
-class FeedStoryLikeForm(forms.ModelForm):
+class MessageLikeForm(forms.ModelForm):
 	is_liked = forms.BooleanField(widget=forms.widgets.CheckboxInput())
 
 	class Meta:
 		fields=['is_liked']
-		model = FeedStory
+		model = MessageLike
 
 	# def save(self, sender, recipients, meta_msg, conversation, parent_msg=None):
 	# 	#recipients = self.cleaned_data['recipient']

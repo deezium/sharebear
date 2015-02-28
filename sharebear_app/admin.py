@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from sharebear_app.models import UserProfile, Message, FeedStory
+from sharebear_app.models import UserProfile, Message, MessageLike, SpreadMessage
 
 
 from sharebear_app.utils import get_user_model
@@ -113,4 +113,5 @@ else:
             
 admin.site.register(Message)
 admin.site.register(UserProfile)
-admin.site.register(FeedStory)
+admin.site.register(MessageLike)
+admin.site.register(SpreadMessage)

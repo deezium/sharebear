@@ -2,21 +2,20 @@
 {% block content %}
 
 <ol class="feed-list">
-{% for story in feed_story_list %}
+{% for message, like_status in feed_message_list %}
 	<li class="feed-message">
 		<div id='feed-profile'>
-			<span><a href="/users/{{ story.msg.creator }}"><img src="{{ story.msg.creator.profile.profile_image_url }}" width="30" height="30" /></a></span> 
-			<span id='feed-username'><a href="/users/{{ story.msg.creator }}">{{ story.msg.creator }}</a></span>
+			<span><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></span> 
+			<span id='feed-username'><a href="/users/{{ message.creator }}">{{ message.creator }}</a></span>
 		</div>
 		<div id='feed-body'>
-			{{ story.msg.body|urlize }}
+			{{ message.body|urlize }}
 		</div>
 		<div id='feed-timestamp'>
-			<time>{{ story.msg.creation_time|date:_("DATETIME_FORMAT") }}</time> 
+			<time>{{ message.creation_time|date:_("DATETIME_FORMAT") }}</time> 
 		</div>
-		{{ story }}
 
-		{% if story.is_liked %}
+		{% if like_status %}
 		<p>Liked!</p>
 		{% else %}
 		<p>Not liked!</p>
@@ -24,15 +23,15 @@
 
 		{% if like_form %}
 
-		{% if story.is_liked %}
+		{% if like_status %}
 
-		<form action="{% url 'story_like' story.id %}" method="post">{% csrf_token %}
+		<form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
 		<button type="submit" class="btn">Unlike</button>
 		</form>
 
 		{% else %}
 
-		<form action="{% url 'story_like' story.id %}" method="post">{% csrf_token %}
+		<form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
 		<button type="submit" class="btn btn-default">Like</button>
 		</form>
 

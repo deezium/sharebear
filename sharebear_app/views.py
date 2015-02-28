@@ -10,8 +10,8 @@ from django.utils import timezone
 from django.conf import settings
 from datetime import datetime
 from collections import OrderedDict
-from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, FeedStoryLikeForm
-from sharebear_app.models import UserProfile, Message, FeedStory, Relationship
+from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm
+from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage
 from sharebear_app.utils import get_user_model, get_username_field
 from urllib2 import urlopen
 import json
@@ -135,9 +135,22 @@ def users(request, username="", edit_form=None):
 def feed(request, like_form=None):
 	user = request.user
 	#message_list = Message.objects.feed_for(request.user)
-	feed_story_list = FeedStory.objects.filter(user=request.user)
-	like_form=FeedStoryLikeForm()
-	return render(request, 'feed.html', {'feed_story_list': feed_story_list, 'user': user, 'like_form': like_form, })
+	spread_list = SpreadMessage.objects.filter(user=request.user)
+	followed_users = user.profile.get_following()
+	spread_message_list = [x.msg for x in spread_list]
+	
+	followed_message_list = [x.user.sent_messages.all() for x in followed_users]
+	
+	flattened_followed_message_list = [item for sublist in followed_message_list for item in sublist]
+
+	full_message_list = spread_message_list + flattened_followed_message_list
+	
+	
+	feed_message_list = [(i, i.is_liked_by_user(user)) for i in full_message_list]
+	#print feed_message_list
+
+	like_form=MessageLikeForm()
+	return render(request, 'feed.html', {'feed_message_list': feed_message_list, 'user': user, 'like_form': like_form, })
 
 # @login_required
 # def outbox(request):
@@ -167,8 +180,8 @@ def compose(request, form_class=ComposeForm, success_url=None):
 			print f
 
 			for i in range(5):
-				new_feed_story = FeedStory(user=recipient_list[i],msg=f)
-				new_feed_story.save()
+				new_spread_message = SpreadMessage(user=recipient_list[i],msg=f)
+				new_spread_message.save()
 			messages.info(request, u"Message successfully sent.")
 			if success_url is None:
 				success_url = reverse('messages_compose')
@@ -237,19 +250,21 @@ def compose(request, form_class=ComposeForm, success_url=None):
 # 	return render(request, 'conversation.html', {'conversation': conversation, 'messages': messages, 'reply_form': reply_form, })
 
 @login_required
-def like(request, feed_story_id):
+def like(request, message_id):
 	user = request.user
 	profile = UserProfile.objects.get(user=user)
 	try:
-		feed_story=get_object_or_404(FeedStory, id=feed_story_id)
+		message=get_object_or_404(Message, id=message_id)
 	except:
 		pass
 	if request.method == "POST":
+		message_like = MessageLike.objects.get_or_create(user=user, msg=message)[0]
+		print message_like
 		
-		feed_story.is_liked = not feed_story.is_liked
-		if feed_story.ever_liked == False:
-			feed_story.ever_liked = True
-			feed_story.save()
+		message_like.is_liked = not message_like.is_liked
+		if message_like.ever_liked == False:
+			message_like.ever_liked = True
+			message_like.save()
 
 			# Updating promoter score
 
@@ -271,21 +286,21 @@ def like(request, feed_story_id):
 
 			# Creating more feed stories
 
-			m = Message.objects.get(id=feed_story.msg.id)
+			# m = Message.objects.get(id=feed_story.msg.id)
 
-			recipient_list = [User.objects.order_by('?')[i] for i in range(4)]
+			# recipient_list = [User.objects.order_by('?')[i] for i in range(4)]
 
-			for i in range(4):
-				new_feed_story=FeedStory(user=recipient_list[i],
-					msg=m,
-					is_liked=False,
-					ever_liked=False,
-					)
-				new_feed_story.save()
-				print new_feed_story
+			# for i in range(4):
+			# 	new_feed_story=FeedStory(user=recipient_list[i],
+			# 		msg=m,
+			# 		is_liked=False,
+			# 		ever_liked=False,
+			# 		)
+			# 	new_feed_story.save()
+			# 	print new_feed_story
 			
 		else:
-			feed_story.save()
+			message_like.save()
 		
 	return redirect('/')
 
