@@ -24,6 +24,31 @@
         </div>
     </div>
 
+        {% if like_status %}
+        <p>Liked!</p>
+        {% else %}
+        <p>Not liked!</p>
+        {% endif %}
+
+        {% if like_form %}
+
+        {% if like_status %}
+
+        <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
+        <button type="submit" class="btn">Unlike</button>
+        </form>
+
+        {% else %}
+
+        <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
+        <button type="submit" class="btn btn-default">Like</button>
+        </form>
+
+        {% endif %}
+
+        {% endif %}
+
+
     {% if user == message.creator %}
 
     <div class='row message-stats'>

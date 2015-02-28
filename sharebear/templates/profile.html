@@ -54,28 +54,28 @@
 			<h2>Liked messages</h2>
 		</div>
 
-		{% for story in profile_user.feed_stories.all %}
-		{% if story.is_liked %}
+		{% for message in profile_user.user_likes.all %}
+		{% if message.is_liked %}
 		
 	    <div class="row sender-info">
 	        <div class="col-md-8">
-	            <a href="/users/{{ story.msg.creator }}"><img src="{{ story.msg.creator.profile.profile_image_url }}" width="50" height="50" /></a>
-	            <a href="/users/{{ story.msg.creator }}">{{ story.msg.creator }}</a>
+	            <a href="/users/{{ message.msg.creator }}"><img src="{{ message.msg.creator.profile.profile_image_url }}" width="50" height="50" /></a>
+	            <a href="/users/{{ message.msg.creator }}">{{ message.msg.creator }}</a>
 	        </div>
 	        <div class="col-md-4">
-	            <p><em>Sent at {{ story.msg.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
+	            <p><em>Sent at {{ message.msg.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
 	        </div>
 	    </div>
 
         <div class='row'>
 	    	<div class='col-md-12'>
-	    		<a href="/message/{{ story.msg.id }}">View</a>
+	    		<a href="/message/{{ message.msg.id }}">View</a>
 	    	</div>
 	    </div>
 
 	    <div class='row message-body'>
 	        <div class='col-md-12'>
-	            <p>{{ story.msg.body|urlize }}</p>
+	            <p>{{ message.msg.body|urlize }}</p>
 	        </div>
 	    </div>
 	    {% endif %}

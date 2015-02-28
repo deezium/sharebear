@@ -8,6 +8,10 @@
 			<span><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></span> 
 			<span id='feed-username'><a href="/users/{{ message.creator }}">{{ message.creator }}</a></span>
 		</div>
+		 <div>
+	    	<a href="/message/{{ message.id }}">View</a>
+	    </div>
+
 		<div id='feed-body'>
 			{{ message.body|urlize }}
 		</div>
@@ -16,9 +20,13 @@
 		</div>
 
 		{% if like_status %}
+
 		<p>Liked!</p>
+		
 		{% else %}
+		
 		<p>Not liked!</p>
+		
 		{% endif %}
 
 		{% if like_form %}

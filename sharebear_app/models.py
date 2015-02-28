@@ -76,10 +76,13 @@ class UserProfile(models.Model):
 			to_people__status=status,
 			to_people__from_person=self)
 
+	def get_related_to(self, status):
+		return self.related_to.filter(
+			from_people__status=status,
+			from_people__to_person=self)
+
 	def get_following(self):
 		return self.get_relationships(RELATIONSHIP_FOLLOWING)
-
-	# Not working for some reason
 
 	def get_followers(self):
 		return self.get_related_to(RELATIONSHIP_FOLLOWING)

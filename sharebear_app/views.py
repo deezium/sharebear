@@ -353,10 +353,13 @@ def undelete(request, message_id, success_url=None):
 def messageview(request, message_id):
 	user = request.user
 	message = get_object_or_404(Message, id=message_id)
-	view_count = message.feed_messages.count()
-	prop_count = message.feed_messages.filter(ever_liked=1).count()
-	
-	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, })
+	view_count = message.message_spreadmessages.all().count() + user.profile.get_followers().count()
+	prop_count = message.message_likes.filter(ever_liked=1).count()
+
+	like_status = message.is_liked_by_user(user)
+
+	like_form = MessageLikeForm(initial={'is_liked': like_status, })
+	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'like_form': like_form, 'like_status': like_status, })
 
 @login_required
 def view(request, message_id, form_class=ComposeForm, like_form=None, subject_template=u"Re: %(subject)s"):
