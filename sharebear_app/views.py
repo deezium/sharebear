@@ -284,20 +284,13 @@ def like(request, message_id):
 
 				profile.save()
 
-			# Creating more feed stories
+			# Spreading
 
-			# m = Message.objects.get(id=feed_story.msg.id)
+			recipient_list = [User.objects.order_by('?')[i] for i in range(5)]
 
-			# recipient_list = [User.objects.order_by('?')[i] for i in range(4)]
-
-			# for i in range(4):
-			# 	new_feed_story=FeedStory(user=recipient_list[i],
-			# 		msg=m,
-			# 		is_liked=False,
-			# 		ever_liked=False,
-			# 		)
-			# 	new_feed_story.save()
-			# 	print new_feed_story
+			for i in range(5):
+				new_spread_message = SpreadMessage(user=recipient_list[i],msg=message)
+				new_spread_message.save()
 			
 		else:
 			message_like.save()
