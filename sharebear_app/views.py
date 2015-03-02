@@ -113,14 +113,29 @@ def likes(request, username="", edit_form=None):
 			userprofile = UserProfile.objects.get_or_create(user=profile_user)
 		except User.DoesNotExist:
 			raise Http404
+		if user.profile.is_following(userprofile[0]):
+			following=True
+		return render(request, 'likes.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'following': following, })
+	users = User.objects.all()
+	return redirect('/')
+
+
+def edit(request, username="", edit_form=None):
+	user = request.user
+	following=False
+	if username:
+		try:
+			profile_user = User.objects.get(username=username)
+			userprofile = UserProfile.objects.get_or_create(user=profile_user)
+		except User.DoesNotExist:
+			raise Http404
 		if profile_user == request.user:
 			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
 		if user.profile.is_following(userprofile[0]):
 			following=True
-		return render(request, 'likes.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'following': following, })
+		return render(request, 'edit.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'following': following, })
 	users = User.objects.all()
 	return redirect('/')
-
 
 	#return render(request, 'users.html', {'users': users, 'username': request.user.username, })
 

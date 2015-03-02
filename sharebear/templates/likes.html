@@ -20,7 +20,16 @@
 		</div>
 
 		<div class='row'>
-			<h2>Liked messages</h2>
+			<ul class='nav nav-pills'>
+				<li role='presentation'><a href='/users/{{ profile_user.username }}'>Profile</a></li>
+				<li role='presentation'><a href='/likes/{{ profile_user.username }}'>Likes</a></li>
+				{% if profile_user == user %}
+				<li role='presentation'><a href='/edit/{{ profile_user.username }}'>Edit</a></li>
+				{% endif %}
+		</div>
+
+		<div class='row profile-section'>
+			<h3>Liked messages</h3>
 		</div>
 
 		{% for message in profile_user.user_likes.all %}

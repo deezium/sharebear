@@ -96,7 +96,7 @@ body {
 	text-align: center;
 }
 
-#profile-edit{
+.profile-section{
 	border-top: 1px solid #ddd;
 	padding-bottom: 10px;
 }
