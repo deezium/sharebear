@@ -32,62 +32,60 @@
         </div>
     </div>
 
-<!--    <div class='row'>
+    {% if youtube_id %}
+    <div class='row'>
         <div class='col-md-12'>
-        <iframe id="ytplayer" type="text/html" width="640" height="390"
-          src="http://www.youtube.com/embed/WrKwDsHpBwA?autoplay=0&origin=http://example.com"
-          frameborder="0"/>
+        <iframe id="ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/>
         </div>
     </div>
+    {% endif %}
 
-    !-->
+    {% if like_status %}
+    <p>Liked!</p>
+    {% else %}
+    <p>Not liked!</p>
+    {% endif %}
 
-        {% if like_status %}
-        <p>Liked!</p>
-        {% else %}
-        <p>Not liked!</p>
-        {% endif %}
+    {% if like_form %}
 
-        {% if like_form %}
+    {% if like_status %}
 
-        {% if like_status %}
+    <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
+    <button type="submit" class="btn">Unlike</button>
+    </form>
 
-        <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
-        <button type="submit" class="btn">Unlike</button>
-        </form>
+    {% else %}
 
-        {% else %}
+    <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
+    <button type="submit" class="btn btn-default">Like</button>
+    </form>
 
-        <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
-        <button type="submit" class="btn btn-default">Like</button>
-        </form>
+    {% endif %}
 
-        {% endif %}
+    {% endif %}
 
-        {% endif %}
+    <button class="btn btn-info" onclick="facebookShare()">Facebook Share</button>
 
-        <button class="btn btn-info" onclick="facebookShare()">Facebook Share</button>
+    <a class="twitter-share-button" href="https://twitter.com/share" data-text="Check out this hot new track {{ message.creator }} posted on Sharebear!" data-count="none" data-url="http://localhost:8000/message/{{ message.id }}">Tweet</a>
 
-        <a class="twitter-share-button" href="https://twitter.com/share" data-text="Check out this hot new track {{ message.creator }} posted on Sharebear!" data-count="none" data-url="http://localhost:8000/message/{{ message.id }}">Tweet</a>
+    <script>
+        function facebookShare(){
+            FB.ui({
+              method: 'share',
+                href: 'http://soundcloud.com/deezium',
+                }, function(response){
+                if (response && !response.error_code) {
+                  alert('Posting completed.');
+                } else {
+                  alert('Error while posting.');
+                }
+            });
+        }
 
-        <script>
-            function facebookShare(){
-                FB.ui({
-                  method: 'share',
-                    href: 'http://soundcloud.com/deezium',
-                    }, function(response){
-                    if (response && !response.error_code) {
-                      alert('Posting completed.');
-                    } else {
-                      alert('Error while posting.');
-                    }
-                });
-            }
+        window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
 
-            window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
-
-                
-        </script>
+            
+    </script>
 
 
     {% if user == message.creator %}

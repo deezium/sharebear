@@ -2,16 +2,6 @@
 
 {% block login %}
 
-	<form class ='navbar-form navbar-right' action='/login' method='post'>{% csrf_token %}
-		{% for field in auth_form %}
-		{{ field }}
-		{% endfor %}
-		<input type='submit' id='btnLogin' class='btn btn-large btn-primary' value='Log In'>
-		
-		Or
-		
-		<a href="{% url 'social:begin' 'facebook'%}?next={{request.path}}">Login with Facebook</a>	
-	</form>
 {% endblock %}
 
 {% block flash %}
@@ -28,14 +18,8 @@
 		<div id='intro'>
 			<h1> Sharebear lets you make new friends around the world. </h1>
 		</div>
+		<a href="{% url 'social:begin' 'facebook'%}?next={{request.path}}"><img src='{{ MEDIA_URL }}/facebooklogin.png'/></a>
 	
-
-		<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-		</fb:login-button>
-
-		<div id="status">
-		</div>
-
 	</div>
 
 {% endblock %}

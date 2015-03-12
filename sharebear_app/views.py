@@ -15,6 +15,8 @@ from sharebear_app.models import UserProfile, Message, MessageLike, Relationship
 from sharebear_app.utils import get_user_model, get_username_field
 from urllib2 import urlopen
 import json
+import re
+import urlparse
 
 User = get_user_model()
 
@@ -178,7 +180,6 @@ def feed(request, like_form=None):
 	flattened_followed_message_list = [item for sublist in followed_message_list for item in sublist]
 
 	full_message_list = spread_message_list + flattened_followed_message_list
-	
 	
 	feed_message_list = [(i, i.is_liked_by_user(user)) for i in full_message_list]
 	#print feed_message_list
@@ -390,10 +391,18 @@ def messageview(request, message_id):
 	view_count = message.message_spreadmessages.all().count() + user.profile.get_followers().count()
 	prop_count = message.message_likes.filter(ever_liked=1).count()
 
+	youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
+	youtube_string = "http://"+youtube_s
+
+	url_data = urlparse.urlparse(youtube_string)
+	query = urlparse.parse_qs(url_data.query)
+	youtube_id = query["v"][0]
+	print youtube_id
+	
 	like_status = message.is_liked_by_user(user)
 
 	like_form = MessageLikeForm(initial={'is_liked': like_status, })
-	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'like_form': like_form, 'like_status': like_status, })
+	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'like_form': like_form, 'like_status': like_status, 'youtube_id': youtube_id, })
 
 @login_required
 def view(request, message_id, form_class=ComposeForm, like_form=None, subject_template=u"Re: %(subject)s"):
