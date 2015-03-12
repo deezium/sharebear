@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
+{% block head %}
+
+<meta property="og:title" content="Suck my what"/>
+<meta property="og:url" content="{{ request.path }}"/>
+<meta property="og:description" content="Sharebear is the premier platform for artists to build audiences."/>
+
+{% endblock %}
+
 {% block content %}
 
     <script>
@@ -23,6 +31,16 @@
             <p>{{ message.body|urlize }}</p>
         </div>
     </div>
+
+<!--    <div class='row'>
+        <div class='col-md-12'>
+        <iframe id="ytplayer" type="text/html" width="640" height="390"
+          src="http://www.youtube.com/embed/WrKwDsHpBwA?autoplay=0&origin=http://example.com"
+          frameborder="0"/>
+        </div>
+    </div>
+
+    !-->
 
         {% if like_status %}
         <p>Liked!</p>
@@ -47,6 +65,29 @@
         {% endif %}
 
         {% endif %}
+
+        <button class="btn btn-info" onclick="facebookShare()">Facebook Share</button>
+
+        <a class="twitter-share-button" href="https://twitter.com/share" data-text="Check out this hot new track {{ message.creator }} posted on Sharebear!" data-count="none" data-url="http://localhost:8000/message/{{ message.id }}">Tweet</a>
+
+        <script>
+            function facebookShare(){
+                FB.ui({
+                  method: 'share',
+                    href: 'http://soundcloud.com/deezium',
+                    }, function(response){
+                    if (response && !response.error_code) {
+                      alert('Posting completed.');
+                    } else {
+                      alert('Error while posting.');
+                    }
+                });
+            }
+
+            window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+
+                
+        </script>
 
 
     {% if user == message.creator %}

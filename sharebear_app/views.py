@@ -218,7 +218,7 @@ def compose(request, form_class=ComposeForm, success_url=None):
 				new_spread_message.save()
 			messages.info(request, u"Message successfully sent.")
 			if success_url is None:
-				success_url = reverse('messages_compose')
+				success_url = reverse('messages_recipients', kwargs={'message_id': f.id})
 				#success_url = reverse('messages_recipients', kwargs={'meta_message_id': m.id})
 			if 'next' in request.GET:
 				success_url = request.GET['next']
@@ -422,7 +422,8 @@ def view(request, message_id, form_class=ComposeForm, like_form=None, subject_te
 def recipients(request, message_id):
 	user = request.user
 	message = get_object_or_404(Message, id=message_id)
-	return render(request, 'recipients.html', {'user': user, 'message': message, })
+	spread_messages = message.message_spreadmessages.all()
+	return render(request, 'recipients.html', {'user': user, 'message': message, 'spread_messages': spread_messages, })
 
 @login_required
 def follow(request, user_id):
