@@ -181,8 +181,35 @@ def feed(request, like_form=None):
 
 	full_message_list = spread_message_list + flattened_followed_message_list
 	
-	feed_message_list = [(i, i.is_liked_by_user(user)) for i in full_message_list]
-	#print feed_message_list
+	#print full_message_list
+
+	full_youtube_list = []
+
+	for message in full_message_list:
+		youtube_id = None
+		if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
+			youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
+			youtube_string = "http://"+youtube_s
+
+			url_data = urlparse.urlparse(youtube_string)
+			query = urlparse.parse_qs(url_data.query)
+			youtube_id = query["v"][0]
+		full_youtube_list.append(youtube_id)
+
+	#print full_youtube_list
+
+	parameter_list = [[full_message_list[i], full_youtube_list[i]] for i in range(len(full_youtube_list))]
+	#print parameter_list
+
+	#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
+	# print feed_message_list
+
+	feed_message_list = []
+	for i in parameter_list:
+		feed_message_list.append([i[0],i[0].is_liked_by_user(user),i[1]])
+
+	print feed_message_list
+
 
 	like_form=MessageLikeForm()
 	return render(request, 'feed.html', {'feed_message_list': feed_message_list, 'user': user, 'like_form': like_form, })
@@ -205,7 +232,7 @@ def compose(request, form_class=ComposeForm, success_url=None):
 		user = request.user
 		form = form_class(data=request.POST)
 
-		recipient_list = [User.objects.order_by('?')[i] for i in range(5)]
+		recipient_list = [User.objects.order_by('?')[i] for i in range(50)]
 
 		if form.is_valid():
 			f = form.save(commit=False)
@@ -214,7 +241,7 @@ def compose(request, form_class=ComposeForm, success_url=None):
 			f.save()
 			print f
 
-			for i in range(5):
+			for i in range(50):
 				new_spread_message = SpreadMessage(user=recipient_list[i],msg=f)
 				new_spread_message.save()
 			messages.info(request, u"Message successfully sent.")
@@ -391,12 +418,14 @@ def messageview(request, message_id):
 	view_count = message.message_spreadmessages.all().count() + user.profile.get_followers().count()
 	prop_count = message.message_likes.filter(ever_liked=1).count()
 
-	youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
-	youtube_string = "http://"+youtube_s
+	youtube_id = None
+	if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
+		youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
+		youtube_string = "http://"+youtube_s
 
-	url_data = urlparse.urlparse(youtube_string)
-	query = urlparse.parse_qs(url_data.query)
-	youtube_id = query["v"][0]
+		url_data = urlparse.urlparse(youtube_string)
+		query = urlparse.parse_qs(url_data.query)
+		youtube_id = query["v"][0]
 	print youtube_id
 	
 	like_status = message.is_liked_by_user(user)
@@ -442,8 +471,8 @@ def follow(request, user_id):
 		user.profile.remove_relationship(to_person=followed_user, status=1)
 	else:
 		print Relationship.objects.filter(from_person=user.profile,status=1).count()
-		if Relationship.objects.filter(from_person=user.profile,status=1).count() >= 2:
-			print "You can only follow 2 artists at a time!"
+		if Relationship.objects.filter(from_person=user.profile,status=1).count() >= 100:
+			print "You can only follow 100 artists at a time!"
 		else:
 			user.profile.add_relationship(to_person=followed_user, status=1)
 	return redirect('/')

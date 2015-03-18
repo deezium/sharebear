@@ -2,7 +2,7 @@
 {% block content %}
 
 <ol class="feed-list">
-{% for message, like_status in feed_message_list %}
+{% for message, like_status, youtube_id in feed_message_list %}
 	<li class="feed-message">
 		<div id='feed-profile'>
 			<span><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></span> 
@@ -18,6 +18,10 @@
 		<div id='feed-timestamp'>
 			<time>{{ message.creation_time|date:_("DATETIME_FORMAT") }}</time> 
 		</div>
+
+		{% if youtube_id %}
+	    	 <iframe id="ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
+	    {% endif %}
 
 		{% if like_status %}
 
