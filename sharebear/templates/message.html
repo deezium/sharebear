@@ -17,13 +17,17 @@
     }
     </script>
 
-    <div class="row sender-info">
-        <div class="col-md-8">
-            <a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="50" height="50" /></a>
-            <a href="/users/{{ message.creator }}">{{ message.creator }}</a>
+    <div class='row' style="padding-top: 10px">
+        <div class='col-md-8'>
+            <div id='feed-profile'>
+                <span><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></span> 
+                <span id='feed-username'><a href="/users/{{ message.creator }}">{{ message.creator }}</a></span>
+            </div>
         </div>
-        <div class="col-md-4">
-            <p><em>Posted at {{ message.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
+        <div class='col-md-4'>
+            <div id='feed-timestamp'>
+                <time>{{ message.creation_time|date:_("DATETIME_FORMAT") }}</time> 
+            </div>
         </div>
     </div>
     <div class='row message-body'>
@@ -35,74 +39,105 @@
     {% if youtube_id %}
     <div class='row'>
         <div class='col-md-12'>
-        <iframe id="ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
+        <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
         </div>
     </div>
     {% endif %}
 
-    {% if like_status %}
-    <p>Liked!</p>
-    {% else %}
-    <p>Not liked!</p>
-    {% endif %}
+    <div class='row' id='engagement-buttons'>
+            <div class='col-md-3 col-md-offset-9'>
 
-    {% if like_form %}
+            {% if like_form %}
+                <div class="col-md-4">
+                    {% if like_status %}
 
-    {% if like_status %}
+                    <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
+                    <button type="submit" class="btn like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                    </form>
 
-    <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
-    <button type="submit" class="btn">Unlike</button>
-    </form>
+                    {% else %}
 
-    {% else %}
+                    <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
+                    <button type="submit" class="btn btn-default like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                    </form>
 
-    <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
-    <button type="submit" class="btn btn-default">Like</button>
-    </form>
+                    {% endif %}
+                </div>
 
-    {% endif %}
+            {% endif %}
 
-    {% endif %}
+                <div class="col-md-4">
+                    <button class="btn facebook-button" onclick="facebookShare()"></button>
+                </div>
 
-    <button class="btn btn-info" onclick="facebookShare()">Facebook Share</button>
+                <div class="col-md-4">
+                    <a class="btn twitter-button" href="https://twitter.com/intent/tweet?text=Check out this hot new track {{ message.creator }} posted on Sharebear! http://localhost:8000/message/{{ message.id }}"></a>
+                </div>
 
-    <a class="twitter-share-button" href="https://twitter.com/share" data-text="Check out this hot new track {{ message.creator }} posted on Sharebear!" data-count="none" data-url="http://localhost:8000/message/{{ message.id }}">Tweet</a>
+            </div>
 
-    <script>
-        function facebookShare(){
-            FB.ui({
-              method: 'share',
-                href: 'http://soundcloud.com/deezium',
-                }, function(response){
-                if (response && !response.error_code) {
-                  alert('Posting completed.');
-                } else {
-                  alert('Error while posting.');
-                }
-            });
-        }
+        <script>
+            function facebookShare(){
+                FB.ui({
+                  method: 'share',
+                    href: 'http://soundcloud.com/deezium',
+                    }, function(response){
+                    if (response && !response.error_code) {
+                      alert('Posting completed.');
+                    } else {
+                      alert('Error while posting.');
+                    }
+                });
+            }
 
-        window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
-
-            
-    </script>
+            window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+                
+        </script>
+    </div>
 
 
     {% if user == message.creator %}
 
-    <div class='row message-stats'>
-        <div class='col-md-6'>
-            <p>People reached: {{ view_count }}</p>
+    <div class='row' id='message-stats'>
+        <div class='col-md-6' style='border-right: 1px solid #ddd;'>
+            <div class='stats-header'>
+                <span id='message-glyphicon-user' class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                <span class='stats-header-text'>People Reached</span>
+            </div>
+            <div class='stats-number'>
+            {{ view_count }}
+            </div>
+            {% for r in recipients %}
+            <div class='message-user-list'>
+                <a href="/users/{{ r.user }}">
+                <img class='center-block' src="{{ r.user.profile.profile_image_url }}" width="40" height="40" />
+                </a>
+            </div>
+
+            {% endfor %}
         </div>
         <div class='col-md-6'>
-            <p>Props: {{ prop_count }}</p>
+            <div class='stats-header'>
+                <span id='message-glyphicon-heart' class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+                <span class='stats-header-text'>Props</span>
+            </div>
+            <div class='stats-number'>
+            {{ prop_count }}
+            </div>
+            {% for p in proppers %}
+            <div class='message-user-list'>
+                <a href="/users/{{ p.user }}">
+                <img class='center-block' src="{{ p.user.profile.profile_image_url }}" width="40" height="40" />
+                </a>
+            </div>
+            {% endfor %}
         </div>
     </div>
 
-    <div class='row'>
+    <div class='row' id='delete-button-row'>
         <div class='col-md-12'>
             <form action="{% url 'messages_delete' message.id %}" method="post">{% csrf_token %}
-                <button type="submit" onclick="deleteConfirmation()" class="btn btn-default">Delete</button>
+                <button type="submit" onclick="deleteConfirmation()" class="btn btn-disabled">Delete</button>
             </form>
         </div>
     </div>

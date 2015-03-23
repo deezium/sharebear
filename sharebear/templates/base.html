@@ -20,6 +20,17 @@
 
 		{% endblock %}
 	</head>
+	<body>
+		<div id="fb-root"></div>
+		<script>
+		(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=357482904425644&version=v2.0";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+		</script>
 		<header>
 			<nav class="navbar navbar-default" role="navigation">
 				<div class='container'>
@@ -39,13 +50,19 @@
 					<div class='navbar-header navbar-right'>
 					{% if user.is_authenticated %}
 						<ul class='nav navbar-nav'>
-							<li class="promoter-score">Promoter score: {{ user.profile.promoter_score }}</li>
 							<li class='dropdown'>
-								<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><img src="{{ user.profile.profile_image_url }}" height="30" width="30"/> {{ user.username }}<span class='caret'></span></a>
+								<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><img src="{{ user.profile.profile_image_url }}" height="39" width="39"/><span class='caret'></span></a>
 								<ul class='dropdown-menu' role='menu'>
-									<li><a href='/users/{{ user.username }}'>View Profile</a></li>
+									<li><a href='/users/{{ user.username }}'>{{ user.username }}</a></li>
 									<li style='border-top:1px solid #ddd'><a href='/logout'>Log Out</a></li>
 								</ul>
+							</li>
+							<li class="compose-button">
+							<form action="/compose">
+								<div>
+									<button id='compose-button' type="submit" class="btn btn-default"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+								</div>
+							</form>
 							</li>
 						</ul>
 					{% endif %}
@@ -73,19 +90,18 @@
 				{% if user.is_authenticated %}
 				<div class='col-sm-3'>	
 					<div class='col-md-12' id='sidebar'>
-						<div class='row' id='button-container'>
 						{% block sidebar %}
-							<form action="/compose">
-								<div id='compose-button'>
-									<input type="submit" class="btn btn-default" value="Compose">
-								</div>
-							</form>
-						</div>
 						<div class='row' id='pill-row'>
 						<ul class='nav nav-pills nav-stacked'>
-							<li><a href="{% url 'messages_feed' %}">Feed</a></li>
+							<li><a href="{% url 'messages_feed' %}">Home</a></li>
+							<li><a href="/shares/{{ user.username }}/ ">Shares</a>
+							<li><a href='/users/{{ user.username }}'>Profile</a></li>
 							<!--<li><a href="{% url 'social:begin' 'twitter'%}?next={{request.path}}">Login with Twitter</a></li>!-->
 						</ul>
+						</div>
+						<div class='row' id='stats-container'>
+							<p>Total views: </p>
+							<p>Promoter score: {{ user.profile.promoter_score }}</p>
 						</div>
 
 						{% endblock %}

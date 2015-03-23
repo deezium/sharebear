@@ -45,6 +45,7 @@ body {
 	/*background-color: #8FCBD9;*/
 }
 
+
 #main-content{
 	/*border: 1px solid gray;*/
 	padding-bottom: 15px;
@@ -68,6 +69,12 @@ body {
 #compose-button{
 	margin-bottom:10px;
 	text-align: center;
+	height: 39px;
+	width: 46px;
+}
+
+.compose-button{
+	margin-top: 15px;
 }
 
 #random-button{
@@ -116,6 +123,51 @@ body {
 	background-color: rgb(127,0,0);
 	border-color: rgb(127,0,0);
 	color: white;
+}
+
+#message-stats {
+	border-top: 1px solid #ddd;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+#engagement-buttons {
+	padding-bottom: 20px;
+}
+
+#delete-button-row {
+	padding-top: 20px;
+	border-top: 1px solid #ddd;
+}
+
+#message-glyphicon-user{
+	font-size: 50px;
+}
+
+#message-glyphicon-heart{
+	font-size: 50px;
+}
+
+.glyphicon-pencil{
+	font-size: 20px;
+}
+
+.stats-header {
+	text-align: center;
+}
+
+.stats-header-text {
+	font-size: 30px;
+}
+
+.stats-number {
+	text-align: center;
+	font-size: 50px;
+}
+
+.stats-user-list {
+	text-align: center;
+	height: 40px;
 }
 
 .navbar-inverse{
@@ -200,7 +252,7 @@ body {
 .feed-message {
 	padding-top: 10px;
 	padding-bottom: 10px;
-	border-bottom: solid 1px #ddd;
+	border-bottom: solid 1px #000;
 }
 
 .feed-list {
@@ -211,14 +263,52 @@ body {
 	padding-bottom: 10px;
 }
 
-#feed-body {
-	font-size: 1.24em;
+#ytplayer{
+	padding-bottom: 20px;
 }
 
+
+.message-user-list{
+	float: left;
+	padding-right: 6px;
+	padding-left: 6px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#left{float:left;width:50px;}
+#right{float:right;width:50px;}
+#center{margin:0 auto;width:50px;}
+
+#feed-body {
+	font-size: 1.24em;
+	padding-top: 10px;
+	padding-bottom: 20px;
+}
+
+.like-button{
+	height: 40px;
+	width: 40px;
+}
+
+.facebook-button{
+	height: 40px;
+	width: 40px;
+	background: url('/media/fblogo_40.png') no-repeat scroll center;
+}
+
+
+.twitter-button{
+	border: 1px solid #55acee;
+	height: 40px;
+	width: 40px;
+	background: url('/media/twitterlogo_32x26.png') no-repeat scroll center;
+}
 #feed-timestamp {
 	padding-top: 10px;
 	font-size: 0.8em;
 	color: #aaa;
+	text-align: right;
 }
 
 #feed-username a {
@@ -243,6 +333,10 @@ body {
 	left: 0;
 	text-decoration: none;
 	z-index: 10;
+}
+
+nav.navbar.navbar-default{
+	/*height: 46px;*/
 }
 
 /*
