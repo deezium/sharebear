@@ -50,12 +50,19 @@ body {
 	/*border: 1px solid gray;*/
 	padding-bottom: 15px;
 	background-color: #fff;
+	border-radius: 5px;
 }
 
 #sidebar{
 	padding-bottom: 20px;
 	padding-top: 20px;
 	background-color: #fff;
+	border-radius: 5px;
+}
+
+#sidebar-stats{
+	padding-top: 20px;
+	border-top: 1px solid #ddd;
 }
 
 #button-container{
@@ -88,6 +95,11 @@ body {
 }
 
 #pill-row{
+	margin-top: 0px;
+	padding-bottom: 10px;
+}
+
+.profile-pill-row{
 	margin-top: 20px;
 }
 
@@ -99,12 +111,16 @@ body {
 	float:right;
 }
 
+.message-header{
+	 padding-top: 10px; 
+	 border-top: 1px solid black;
+}
+
 .meta-recipient{
 	text-align: center;
 }
 
 .profile-section{
-	border-top: 1px solid #ddd;
 	padding-bottom: 10px;
 }
 
@@ -131,7 +147,7 @@ body {
 	padding-bottom: 20px;
 }
 
-#engagement-buttons {
+.engagement-buttons {
 	padding-bottom: 20px;
 }
 
@@ -333,6 +349,26 @@ body {
 	left: 0;
 	text-decoration: none;
 	z-index: 10;
+}
+
+#profile-pic{
+	float: left;
+	height: 150px;
+	width: 150px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+}
+
+#profile-button{
+	clear: both;
+}
+
+#edit-button{
+	width: 150px;
+}
+
+.follow-button{
+	width: 150px;
 }
 
 nav.navbar.navbar-default{

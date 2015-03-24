@@ -5,60 +5,181 @@
 {% block content %}
 
 <div class='row'>
-	<div id = 'top-container' class='col-md-8 col-md-offset-2'>
-		<div class='row'>
-				<div id='profile-pic' style='padding-top: 20px'>
-				<img src="{{ profile_user.profile.profile_image_url }}" height="100" width="100"/>
-				</div>
-				<h2> {{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
-		</div>
-		<div class='row'>
-			<p>{{ profile_user.profile.location }}</p>
-		</div>
-		<div class='row'>
+	<div class='col-md-12'>
+		<div id='profile-pic-container' style='padding-top: 20px'>
+			<img id='profile-pic' src="{{ profile_user.profile.profile_image_url }}" style='float: left;' height="100" width="100"/>
+			<h2> {{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
 			<p>{{ profile_user.profile.aboutme }}</p>
+			<p>{{ profile_user.profile.location }}</p>
+		</div>		
+		<div id='profile-button'>	
+			{% if profile_user == user %}
+			<form action ='/edit/{{ profile_user.username }}'>
+				<input id='edit-button' type='submit' class='btn btn-default' value='Edit'>
+			</form>
+			{% endif %}
+			
+			{% if profile_user != user %}
+			
+				{% if following %}
+
+			    <form action="{% url 'user_follow' profile_user.profile.id %}" method="post">{% csrf_token %}
+			        <button type="submit" class="btn follow-button">Unfollow</button>
+			    </form>
+			    
+			    {% else %}
+
+	            <form action="{% url 'user_follow' profile_user.profile.id %}" method="post">{% csrf_token %}
+	                <button type="submit" class="btn btn-default follow-button">Follow</button>
+	            </form>
+
+			    {% endif %}
+
+			{% endif %}
 		</div>
+	</div>
+</div>
+<div class='row profile-pill-row'>
+	<ul class='nav nav-pills'>
+		<li role='presentation'><a href='/users/{{ profile_user.username }}'>Shares</a></li>
+		<li role='presentation'><a href='/likes/{{ profile_user.username }}'>Likes</a></li>
+	</ul>
+</div>
 
-		<div class='row'>
-			<ul class='nav nav-pills'>
-				<li role='presentation'><a href='/users/{{ profile_user.username }}'>Profile</a></li>
-				<li role='presentation'><a href='/likes/{{ profile_user.username }}'>Likes</a></li>
-				{% if profile_user == user %}
-				<li role='presentation'><a href='/edit/{{ profile_user.username }}'>Edit</a></li>
-				{% endif %}
+{% for message, like_status, youtube_id, view_count, prop_count in share_message_list %}
+<div class='row message-header'>
+	<div class='col-md-8'>
+		<div id='feed-profile'>
+			<span><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></span> 
+			<span id='feed-username'><a href="/users/{{ message.creator }}">{{ message.creator }}</a></span>
 		</div>
-
-		<div class='row profile-section'>
-			<h3>Liked messages</h3>
+	</div>
+	<div class='col-md-4'>
+		<div id='feed-timestamp'>
+			<time>{{ message.creation_time|date:_("DATETIME_FORMAT") }}</time> 
 		</div>
-
-		{% for message in profile_user.user_likes.all %}
-		{% if message.is_liked %}
-		
-	    <div class="row sender-info">
-	        <div class="col-md-8">
-	            <a href="/users/{{ message.msg.creator }}"><img src="{{ message.msg.creator.profile.profile_image_url }}" width="50" height="50" /></a>
-	            <a href="/users/{{ message.msg.creator }}">{{ message.msg.creator }}</a>
-	        </div>
-	        <div class="col-md-4">
-	            <p><em>Sent at {{ message.msg.creation_time|date:_("DATETIME_FORMAT")}}</em></p>
-	        </div>
+	</div>
+</div>
+<div class='row'>
+	<div class='col-md-12'>
+		 <div>
+	    	<a href="/message/{{ message.id }}">View</a>
 	    </div>
-
-        <div class='row'>
-	    	<div class='col-md-12'>
-	    		<a href="/message/{{ message.msg.id }}">View</a>
-	    	</div>
-	    </div>
-
-	    <div class='row message-body'>
-	        <div class='col-md-12'>
-	            <p>{{ message.msg.body|urlize }}</p>
-	        </div>
-	    </div>
-	    {% endif %}
-	    {% endfor %}
     </div>
 </div>
+    	
+<div class='row'>
+	<div class='col-md-12'>
+		<div id='feed-body'>
+			{{ message.body|urlize }}
+		</div>
+	</div>
+</div>
+	
+<div class='row'>
+	<div class='col-md-12'>
+		{% if youtube_id %}
+	    	 <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
+	    {% endif %}
+    </div>
+</div>
+
+<div class='row engagement-buttons'>
+	<div class='col-md-3 col-md-offset-9'>
+
+	{% if like_form %}
+		<div class='col-md-4'>
+			{% if like_status %}
+
+			<form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
+			<button type="submit" class="btn like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></button>
+			</form>
+
+			{% else %}
+
+			<form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
+			<button type="submit" class="btn btn-default like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></button>
+			</form>
+
+			{% endif %}
+		</div>
+
+	{% endif %}
+
+        <div class="col-md-4">
+            <button class="btn facebook-button" onclick="facebookShare()"></button>
+        </div>
+
+        <div class="col-md-4">
+            <a class="btn twitter-button" href="https://twitter.com/intent/tweet?text=Check out this hot new track {{ message.creator }} posted on Sharebear! http://localhost:8000/message/{{ message.id }}"></a>
+        </div>
+
+	</div>
+</div>
+
+{% if user == message.creator %}
+
+<div class='row' id='message-stats'>
+<div class='col-md-6' style='border-right: 1px solid #ddd;'>
+    <div class='stats-header'>
+        <span id='message-glyphicon-user' class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        <span class='stats-header-text'>People Reached</span>
+    </div>
+    <div class='stats-number'>
+    {{ view_count }}
+    </div>
+    {% for r in recipients %}
+    <div class='message-user-list'>
+        <a href="/users/{{ r.user }}">
+        <img class='center-block' src="{{ r.user.profile.profile_image_url }}" width="40" height="40" />
+        </a>
+    </div>
+
+    {% endfor %}
+</div>
+<div class='col-md-6'>
+    <div class='stats-header'>
+        <span id='message-glyphicon-heart' class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+        <span class='stats-header-text'>Props</span>
+    </div>
+    <div class='stats-number'>
+    {{ prop_count }}
+    </div>
+    {% for p in proppers %}
+    <div class='message-user-list'>
+        <a href="/users/{{ p.user }}">
+        <img class='center-block' src="{{ p.user.profile.profile_image_url }}" width="40" height="40" />
+        </a>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
+<script>
+	function facebookShare(){
+		FB.ui({
+		  method: 'share',
+	  		href: 'http://soundcloud.com/deezium',
+			}, function(response){
+		    if (response && !response.error_code) {
+		      alert('Posting completed.');
+		    } else {
+		      alert('Error while posting.');
+		    }
+		});
+	}
+
+	window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+
+
+		
+</script>
+
+{% endfor %}
+
+
+	</div>
+</div>
+
 
 {% endblock %}

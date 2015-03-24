@@ -99,10 +99,48 @@ def users(request, username="", edit_form=None):
 			raise Http404
 		if profile_user == request.user:
 			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
-		print user.profile.get_following()
 		if user.profile.is_following(userprofile[0]):
 			following=True
-		return render(request, 'profile.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'following': following, })
+
+		full_message_list = profile_user.sent_messages.all()
+
+		view_count_list = []
+		prop_count_list = []
+		full_youtube_list = []
+
+		for message in full_message_list:
+			youtube_id = None
+			view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
+			prop_count = message.message_likes.filter(ever_liked=1).count()
+
+			view_count_list.append(view_count)
+			prop_count_list.append(prop_count)
+		
+			if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
+				youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
+				youtube_string = "http://"+youtube_s
+
+				url_data = urlparse.urlparse(youtube_string)
+				query = urlparse.parse_qs(url_data.query)
+				youtube_id = query["v"][0]
+			full_youtube_list.append(youtube_id)
+
+		#print full_youtube_list
+
+		parameter_list = [[full_message_list[i], full_youtube_list[i], view_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
+		#print parameter_list
+
+		#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
+		# print feed_message_list
+
+		share_message_list = []
+		for i in parameter_list:
+			share_message_list.append([i[0],i[0].is_liked_by_user(profile_user),i[1],i[2],i[3]])
+		
+		like_form=MessageLikeForm()
+
+
+		return render(request, 'profile.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'following': following, 'share_message_list': share_message_list, 'like_form': like_form, })
 	users = User.objects.all()
 	return redirect('/')
 
@@ -115,17 +153,61 @@ def likes(request, username="", edit_form=None):
 			userprofile = UserProfile.objects.get_or_create(user=profile_user)
 		except User.DoesNotExist:
 			raise Http404
+		if profile_user == request.user:
+			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
 		if user.profile.is_following(userprofile[0]):
 			following=True
-		return render(request, 'likes.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'following': following, })
+
+		message_likes_list = profile_user.user_likes.all()
+
+		full_message_list = [f.msg for f in message_likes_list]
+
+		print full_message_list
+
+		view_count_list = []
+		prop_count_list = []
+		full_youtube_list = []
+
+		for message in full_message_list:
+			youtube_id = None
+			view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
+			prop_count = message.message_likes.filter(ever_liked=1).count()
+
+			view_count_list.append(view_count)
+			prop_count_list.append(prop_count)
+		
+			if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
+				youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
+				youtube_string = "http://"+youtube_s
+
+				url_data = urlparse.urlparse(youtube_string)
+				query = urlparse.parse_qs(url_data.query)
+				youtube_id = query["v"][0]
+			full_youtube_list.append(youtube_id)
+
+		#print full_youtube_list
+
+		parameter_list = [[full_message_list[i], full_youtube_list[i], view_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
+		#print parameter_list
+
+		#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
+		# print feed_message_list
+
+		share_message_list = []
+		for i in parameter_list:
+			share_message_list.append([i[0],i[0].is_liked_by_user(profile_user),i[1],i[2],i[3]])
+		
+		like_form=MessageLikeForm()
+
+		return render(request, 'likes.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'following': following, 'share_message_list': share_message_list, 'like_form': like_form, })
 	users = User.objects.all()
 	return redirect('/')
 
 def shares(request, username=""):
 	user = request.user
+	profile_user = User.objects.get(username=username)
 	#message_list = Message.objects.feed_for(request.user)
-	full_message_list = user.sent_messages.all()
-	print full_message_list
+	full_message_list = profile_user.sent_messages.all()
 
 	view_count_list = []
 	prop_count_list = []
@@ -133,7 +215,7 @@ def shares(request, username=""):
 
 	for message in full_message_list:
 		youtube_id = None
-		view_count = message.message_spreadmessages.all().count() + user.profile.get_followers().count()
+		view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
 		prop_count = message.message_likes.filter(ever_liked=1).count()
 
 		view_count_list.append(view_count)
@@ -158,12 +240,10 @@ def shares(request, username=""):
 
 	share_message_list = []
 	for i in parameter_list:
-		share_message_list.append([i[0],i[0].is_liked_by_user(user),i[1],i[2],i[3]])
-
-
+		share_message_list.append([i[0],i[0].is_liked_by_user(profile_user),i[1],i[2],i[3]])
 	
 	like_form=MessageLikeForm()
-	return render(request, 'shares.html', {'share_message_list': share_message_list, 'user': user, 'like_form': like_form, })
+	return render(request, 'shares.html', {'share_message_list': share_message_list, 'user': user, 'profile_user': profile_user, 'like_form': like_form, })
 
 def edit(request, username="", edit_form=None):
 	user = request.user

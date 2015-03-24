@@ -5,44 +5,61 @@
 {% block content %}
 
 <div class='row'>
-	<div id = 'top-container' class='col-md-8 col-md-offset-2'>
-		<div class='row'>
-				<div id='profile-pic' style='padding-top: 20px'>
-				<img src="{{ profile_user.profile.profile_image_url }}" height="100" width="100"/>
-				</div>
-				<h2> {{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
-		</div>
-		<div class='row'>
-			<p>{{ profile_user.profile.location }}</p>
-		</div>
-		<div class='row'>
+	<div class='col-md-12'>
+		<div id='profile-pic-container' style='padding-top: 20px'>
+			<img id='profile-pic' src="{{ profile_user.profile.profile_image_url }}" style='float: left;' height="100" width="100"/>
+			<h2> {{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
 			<p>{{ profile_user.profile.aboutme }}</p>
+			<p>{{ profile_user.profile.location }}</p>
+		</div>		
+		<div id='profile-button'>	
+			{% if profile_user == user %}
+			<form action ='/edit/{{ profile_user.username }}'>
+				<input id='edit-button' type='submit' class='btn btn-default' value='Edit'>
+			</form>
+			{% endif %}
+			
+			{% if profile_user != user %}
+			
+				{% if following %}
+
+			    <form action="{% url 'user_follow' profile_user.profile.id %}" method="post">{% csrf_token %}
+			        <button type="submit" class="btn follow-button">Unfollow</button>
+			    </form>
+			    
+			    {% else %}
+
+	            <form action="{% url 'user_follow' profile_user.profile.id %}" method="post">{% csrf_token %}
+	                <button type="submit" class="btn btn-default follow-button">Follow</button>
+	            </form>
+
+			    {% endif %}
+
+			{% endif %}
 		</div>
-
-		<div class='row'>
-			<ul class='nav nav-pills'>
-				<li role='presentation'><a href='/users/{{ profile_user.username }}'>Profile</a></li>
-				<li role='presentation'><a href='/likes/{{ profile_user.username }}'>Likes</a></li>
-				{% if profile_user == user %}
-				<li role='presentation'><a href='/edit/{{ profile_user.username }}'>Edit</a></li>
-				{% endif %}
-		</div>
-
-		{% if profile_user == user %}
-			<div class='row'>
-				<div class='profile-section'>
-					<h3> Edit Profile </h3>
-				</div>
-					<form enctype='multipart/form-data' action='/edit/' method='post'>{% csrf_token %}
-						{% bootstrap_form edit_form %}
-						<input type='hidden' value='{{ next_url }}' name='next_url'>
-						<input type='submit' class='btn btn-default' value='Update!'>
-					</form>
-			</div>
-		{% endif %}
-
 	</div>
 </div>
-
+<div class='row profile-pill-row'>
+	<ul class='nav nav-pills'>
+		<li role='presentation'><a href='/users/{{ profile_user.username }}'>Shares</a></li>
+		<li role='presentation'><a href='/likes/{{ profile_user.username }}'>Likes</a></li>
+	</ul>
+</div>
+<div class='row' style='border-top: 1px solid black;'>
+	<div class='col-md-12'>
+		{% if profile_user == user %}
+		
+		<div class='profile-section'>
+			<h3> Edit Profile </h3>
+		</div>
+			<form enctype='multipart/form-data' action='/edit/' method='post'>{% csrf_token %}
+				{% bootstrap_form edit_form %}
+				<input type='hidden' value='{{ next_url }}' name='next_url'>
+				<input type='submit' class='btn btn-default' value='Update!' style='float: right;'>
+			</form>
+			
+		{% endif %}
+	</div>
+</div>
 
 {% endblock %}

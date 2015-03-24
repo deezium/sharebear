@@ -94,14 +94,18 @@
 						<div class='row' id='pill-row'>
 						<ul class='nav nav-pills nav-stacked'>
 							<li><a href="{% url 'messages_feed' %}">Home</a></li>
-							<li><a href="/shares/{{ user.username }}/ ">Shares</a>
-							<li><a href='/users/{{ user.username }}'>Profile</a></li>
+							<li><a href="/shares/{{ user.username }}/ ">My Shares</a>
+							<li><a href='/users/{{ user.username }}'>My Profile</a></li>
 							<!--<li><a href="{% url 'social:begin' 'twitter'%}?next={{request.path}}">Login with Twitter</a></li>!-->
 						</ul>
 						</div>
-						<div class='row' id='stats-container'>
-							<p>Total views: </p>
-							<p>Promoter score: {{ user.profile.promoter_score }}</p>
+						<div class='row text-center' id='sidebar-stats'>
+							<span class='glyphicon glyphicon-user text-center' aria-hidden='true'></span>
+							<span class='text-center'>Total Reach</span>
+							<p>{{user.user_spreadmessages.msg.count}}</p>
+							<span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
+							<span>Promoter Score</span>
+							<p>{{ user.profile.promoter_score }}</p>
 						</div>
 
 						{% endblock %}
