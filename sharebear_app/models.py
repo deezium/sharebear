@@ -153,6 +153,7 @@ class MessageLike(models.Model):
 	msg = models.ForeignKey(Message, related_name='message_likes')
 	is_liked = models.BooleanField("Liked", default=False)
 	ever_liked = models.BooleanField("Ever Liked", default=False)
+	liked_at = models.DateTimeField(auto_now=True, default=None)
 
 	def __unicode__(self):
 		return str(self.id)
@@ -165,6 +166,9 @@ class Relationship(models.Model):
 class SpreadMessage(models.Model):
 	user = models.ForeignKey(AUTH_USER_MODEL, related_name='user_spreadmessages')
 	msg = models.ForeignKey(Message, related_name='message_spreadmessages')
+
+	class Meta:
+		unique_together = (("user", "msg"),)
 
 	def __unicode__(self):
 		return str(self.id)

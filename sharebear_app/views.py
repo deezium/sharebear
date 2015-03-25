@@ -158,7 +158,7 @@ def likes(request, username="", edit_form=None):
 		if user.profile.is_following(userprofile[0]):
 			following=True
 
-		message_likes_list = profile_user.user_likes.all()
+		message_likes_list = profile_user.user_likes.filter(is_liked=True).order_by('-liked_at')
 
 		full_message_list = [f.msg for f in message_likes_list]
 

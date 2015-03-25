@@ -87,7 +87,15 @@
 <div class='row engagement-buttons'>
 	<div class='col-md-3 col-md-offset-9'>
 
-	{% if like_form %}
+        <div class="col-md-4">
+            <button class="btn facebook-button" onclick="facebookShare()"></button>
+        </div>
+
+        <div class="col-md-4">
+            <a class="btn twitter-button" href="https://twitter.com/intent/tweet?text=Check out this hot new track {{ message.creator }} posted on Sharebear! http://localhost:8000/message/{{ message.id }}"></a>
+        </div>
+
+	{% if like_form and user != message.creator %}
 		<div class='col-md-4'>
 			{% if like_status %}
 
@@ -105,14 +113,6 @@
 		</div>
 
 	{% endif %}
-
-        <div class="col-md-4">
-            <button class="btn facebook-button" onclick="facebookShare()"></button>
-        </div>
-
-        <div class="col-md-4">
-            <a class="btn twitter-button" href="https://twitter.com/intent/tweet?text=Check out this hot new track {{ message.creator }} posted on Sharebear! http://localhost:8000/message/{{ message.id }}"></a>
-        </div>
 
 	</div>
 </div>
