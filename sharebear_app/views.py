@@ -355,7 +355,9 @@ def compose(request, form_class=ComposeForm, success_url=None):
 		user = request.user
 		form = form_class(data=request.POST)
 
-		recipient_list = [User.objects.order_by('?')[i] for i in range(50)]
+		recipient_list = User.objects.order_by('?')[:20]
+
+		print recipient_list
 
 		if form.is_valid():
 			f = form.save(commit=False)
@@ -364,7 +366,7 @@ def compose(request, form_class=ComposeForm, success_url=None):
 			f.save()
 			print f
 
-			for i in range(50):
+			for i in range(len(recipient_list)):
 				new_spread_message = SpreadMessage(user=recipient_list[i],msg=f)
 				new_spread_message.save()
 			messages.info(request, u"Message successfully sent.")
@@ -486,9 +488,14 @@ def like(request, message_id):
 def delete(request, message_id):
 	user = request.user
 	message = get_object_or_404(Message, id=message_id)
+	deleted = False
 	if request.method == "POST":
 		message.delete()
-	return redirect('/')
+		deleted = True
+	if deleted == True:
+		return redirect('/')
+	print deleted
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 # @login_required
