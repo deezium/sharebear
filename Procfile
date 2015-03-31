@@ -1,0 +1,1 @@
+web: gunicorn sharebear.wsgi --log-file -
