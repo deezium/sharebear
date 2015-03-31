@@ -72,9 +72,17 @@ DJANGO_SETTINGS_MODULE = 'sharebear_app.settings'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(PROJECT_PATH, 'db.sqlite3'),
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_PATH, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'sharebeardb',                      # Or path to database file if using sqlite3.
+        'USER': 'deez',                      # Not used with sqlite3.
+        'PASSWORD': 'pg2441',                  # Not used with sqlite3.
+        'HOST': 'localhost',                
+        'PORT': '5432',
     }
 }
 
@@ -145,7 +153,7 @@ USE_TZ = True
 
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
+DATABASES['default'] =  dj_database_url.config(default='postgres://deez:pg2441@localhost:5432/sharebeardb')
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
