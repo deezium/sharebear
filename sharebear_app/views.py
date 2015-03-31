@@ -331,8 +331,8 @@ def feed(request, like_form=None):
 	for i in parameter_list:
 		feed_message_list.append([i[0],i[0].is_liked_by_user(user),i[1]])
 
-	print feed_message_list
-
+	# print feed_message_list
+	print user
 
 	like_form=MessageLikeForm()
 	return render(request, 'feed.html', {'feed_message_list': feed_message_list, 'user': user, 'like_form': like_form, })

@@ -6,6 +6,7 @@ from datetime import datetime
 from django.utils import timezone
 #from django.utils.encoding import python_2_unicode_compatible
 from allauth.socialaccount.models import SocialAccount
+from social.apps.django_app.default.models import UserSocialAuth
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
@@ -32,7 +33,7 @@ class UserProfile(models.Model):
 		return self.user.username
 
 	def profile_image_url(self):
-		fb_uid = SocialAccount.objects.filter(user_id=self.user.id, provider='facebook')
+		fb_uid = UserSocialAuth.objects.filter(user_id=self.user.id, provider='facebook')
 
 		if len(fb_uid):
 			print fb_uid[0].uid
