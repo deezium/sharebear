@@ -264,32 +264,6 @@ def edit(request, username="", edit_form=None):
 
 	#return render(request, 'users.html', {'users': users, 'username': request.user.username, })
 
-# @login_required
-# def inbox(request):
-# 	user = request.user
-# 	message_list = Message.objects.inbox_for(request.user)
-# 	return render(request, 'inbox.html', {'message_list': message_list, 'user': user, })
-
-# @login_required
-# def conversationbox(request):
-# 	user = request.user
-# 	conversation_set = set()
-# 	for m in Message.objects.select_related('conversation').filter(sender=request.user):
-# 		conversation_set.add(m.conversation)
-# 	for m in Message.objects.select_related('conversation').filter(recipient=request.user):
-# 		conversation_set.add(m.conversation)
-# 	print conversation_set
-# 	conversation_set.remove(None)
-# 	print conversation_set
-# 	conversation_list = []
-# 	for c in conversation_set:
-# 		message = c.convo_messages.first().body
-# 		other_person = c.convo_messages.first().sender if c.convo_messages.first().sender != request.user else c.convo_messages.first().recipient  
-# 		latest_sender = c.convo_messages.first().sender
-# 		timestamp = c.convo_messages.first().sent_at
-# 		conversation_list.append([message,other_person,latest_sender,timestamp,c])
-# 	return render(request, 'conversationbox.html', {'conversation_list': conversation_list, })
-
 @login_required
 def feed(request, like_form=None):
 	user = request.user
@@ -337,17 +311,22 @@ def feed(request, like_form=None):
 	like_form=MessageLikeForm()
 	return render(request, 'feed.html', {'feed_message_list': feed_message_list, 'user': user, 'like_form': like_form, })
 
-# @login_required
-# def outbox(request):
-# 	user = request.user
-# 	message_list = Message.objects.convo_outbox_for(request.user)
-# 	return render(request, 'outbox.html', {'message_list': message_list, })
+def initial_feed(request, user, *args, **kwargs):
 
-# @login_required
-# def trash(request):
-# 	user = request.user
-# 	message_list = Message.objects.trash_for(request.user)
-# 	return render(request, 'trash.html', {'message_list': message_list, })
+	try:
+		profile = UserProfile.objects.get(user=user)
+
+	except UserProfile.DoesNotExist:
+		UserProfile.objects.create(user=user)
+	
+		message_list = Message.objects.order_by('?')[:5]
+
+		for i in range(len(message_list)):
+			new_spread_message = SpreadMessage(user=user,msg=message_list[i])
+			new_spread_message.save()
+	# print message_list
+
+	return
 
 @login_required
 def compose(request, form_class=ComposeForm, success_url=None):
@@ -381,60 +360,6 @@ def compose(request, form_class=ComposeForm, success_url=None):
 	else:
 		form = form_class()
 	return render(request, 'compose.html', {'form': form, })
-
-# @login_required
-# def reply(request, message_id, form_class=ComposeForm, success_url=None, recipient_filter=None, subject_template=u"Re: %(subject)s"):
-# 	parent = get_object_or_404(Message, id=message_id)
-# 	if parent.sender != request.user and parent.recipient != request.user:
-# 		raise Http404
-
-# 	# Note that replying doesn't create a meta message
-
-# 	if request.method == "POST":
-# 		sender = request.user
-# 		form = form_class(request.POST, recipient_filter=recipient_filter)
-
-# 		if form.is_valid():
-# 			f = form.save(sender=request.user, recipients=[parent.sender], parent_msg=parent)
-# 			messages.info(request, u"Message successfully sent.")
-# 			print f
-
-# 			# m = MetaMessage.objects.get(id=parent.meta_msg.id)
-# 			# message = m.sub_messages.first()
-# 			# for i in range(10):
-# 			# 	new_message=Message(subject=message.subject,
-# 			# 		body=message.body,
-# 			# 		sender=message.sender,
-# 			# 		recipient=User.objects.order_by('?')[0],
-# 			# 		meta_msg=m,
-# 			# 		sent_at=datetime.now()
-# 			# 		)
-# 			# 	new_message.save()
-
-# 			if success_url is None:
-# 				success_url = reverse('messages_inbox')
-# 			return HttpResponseRedirect(success_url)
-# 	else:
-# 		form = form_class(initial={
-# 			#'body': (parent.sender, parent.body),
-# 			'subject': subject_template % {'subject': parent.subject},
-# 			'recipient': [[parent.sender,]]
-# 			})
-# 	return render(request, 'compose.html', {'form': form, })
-
-# @login_required
-# def feedreply(request, user_id,form_class=ComposeForm, subject_template=u"Re: %(subject)s"):
-# 	user = request.user
-# 	other_user = User.objects.get(id=user_id)
-# 	print user, other_user
-
-# 	conversation = get_object_or_404(Conversation, id=3)
-# 	messages = conversation.convo_messages.all().order_by('sent_at')
-
-# 	reply_form = form_class(initial={
-# 		'subject': subject_template % {'subject': messages.last().subject},
-# 		})
-# 	return render(request, 'conversation.html', {'conversation': conversation, 'messages': messages, 'reply_form': reply_form, })
 
 @login_required
 def like(request, message_id):
@@ -611,90 +536,3 @@ def follow(request, user_id):
 			user.profile.add_relationship(to_person=followed_user, status=1)
 	return redirect('/')
 
-# @login_required
-# def metaoutbox(request):
-# 	user = request.user
-# 	m = Message.objects.filter(sender=user).order_by('-sent_at')
-# 	messages = [message.meta_msg for message in m]
-# 	message_list = list(OrderedDict.fromkeys(messages))
-
-# 	return render(request, 'metaoutbox.html', {'message_list': message_list, })
-
-# @login_required
-# def metaview(request, meta_message_id):
-# 	user = request.user
-# 	meta_message = get_object_or_404(MetaMessage, id=meta_message_id)
-# 	# print user
-# 	# Prevent viewing of message unless you're the sender
-# 	# if (message.sender != user) and (message.recipient != user):
-	
-# 	# raise Http404
-
-# 	return render(request, 'metaview.html', {'meta_message': meta_message, })
-
-# @login_required
-# def conversations(request, conversation_id, form_class=ComposeForm, subject_template=u"Re: %(subject)s"):
-# 	user = request.user
-# 	conversation = get_object_or_404(Conversation, id=conversation_id)
-# 	messages = conversation.convo_messages.all().order_by('sent_at')
-
-# 	reply_form = form_class(initial={
-# 		'subject': subject_template % {'subject': messages.last().subject},
-# 		})
-# 	return render(request, 'conversation.html', {'conversation': conversation, 'messages': messages, 'reply_form': reply_form, })
-
-# @login_required
-# def random(request, form_class=ComposeForm, subject_template=u"Re: %(subject)s"):
-# 	user = request.user
-# 	now = timezone.now()
-
-# 	meta_message = MetaMessage.objects.order_by('?')[0]
-	
-# 	form = form_class(initial={
-# 		'subject': subject_template % {'subject': meta_message.sub_messages.first()},
-# 		'recipient': [meta_message.sub_messages.first().sender, ]
-# 		})
-# 	return render(request, 'random.html', {'meta_message': meta_message, 'reply_form': form, })
-
-# @login_required
-# def randomreply(request, meta_message_id, form_class=ComposeForm, success_url=None, recipient_filter=None, subject_template=u"Re: %(subject)s"):
-# 	meta_msg = get_object_or_404(MetaMessage, id=meta_message_id)
-	
-# 	if request.method == "POST":
-# 		sender = request.user
-# 		form = form_class(request.POST, recipient_filter=recipient_filter)
-
-# 		if form.is_valid():
-# 			msg = meta_msg.sub_messages.first()
-# 			parent = Message.objects.create(sender=msg.sender, recipient=request.user, subject=msg.subject, body=msg.body, sent_at=timezone.now(), replied_at=timezone.now())
-# 			f = form.save(sender=request.user, recipients=[parent.sender], parent_msg=parent)
-# 			messages.info(request, u"Message successfully sent.")
-# 			if success_url is None:
-# 				success_url = reverse('messages_inbox')
-# 			return HttpResponseRedirect(success_url)
-
-# 	return render(request, 'random.html', {'reply_form': form, })
-
-# @login_required
-# def convoreply(request, conversation_id, form_class=ComposeForm, success_url=None):
-# 	conversation = get_object_or_404(Conversation, id=conversation_id)
-	
-# 	first_message = conversation.convo_messages.first()
-# 	if first_message.sender == request.user:
-# 		recipient = first_message.recipient
-# 	else:
-# 		recipient = first_message.sender
-	
-# 	if request.method == "POST":
-# 		sender = request.user
-# 		form = form_class(request.POST)
-# 		parent = conversation.convo_messages.last()
-
-# 		if form.is_valid():
-# 			f = form.save(sender=sender, recipients=[recipient, ], parent_msg=parent, meta_msg=None, conversation=conversation)
-# 			messages.info(request, u"Message successfully sent.")
-# 			if success_url is None:
-# 				success_url = reverse('conversations_detail', args=[conversation.id])
-# 			print success_url
-# 			return HttpResponseRedirect(success_url)
-# 	return redirect('/')

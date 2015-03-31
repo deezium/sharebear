@@ -4,20 +4,20 @@
 
 {% for message, like_status, youtube_id in feed_message_list %}
 <div class='row message-header'>
-	<div class='col-md-8'>
+	<div class='col-xs-8'>
 		<div id='feed-profile'>
 			<span><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></span> 
 			<span id='feed-username'><a href="/users/{{ message.creator }}">{{ message.creator }}</a></span>
 		</div>
 	</div>
-	<div class='col-md-4'>
+	<div class='col-xs-4'>
 		<div id='feed-timestamp'>
 			<time>{{ message.creation_time|date:_("DATETIME_FORMAT") }}</time> 
 		</div>
 	</div>
 </div>
 <div class='row'>
-	<div class='col-md-12'>
+	<div class='col-xs-12'>
 		 <div>
 	    	<a href="/message/{{ message.id }}">View</a>
 	    </div>
@@ -25,7 +25,7 @@
 </div>
     	
 <div class='row'>
-	<div class='col-md-12'>
+	<div class='col-xs-12'>
 		<div id='feed-body'>
 			{{ message.body|urlize }}
 		</div>
@@ -33,7 +33,7 @@
 </div>
 	
 <div class='row'>
-	<div class='col-md-12'>
+	<div class='col-xs-12'>
 		{% if youtube_id %}
 	    	 <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
 	    {% endif %}
@@ -41,18 +41,18 @@
 </div>
 
 <div class='row engagement-buttons'>
-	<div class='col-md-3 col-md-offset-9'>
+	<div class='col-xs-3 col-xs-offset-9'>
 
-        <div class="col-md-4">
+        <div class="col-xs-4">
             <button class="btn facebook-button" onclick="facebookShare()"></button>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-xs-4">
             <a class="btn twitter-button" href="https://twitter.com/intent/tweet?text=Check out this hot new track {{ message.creator }} posted on Sharebear! http://localhost:8000/message/{{ message.id }}"></a>
         </div>
 
 	{% if like_form and user != message.creator %}
-		<div class='col-md-4'>
+		<div class='col-xs-4'>
 			{% if like_status %}
 
 			<form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}

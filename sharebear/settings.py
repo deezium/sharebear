@@ -119,6 +119,20 @@ SOCIAL_AUTH_TWITTER_SECRET = 'z0gNBwJ3NddeKfF06L8zDXgfrfMgqSwBhIk1jdVUVv7aPJWWvr
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'sharebear_app.views.initial_feed',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+)
+
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'

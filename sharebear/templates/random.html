@@ -5,22 +5,22 @@
 
     {% with meta_message.sub_messages.all|first as message %}
     <div class="row subject">
-        <div class='col-md-12'>
+        <div class='col-xs-12'>
         <h2>{{ message.subject }}</h2>
         </div>
     </div>
     <div class="row sender-info">
-        <div class="col-md-8">
+        <div class="col-xs-8">
         <img src="{{ message.sender.profile.profile_image_url }}" width="50" height="50" />
             <a href="/users/{{ message.sender }}">{{ message.sender }}</a>
         </div>
-        <div class="col-md-4">
+        <div class="col-xs-4">
             <p><em>Sent at {{ message.sent_at|date:_("DATETIME_FORMAT")}}</em></p>
         </div>
     </div>
 
     <div class='row message-body'>
-        <div class='col-md-12'>
+        <div class='col-xs-12'>
         <p>{{ message.body|urlize }}</p>
         </div>
     </div>

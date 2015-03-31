@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class='row'>
-	<div class='col-md-12'>
+	<div class='col-xs-12'>
 		<div id='profile-pic-container' style='padding-top: 20px'>
 			<img id='profile-pic' src="{{ profile_user.profile.profile_image_url }}" style='float: left;' height="100" width="100"/>
 			<h2> {{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
@@ -48,20 +48,20 @@
 
 {% for message, like_status, youtube_id, view_count, prop_count in share_message_list %}
 <div class='row message-header'>
-	<div class='col-md-8'>
+	<div class='col-xs-8'>
 		<div id='feed-profile'>
 			<span><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></span> 
 			<span id='feed-username'><a href="/users/{{ message.creator }}">{{ message.creator }}</a></span>
 		</div>
 	</div>
-	<div class='col-md-4'>
+	<div class='col-xs-4'>
 		<div id='feed-timestamp'>
 			<time>{{ message.creation_time|date:_("DATETIME_FORMAT") }}</time> 
 		</div>
 	</div>
 </div>
 <div class='row'>
-	<div class='col-md-12'>
+	<div class='col-xs-12'>
 		 <div>
 	    	<a href="/message/{{ message.id }}">View</a>
 	    </div>
@@ -69,7 +69,7 @@
 </div>
     	
 <div class='row'>
-	<div class='col-md-12'>
+	<div class='col-xs-12'>
 		<div id='feed-body'>
 			{{ message.body|urlize }}
 		</div>
@@ -77,7 +77,7 @@
 </div>
 	
 <div class='row'>
-	<div class='col-md-12'>
+	<div class='col-xs-12'>
 		{% if youtube_id %}
 	    	 <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
 	    {% endif %}
@@ -85,18 +85,18 @@
 </div>
 
 <div class='row engagement-buttons'>
-	<div class='col-md-3 col-md-offset-9'>
+	<div class='col-xs-3 col-xs-offset-9'>
 
-        <div class="col-md-4">
+        <div class="col-xs-4">
             <button class="btn facebook-button" onclick="facebookShare()"></button>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-xs-4">
             <a class="btn twitter-button" href="https://twitter.com/intent/tweet?text=Check out this hot new track {{ message.creator }} posted on Sharebear! http://localhost:8000/message/{{ message.id }}"></a>
         </div>
 
 	{% if like_form and user != message.creator %}
-		<div class='col-md-4'>
+		<div class='col-xs-4'>
 			{% if like_status %}
 
 			<form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
@@ -120,7 +120,7 @@
 {% if user == message.creator %}
 
 <div class='row' id='message-stats'>
-<div class='col-md-6' style='border-right: 1px solid #ddd;'>
+<div class='col-xs-6' style='border-right: 1px solid #ddd;'>
     <div class='stats-header'>
         <span id='message-glyphicon-user' class="glyphicon glyphicon-user" aria-hidden="true"></span>
         <span class='stats-header-text'>People Reached</span>
@@ -137,7 +137,7 @@
 
     {% endfor %}
 </div>
-<div class='col-md-6'>
+<div class='col-xs-6'>
     <div class='stats-header'>
         <span id='message-glyphicon-heart' class="glyphicon glyphicon-heart" aria-hidden="true"></span>
         <span class='stats-header-text'>Props</span>
