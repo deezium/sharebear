@@ -46,7 +46,7 @@
 				<div class='container'>
 					<div class='navbar-left'>
 					<ul class='nav navbar-nav'>
-						<li><h3><a href="{% url 'index' %}" style="text-decoration:none">Kuvalenz</a></h3></li>
+						<li><h2><a href="{% url 'index' %}" style="text-decoration:none">Kuvalenz</a></h2></li>
 					</ul>
 					</div>
 					<div class='navbar-header navbar-right'>
@@ -112,7 +112,7 @@
 						<div class='row text-center' id='sidebar-stats'>
 							<span class='glyphicon glyphicon-user text-center' aria-hidden='true'></span>
 							<span class='text-center'>Total Reach</span>
-							<p>{{user.user_spreadmessages.msg.count}}</p>
+							<p>{{user.profile.get_reach }}</p>
 							<span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
 							<span>Promoter Score</span>
 							<p>{{ user.profile.promoter_score }}</p>

@@ -39,8 +39,12 @@ a{
 	color: rgb(191,0,0);
 }
 
+a:hover{
+	color: rgb(55,0,0);
+}
+
 body {
-	font-family: 'Quicksand', sans-serif;
+	font-family: 'Quicksand', helvetica, sans-serif;
 	background-color: rgba(36,32,31,1);
 	/*background-color: #8FCBD9;*/
 }
@@ -188,6 +192,10 @@ body {
 
 .navbar-inverse{
 	background-color: rgba(28,25,25,1);
+}
+
+.navbar-default {
+	border-radius: 0;
 }
 
 .form-control{

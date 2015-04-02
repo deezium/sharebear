@@ -88,6 +88,15 @@ class UserProfile(models.Model):
 	def get_followers(self):
 		return self.get_related_to(RELATIONSHIP_FOLLOWING)
 
+	def get_reach(self):
+		followers = self.get_followers().count()
+		messages = self.user.sent_messages.all()
+		spread_count_list = [i.message_spreadmessages.all().count() for i in messages]
+		spread_view_count = sum(spread_count_list)
+		follower_view_count = followers*messages.count()
+		view_count = spread_view_count + follower_view_count
+		return view_count
+
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 
