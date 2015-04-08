@@ -173,6 +173,9 @@ class Relationship(models.Model):
 	to_person = models.ForeignKey(UserProfile, related_name='to_people')
 	status = models.IntegerField(choices=RELATIONSHIP_STATUSES)
 
+	class Meta:
+		unique_together = (("from_person", "to_person", "status"),)
+
 class SpreadMessage(models.Model):
 	user = models.ForeignKey(AUTH_USER_MODEL, related_name='user_spreadmessages')
 	msg = models.ForeignKey(Message, related_name='message_spreadmessages')

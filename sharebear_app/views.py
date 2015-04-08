@@ -525,14 +525,22 @@ def recipients(request, message_id):
 @login_required
 def follow(request, user_id):
 	user = request.user
+	user_id = request.POST.get('identifier')
+	print user_id
+	response_data = {}
 	followed_user = get_object_or_404(UserProfile, id=user_id)
 	if user.profile.is_following(followed_user):
 		user.profile.remove_relationship(to_person=followed_user, status=1)
+		response_data['result'] = 'Unfollowed'
+		response_data['next_action'] = 'Follow'
 	else:
 		print Relationship.objects.filter(from_person=user.profile,status=1).count()
 		if Relationship.objects.filter(from_person=user.profile,status=1).count() >= 100:
 			print "You can only follow 100 artists at a time!"
 		else:
 			user.profile.add_relationship(to_person=followed_user, status=1)
-	return redirect('/')
+		response_data['result'] = 'Followed'
+		response_data['next_action'] = 'Unfollow'
+	return HttpResponse(json.dumps(response_data), content_type='application/json')
+#	return redirect('/')
 
