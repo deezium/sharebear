@@ -59,14 +59,14 @@
                 <div class="col-xs-4">
                     {% if like_status %}
 
-                    <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
-                    <button type="submit" class="btn like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                    <form action="{% url 'message_like' message.id %}" method="post" class='like-form'>{% csrf_token %}
+                    <button type="submit" id="lbutton" class="btn like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
                     </form>
 
                     {% else %}
 
-                    <form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
-                    <button type="submit" class="btn btn-default like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                    <form action="{% url 'message_like' message.id %}" method="post" class='like-form'>{% csrf_token %}
+                    <button type="submit" id="lbutton" class="btn btn-default like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
                     </form>
 
                     {% endif %}
@@ -119,7 +119,7 @@
         <div class='col-xs-6'>
             <div class='stats-header'>
                 <span id='message-glyphicon-heart' class="glyphicon glyphicon-heart" aria-hidden="true"></span>
-                <span class='stats-header-text'>Props</span>
+                <span class='stats-header-text'>Likes</span>
             </div>
             <div class='stats-number'>
             {{ prop_count }}
@@ -145,5 +145,32 @@
 
     {% endif %}
 
+<script>
+    $('.like-form').on('submit', function(event){
+        event.preventDefault();
+        console.log("form submitted!")
+        like();
+    });
+
+
+    function like() {
+        $.ajax({
+            url : '/like/{{ message.id }}/',
+            type : "POST",
+            data : { identifier : '{{ message.id }}' },
+
+            success : function(json) {
+                console.log(json);
+                $("#lbutton").toggleClass('btn-default', 'btn');
+                console.log("success");
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+        console.log("create post works!")
+    };
+</script>
+<script src="/media/scripts/main.js"></script>
 
 {% endblock %}

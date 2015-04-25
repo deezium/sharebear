@@ -56,14 +56,14 @@
 		<div class='col-xs-4'>
 			{% if like_status %}
 
-			<form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
-			<button type="submit" class="btn like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></button>
+			<form action="{% url 'message_like' message.id %}" method="post" class='like-form' id='feed_message_{{message.id}}' m="{{ message.id }}">{% csrf_token %}
+			<button type="submit" id="lbutton_{{message.id}}" class="btn like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></button>
 			</form>
 
 			{% else %}
 
-			<form action="{% url 'message_like' message.id %}" method="post">{% csrf_token %}
-			<button type="submit" class="btn btn-default like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></button>
+			<form action="{% url 'message_like' message.id %}" method="post" class='like-form' id='feed_message_{{message.id}}' m="{{ message.id }}">{% csrf_token %}
+			<button type="submit" id="lbutton_{{message.id}}" class="btn btn-default like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></button>
 			</form>
 
 			{% endif %}
@@ -92,6 +92,41 @@
 
 		
 </script>
+
+
+<script>
+    $('#feed_message_{{message.id}}').on('submit', function(event){
+        event.preventDefault();
+        var m_num = $(this).attr("m");
+        //console.log(this);
+        //console.log(m_num);
+        console.log("form submitted!");
+        like(m_num);
+    });
+
+  
+</script>
 {% endfor %}
+<script>
+		function like(m_num) {
+        $.ajax({
+            url : '/like/' + m_num + '/',
+            type : "POST",
+            data : { identifier : m_num },
+
+            success : function(json) {
+                console.log(json);
+                $("#lbutton_"+m_num).toggleClass('btn-default', 'btn');
+                console.log("success");
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+        //console.log("like works!")
+    };
+</script>
+<script src="/media/scripts/main.js"></script>
+
 
 {% endblock %}

@@ -365,15 +365,19 @@ def compose(request, form_class=ComposeForm, success_url=None):
 def like(request, message_id):
 	user = request.user
 	profile = UserProfile.objects.get(user=user)
+	message_id = request.POST.get('identifier')
+	print message_id
+	response_data = {}
 	try:
 		message=get_object_or_404(Message, id=message_id)
 	except:
 		pass
 	if request.method == "POST":
 		message_like = MessageLike.objects.get_or_create(user=user, msg=message)[0]
-		print message_like
 		
 		message_like.is_liked = not message_like.is_liked
+		response_data['result'] = message_like.is_liked
+		response_data['message'] = message.id
 		if message_like.ever_liked == False:
 			message_like.ever_liked = True
 			message_like.save()
@@ -407,7 +411,8 @@ def like(request, message_id):
 		else:
 			message_like.save()
 		
-	return redirect('/')
+	return HttpResponse(json.dumps(response_data), content_type='application/json')
+#	return redirect('/')
 
 @login_required
 def delete(request, message_id):
