@@ -180,8 +180,8 @@ class SpreadMessage(models.Model):
 	user = models.ForeignKey(AUTH_USER_MODEL, related_name='user_spreadmessages')
 	msg = models.ForeignKey(Message, related_name='message_spreadmessages')
 
-	class Meta:
-		unique_together = (("user", "msg"),)
+	#class Meta:
+	#	unique_together = (("user", "msg"),)
 
 	def __unicode__(self):
 		return str(self.id)

@@ -44,6 +44,12 @@
     </div>
     {% endif %}
 
+    <div class='row' id='likeSpreadDiv' style='display:none; padding-bottom:20px;'>
+        <div class='col-xs-12' style='text-align:center;'>
+            Thanks for liking {{ message.creator }}'s shared track!  You've spread this track to five new people!
+        </div>
+    </div>
+
     <div class='row engagement-buttons'>
             <div class='col-xs-3 col-xs-offset-9'>
 
@@ -60,13 +66,13 @@
                     {% if like_status %}
 
                     <form action="{% url 'message_like' message.id %}" method="post" class='like-form'>{% csrf_token %}
-                    <button type="submit" id="lbutton" class="btn like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                    <button type="submit" id="lbutton" class="btn like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true" onclick="showDiv()"></span></button>
                     </form>
 
                     {% else %}
 
                     <form action="{% url 'message_like' message.id %}" method="post" class='like-form'>{% csrf_token %}
-                    <button type="submit" id="lbutton" class="btn btn-default like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                    <button type="submit" id="lbutton" class="btn btn-default like-button"><span class="glyphicon glyphicon-heart" aria-hidden="true" onclick="showDiv()"></span></button>
                     </form>
 
                     {% endif %}
@@ -148,10 +154,9 @@
 <script>
     $('.like-form').on('submit', function(event){
         event.preventDefault();
-        console.log("form submitted!")
+        console.log("form submitted!");
         like();
     });
-
 
     function like() {
         $.ajax({
@@ -169,6 +174,11 @@
             }
         });
         console.log("create post works!")
+    };
+
+    function showDiv() {
+        console.log("sup");
+        document.getElementById("likeSpreadDiv").style.display="block";
     };
 </script>
 <script src="/media/scripts/main.js"></script>

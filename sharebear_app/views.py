@@ -269,6 +269,7 @@ def feed(request, like_form=None):
 	user = request.user
 	#message_list = Message.objects.feed_for(request.user)
 	spread_list = SpreadMessage.objects.filter(user=request.user)
+	
 	followed_users = user.profile.get_following()
 	spread_message_list = [x.msg for x in spread_list]
 	
@@ -277,8 +278,8 @@ def feed(request, like_form=None):
 	flattened_followed_message_list = [item for sublist in followed_message_list for item in sublist]
 
 	full_message_list = spread_message_list + flattened_followed_message_list
-	
-	#print full_message_list
+
+	full_message_list.sort(key=lambda m: m.creation_time, reverse=True)
 
 	full_youtube_list = []
 
@@ -366,18 +367,21 @@ def like(request, message_id):
 	user = request.user
 	profile = UserProfile.objects.get(user=user)
 	message_id = request.POST.get('identifier')
-	print message_id
+	
 	response_data = {}
+	
 	try:
 		message=get_object_or_404(Message, id=message_id)
 	except:
 		pass
 	if request.method == "POST":
+		recipient_list = []
 		message_like = MessageLike.objects.get_or_create(user=user, msg=message)[0]
 		
 		message_like.is_liked = not message_like.is_liked
 		response_data['result'] = message_like.is_liked
 		response_data['message'] = message.id
+
 		if message_like.ever_liked == False:
 			message_like.ever_liked = True
 			message_like.save()
@@ -410,7 +414,10 @@ def like(request, message_id):
 			
 		else:
 			message_like.save()
-		
+		print recipient_list
+		for idx,val in enumerate(recipient_list):
+			response_data['recipient_'+str(idx)]=val.profile.pic.url
+	print response_data
 	return HttpResponse(json.dumps(response_data), content_type='application/json')
 #	return redirect('/')
 
