@@ -2,7 +2,12 @@
 {% block content %}
 {% load humanize %}
 
-{% for message, like_status, youtube_id in feed_message_list %}
+
+{% for message, like_status, ever_like_status, youtube_id in feed_message_list %}
+
+<script>
+
+</script>
 
 <div class='row message-header'>
 	<div class='col-xs-8'>
@@ -38,6 +43,12 @@
 		{% if youtube_id %}
 	    	 <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
 	    {% endif %}
+    </div>
+</div>
+
+<div class='row' id='likeSpreadDiv_{{message.id}}' style='display:none; padding-bottom:20px;'>
+    <div class='col-xs-12' style='text-align:center;'>
+        Thanks for liking {{ message.creator }}'s shared track!  You've spread this track to five new people!
     </div>
 </div>
 
@@ -103,9 +114,18 @@
         console.log("form submitted!");
         like(m_num);
     });
-
-  
 </script>
+
+
+{% if ever_like_status == False %}
+<script>
+    $('#lbutton_{{message.id}}').on('click', function(event) {
+        console.log("likeSpreadDiv_{{message.id}}");
+        document.getElementById("likeSpreadDiv_{{message.id}}").style.display="block";
+    });
+</script>
+{% endif %}
+
 {% endfor %}
 <script>
 		function like(m_num) {

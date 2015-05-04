@@ -153,6 +153,12 @@ class Message(models.Model):
 			return i.is_liked
 		return False
 
+	def ever_liked_by_user(self, user):
+		like = self.message_likes.filter(user=user)
+		for i in like:
+			return i.ever_liked
+		return False
+
 	class Meta:
 		ordering = ['-creation_time']
 		verbose_name = "Message"

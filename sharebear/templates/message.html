@@ -16,6 +16,15 @@
         confirm("Are you sure you want to delete this message?");
     }
     </script>
+    
+    {% if ever_like_status == False %}
+    <script>
+    function showDiv() {
+        console.log("sup");
+        document.getElementById("likeSpreadDiv").style.display="block";
+    };
+    </script>
+    {% endif %}
 
     <div class='row' style="padding-top: 10px">
         <div class='col-xs-8'>
@@ -151,6 +160,14 @@
 
     {% endif %}
 
+
+<script>
+
+
+
+</script>
+
+
 <script>
     $('.like-form').on('submit', function(event){
         event.preventDefault();
@@ -173,14 +190,11 @@
                 console.log(xhr.status + ": " + xhr.responseText);
             }
         });
-        console.log("create post works!")
-    };
+        console.log("create post works!")    };
 
-    function showDiv() {
-        console.log("sup");
-        document.getElementById("likeSpreadDiv").style.display="block";
-    };
 </script>
+
+
 <script src="/media/scripts/main.js"></script>
 
 {% endblock %}

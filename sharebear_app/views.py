@@ -135,8 +135,10 @@ def users(request, username="", edit_form=None):
 
 		share_message_list = []
 		for i in parameter_list:
-			share_message_list.append([i[0],i[0].is_liked_by_user(profile_user),i[1],i[2],i[3]])
+			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3]])
 		
+
+		print share_message_list
 		like_form=MessageLikeForm()
 
 
@@ -195,8 +197,10 @@ def likes(request, username="", edit_form=None):
 
 		share_message_list = []
 		for i in parameter_list:
-			share_message_list.append([i[0],i[0].is_liked_by_user(profile_user),i[1],i[2],i[3]])
+			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3]])
 		
+		print share_message_list
+
 		like_form=MessageLikeForm()
 
 		return render(request, 'likes.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'following': following, 'share_message_list': share_message_list, 'like_form': like_form, })
@@ -240,7 +244,7 @@ def shares(request, username=""):
 
 	share_message_list = []
 	for i in parameter_list:
-		share_message_list.append([i[0],i[0].is_liked_by_user(profile_user),i[1],i[2],i[3]])
+		share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3]])
 	
 	like_form=MessageLikeForm()
 	return render(request, 'shares.html', {'share_message_list': share_message_list, 'user': user, 'profile_user': profile_user, 'like_form': like_form, })
@@ -304,10 +308,9 @@ def feed(request, like_form=None):
 
 	feed_message_list = []
 	for i in parameter_list:
-		feed_message_list.append([i[0],i[0].is_liked_by_user(user),i[1]])
+		feed_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1]])
 
-	# print feed_message_list
-	print user
+	print feed_message_list
 
 	like_form=MessageLikeForm()
 	return render(request, 'feed.html', {'feed_message_list': feed_message_list, 'user': user, 'like_form': like_form, })
@@ -500,9 +503,12 @@ def messageview(request, message_id):
 	print youtube_id
 	
 	like_status = message.is_liked_by_user(user)
+	ever_like_status = message.ever_liked_by_user(user)
+	print like_status
+	print ever_like_status
 
 	like_form = MessageLikeForm(initial={'is_liked': like_status, })
-	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'like_form': like_form, 'like_status': like_status, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, })
+	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'like_form': like_form, 'like_status': like_status, 'ever_like_status': ever_like_status, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, })
 
 @login_required
 def view(request, message_id, form_class=ComposeForm, like_form=None, subject_template=u"Re: %(subject)s"):
