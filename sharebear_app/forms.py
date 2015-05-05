@@ -20,9 +20,16 @@ class UserCreateForm(UserCreationForm):
 		fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']
 		model = User
 
+class UserEditForm(forms.ModelForm):
+	username=forms.CharField(required=False, label='Username', widget=forms.Textarea())
+	
+	class Meta:
+		fields =['username']
+		model = User
+
 class EditProfileForm(forms.ModelForm):
 	pic = forms.ImageField(required=False)
-	aboutme = forms.CharField(required=False, label='About me', widget=forms.Textarea(attrs={'placeholder': 'What is awesome about you?'}))
+	aboutme = forms.CharField(required=False, label='About me', widget=forms.Textarea(attrs={'placeholder': 'You are awesome.'}))
 	location = forms.CharField(required=False, widget=forms.widgets.TextInput(attrs={'placeholder': 'Where you at?'}))
 
 	class Meta:

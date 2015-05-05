@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.conf import settings
 from datetime import datetime
 from collections import OrderedDict
-from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm
+from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm, UserEditForm
 from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage
 from sharebear_app.utils import get_user_model, get_username_field
 from urllib2 import urlopen

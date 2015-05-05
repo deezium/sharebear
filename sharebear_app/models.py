@@ -23,7 +23,7 @@ class UserProfile(models.Model):
 	user = models.ForeignKey(User)
 	pic = models.FileField(upload_to='avatars', default='avatars/finger.jpg')
 	aboutme = models.TextField(null=True, blank=True, default='I am a trapaholic.')
-	location = models.TextField(null=True, blank=True, default='Erf.')
+	location = models.TextField(null=True, blank=True, default='The greatest place on Earth.')
 	promoter_score = models.IntegerField(default=0)
 	promoter_score_last_updated = models.DateTimeField(null=True, blank=True)
 	promoter_score_update_level = models.IntegerField(default=0)

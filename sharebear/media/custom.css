@@ -1,5 +1,5 @@
 .subject{
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid #eee;
 }
 
 .sender-info{
@@ -36,32 +36,44 @@ ol{
 }
 
 a{
-	color: rgb(191,0,0);
+	color: rgb(53,20,86);
 }
 
 a:hover{
-	color: rgb(55,0,0);
+	color: rgb(31,4,57);
 }
 
 body {
-	font-family: 'Quicksand', helvetica, sans-serif;
-	background-color: rgba(36,32,31,1);
+	font-family: 'Ek Mukta', helvetica, sans-serif;
+	/*background-color: rgba(145,119,172,0.2);*/
+	background-color: rgba(0,0,0,0.1);
 	/*background-color: #8FCBD9;*/
 }
 
+#intro-text{
+	font-size: 4em;
+}
+
+
+.container .jumbotron{
+	border-radius: 0px;
+	border: 1px solid #ddd;
+}
 
 #main-content{
-	/*border: 1px solid gray;*/
 	padding-bottom: 15px;
 	background-color: #fff;
-	border-radius: 5px;
+	border-radius: 0px;
+	border: 1px solid #ddd;
 }
 
 #sidebar{
 	padding-bottom: 20px;
 	padding-top: 20px;
 	background-color: #fff;
-	border-radius: 5px;
+	border-radius: 0px;
+	border: 1px solid #ddd;
+	font-size: 1.1em;
 }
 
 #sidebar-stats{
@@ -82,6 +94,16 @@ body {
 	text-align: center;
 	height: 39px;
 	width: 46px;
+	background-color: white;
+	border-color: rgb(53,20,86);
+}
+
+#compose-button:hover{
+	background-color: #eee;
+}
+
+#compose-pencil{
+	color: rgb(31,4,57);
 }
 
 .compose-button{
@@ -96,6 +118,11 @@ body {
 
 .nav-pills>li>a{
 	text-align: center;
+}
+
+.nav-pills>li>a:hover{
+	border-radius: 0px;
+	background-color: #eee;
 }
 
 #pill-row{
@@ -117,7 +144,7 @@ body {
 
 .message-header{
 	 padding-top: 10px; 
-	 border-top: 1px solid black;
+	 border-top: 1px solid #ddd;
 }
 
 .meta-recipient{
@@ -134,19 +161,19 @@ body {
 }
 
 .btn-default{
-	background-color:rgb(191,0,0);
+	background-color:rgb(79,44,115);
 	color:white;
-	border-color:rgb(127,0,0);
+	border-color:rgb(53,20,86);
 }
 
 .btn-default:hover {
-	background-color: rgb(127,0,0);
-	border-color: rgb(127,0,0);
+	background-color: rgb(53,20,86);
+	border-color: rgb(31,4,57);
 	color: white;
 }
 
 #message-stats {
-	border-top: 1px solid #ddd;
+	border-top: 1px solid #eee;
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
@@ -157,7 +184,7 @@ body {
 
 #delete-button-row {
 	padding-top: 20px;
-	border-top: 1px solid #ddd;
+	border-top: 1px solid #eee;
 }
 
 #message-glyphicon-user{
@@ -225,7 +252,7 @@ body {
 
 .message {
 	padding: 10px;
-	border-radius: 2px;
+	border-radius: 0px;
 	box-shadow: 0 1px 2px rgba(black, 0.2);
 }
 
@@ -276,7 +303,7 @@ body {
 .feed-message {
 	padding-top: 10px;
 	padding-bottom: 10px;
-	border-bottom: solid 1px #000;
+	border-bottom: solid 1px #aaa;
 }
 
 .feed-list {
@@ -305,9 +332,13 @@ body {
 #center{margin:0 auto;width:50px;}
 
 #feed-body {
-	font-size: 1.24em;
+	font-size: 1.1em;
 	padding-top: 10px;
 	padding-bottom: 20px;
+}
+
+#feed-body>a{
+	font-size: 1em;
 }
 
 .like-button{
@@ -336,7 +367,6 @@ body {
 }
 
 #feed-username a {
-	color: black;
 	font-weight: bold;
 	text-decoration: none;
 }
@@ -380,7 +410,15 @@ body {
 }
 
 nav.navbar.navbar-default{
+	background-color: rgba(53,20,86,1);
+	border-color: rgba(31,4,57,1);
+	border-bottom: 1px solid black;
 	/*height: 46px;*/
+}
+
+#site-name{
+	font-family: 'Quicksand', helvetica, sans-serif;
+	color: white;
 }
 
 /*
