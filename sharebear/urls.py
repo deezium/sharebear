@@ -51,9 +51,7 @@ urlpatterns = patterns('',
     url(r'^edit/(?P<username>\w.{0,30})/$', 'sharebear_app.views.edit', name='user_edit'),
     url('',include('social.apps.django_app.urls', namespace='social')),
     url('', include('django.contrib.auth.urls', namespace='auth')),
-   ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
-
-urlpatterns += staticfiles_urlpatterns()
+   ) 
 
     # REMOVE STATIC LINE FOR PRODUCTION?
     # FIGURE OUT HOW TO SEPARATE MEDIA URL FROM STATIC URL AND MOVE CUSTOM.CSS TO WHERE STATIC URL IS

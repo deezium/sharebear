@@ -14,6 +14,7 @@ gunicorn==19.3.0
 kombu==3.0.24
 oauthlib==0.7.2
 Pillow==2.7.0
+postgres==2.1.2
 psycopg2==2.6
 PyJWT==0.4.1
 python-openid==2.2.5
@@ -24,3 +25,4 @@ requests-oauthlib==0.4.2
 six==1.9.0
 static3==0.5.1
 Unidecode==0.4.17
+whitenoise==1.0.6
