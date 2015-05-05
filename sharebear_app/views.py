@@ -338,7 +338,7 @@ def compose(request, form_class=ComposeForm, success_url=None):
 		user = request.user
 		form = form_class(data=request.POST)
 
-		recipient_list = User.objects.order_by('?')[:20]
+		recipient_list = User.objects.order_by('?')[:10]
 
 		print recipient_list
 
@@ -409,17 +409,20 @@ def like(request, message_id):
 
 			# Spreading
 
-			recipient_list = [User.objects.order_by('?')[i] for i in range(5)]
+			#recipient_list = [User.objects.order_by('?')[i] for i in range(5)]
 
 			for i in range(5):
-				new_spread_message = SpreadMessage(user=recipient_list[i],msg=message)
-				new_spread_message.save()
-			
+				u = User.objects.order_by('?')[0]
+				s = SpreadMessage.objects.filter(user=u,msg=message)
+				if not s and message.creator != u:
+					new_spread_message = SpreadMessage(user=u,msg=message)
+					new_spread_message.save()
+				
 		else:
 			message_like.save()
-		print recipient_list
-		for idx,val in enumerate(recipient_list):
-			response_data['recipient_'+str(idx)]=val.profile.pic.url
+
+		# for idx,val in enumerate(recipient_list):
+		# 	response_data['recipient_'+str(idx)]=val.profile.pic.url
 	print response_data
 	return HttpResponse(json.dumps(response_data), content_type='application/json')
 #	return redirect('/')
