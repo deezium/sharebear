@@ -23,7 +23,7 @@ def createUsers():
 			)
 		location = fake.city()
 		randint = random.randint(0,19)
-		profile = UserProfile(user=user, aboutme="Fuck a thousand bitches and dey girlfriends.", location=location, pic='avatars/avatar%s.jpg' % randint)
+		profile = UserProfile(user=user, aboutme="Fake data, yo.", location=location, pic='avatars/avatar%s.jpg' % randint)
 		profile.save()
 		print user, profile
 	return True

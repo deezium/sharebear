@@ -21,7 +21,7 @@ RELATIONSHIP_STATUSES = (
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User)
-	pic = models.FileField(upload_to='avatars', default='avatars/finger.jpg')
+	pic = models.FileField(upload_to='avatars', default='avatars/user_icon.jpg')
 	aboutme = models.TextField(null=True, blank=True, default='I am a trapaholic.')
 	location = models.TextField(null=True, blank=True, default='The greatest place on Earth.')
 	promoter_score = models.IntegerField(default=0)

@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.conf import settings
 from datetime import datetime
 from collections import OrderedDict
-from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm, UserEditForm
+from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm, UsernameEditForm
 from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage
 from sharebear_app.utils import get_user_model, get_username_field
 from urllib2 import urlopen
@@ -80,6 +80,20 @@ def edit_profile(request):
 		if form.is_valid():
 			form.save()
 			return redirect(next_url)
+	return redirect('/')
+
+def edit_username(request):
+	try:
+		user = request.user
+	except:
+		pass
+	if request.method == 'POST':
+		form = UsernameEditForm(request.POST, instance=user)
+		form.user = request.user
+		next_url_feed = request.POST.get('next_url_feed', '/')
+		if form.is_valid():
+			form.save()
+			return redirect(next_url_feed)
 	return redirect('/')
 
 def get_latest(user):
@@ -260,9 +274,10 @@ def edit(request, username="", edit_form=None):
 			raise Http404
 		if profile_user == request.user:
 			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
+			username_form = UsernameEditForm(initial={'username': user.username, })
 		if user.profile.is_following(userprofile[0]):
 			following=True
-		return render(request, 'edit.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'following': following, })
+		return render(request, 'edit.html', {'next_url': '/users/%s' % user.username, 'next_url_feed': '/feed/', 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'username_form': username_form, 'following': following, })
 	users = User.objects.all()
 	return redirect('/')
 

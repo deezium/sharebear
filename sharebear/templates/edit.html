@@ -49,14 +49,31 @@
 	<div class='col-xs-12'>
 		{% if profile_user == user %}
 		
-		<div class='profile-section'>
-			<h3> Edit Profile </h3>
+		<div class='row'>
+			<div class='col-xs-12'>
+				<div>
+					<h3>Edit Username</h3>
+				</div>
+				<form action='/editname/' method='post'>{% csrf_token %}
+					{% bootstrap_form username_form %}
+					<input type='hidden' value='{{ next_url_feed }}' name='next_url_feed'>
+					<input type='submit' onclick="return confirm('Are you sure you want to change your username?');" class='btn btn-default' value='Change Username!' style='float: right;'>
+				</form>
+			</div>
 		</div>
-			<form enctype='multipart/form-data' action='/edit/' method='post'>{% csrf_token %}
-				{% bootstrap_form edit_form %}
-				<input type='hidden' value='{{ next_url }}' name='next_url'>
-				<input type='submit' class='btn btn-default' value='Update!' style='float: right;'>
-			</form>
+
+		<div class='row'>
+			<div class='col-xs-12'>
+				<div class='profile-section'>
+					<h3>Edit Profile</h3>
+				</div>
+				<form enctype='multipart/form-data' action='/edit/' method='post'>{% csrf_token %}
+					{% bootstrap_form edit_form %}
+					<input type='hidden' value='{{ next_url }}' name='next_url'>
+					<input type='submit' class='btn btn-default' value='Update!' style='float: right;'>
+				</form>
+			</div>
+		</div>
 			
 		{% endif %}
 	</div>

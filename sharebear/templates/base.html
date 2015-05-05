@@ -63,7 +63,7 @@
 					{% if user.is_authenticated %}
 						<ul class='nav navbar-nav'>
 							<li class='dropdown'>
-								<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><img src="{{ user.profile.profile_image_url }}" height="39" width="39"/><span class='caret'></span></a>
+								<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><img src="{{ user.profile.profile_image_url }}" id="navbar-avatar" /><span class='caret'></span></a>
 								<ul class='dropdown-menu' role='menu'>
 									<li><a href='/users/{{ user.username }}'>{{ user.username }}</a></li>
 									<li style='border-top:1px solid #ddd'><a href='/logout'>Log Out</a></li>
@@ -140,7 +140,7 @@
 				<div class='container'>
 					<div class='navbar-right'>
 						<ul class='nav navbar-nav'>
-							<li><a id='contact-url' href='mailto:feedback@trywavelength.com'>Contact</a></li>
+							<li><a id='contact-url' href='mailto:feedback@trywavelength.com'>Feedback?</a></li>
 						</ul>
 					</div>
 				</div>

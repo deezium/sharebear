@@ -20,8 +20,8 @@ class UserCreateForm(UserCreationForm):
 		fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']
 		model = User
 
-class UserEditForm(forms.ModelForm):
-	username=forms.CharField(required=False, label='Username', widget=forms.Textarea())
+class UsernameEditForm(forms.ModelForm):
+	username=forms.CharField(required=False, label='Username', widget=forms.widgets.TextInput())
 	
 	class Meta:
 		fields =['username']
