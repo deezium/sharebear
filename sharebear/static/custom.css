@@ -356,7 +356,7 @@ body {
 .facebook-button{
 	height: 40px;
 	width: 40px;
-	background: url('/media/fblogo_40.png') no-repeat scroll center;
+	background: url('/static/fblogo_40.png') no-repeat scroll center;
 }
 
 
@@ -364,7 +364,7 @@ body {
 	border: 1px solid #55acee;
 	height: 40px;
 	width: 40px;
-	background: url('/media/twitterlogo_32x26.png') no-repeat scroll center;
+	background: url('/static/twitterlogo_32x26.png') no-repeat scroll center;
 }
 #feed-timestamp {
 	padding-top: 10px;
