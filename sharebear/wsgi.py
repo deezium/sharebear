@@ -15,8 +15,8 @@ from whitenoise.django import DjangoWhiteNoise
 from whitenoise import WhiteNoise
 
 application = get_wsgi_application()
-#application = DjangoWhiteNoise(application)
-application = WhiteNoise(application, root='staticfiles')
+application = DjangoWhiteNoise(application)
+#application = WhiteNoise(application, root='staticfiles')
 
 
 from dj_static import Cling
