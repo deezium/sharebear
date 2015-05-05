@@ -62,6 +62,7 @@ body {
 
 #main-content{
 	padding-bottom: 15px;
+	margin-bottom: 70px;
 	background-color: #fff;
 	border-radius: 0px;
 	border: 1px solid #ddd;
@@ -419,6 +420,18 @@ nav.navbar.navbar-default{
 #site-name{
 	font-family: 'Quicksand', helvetica, sans-serif;
 	color: white;
+}
+
+#footer-nav{
+	height: 30px;
+}
+
+#contact-url{
+	color: white;
+}
+
+#contact-url:hover{
+	color: #eee;
 }
 
 /*
