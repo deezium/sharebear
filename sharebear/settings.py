@@ -177,4 +177,4 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
-MEDIA_URL = 'http://www.trywavelength.com/media/'
+MEDIA_URL = '/media/'
