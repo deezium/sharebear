@@ -37,7 +37,7 @@ class UserProfile(models.Model):
 
 		if len(fb_uid):
 			print fb_uid[0].uid
-			return "http://graph.facebook.com/{}/picture?width=100&height=100".format(fb_uid[0].uid)
+			return "http://graph.facebook.com/{}/picture?width=400&height=400".format(fb_uid[0].uid)
 
 		return self.pic.url
 
