@@ -54,10 +54,40 @@ body {
 	font-size: 4em;
 }
 
+#home-strip-1{
+	margin-top: -20px;
+	padding-bottom: 30px;
+}
+
+#home-strip-2{
+	background-color: rgba(0,0,0,0.3);
+}
+
+#home-strip-4{
+	background-color: rgba(0,0,0,0.3);
+}
+
+.home-container{
+	padding-top: 60px;
+	padding-bottom: 60px;
+}
+
 
 .container .jumbotron{
 	border-radius: 0px;
 	border: 1px solid #ddd;
+}
+
+.jumbotron{
+	background-color: white;
+	text-align: center;
+}
+
+.featurette{
+	background-color: white;
+	text-align: center;
+	border-top: 1px solid #ddd;
+
 }
 
 #navbar-avatar{
@@ -162,10 +192,7 @@ body {
 	padding-bottom: 10px;
 }
 
-.jumbotron{
-	background-color: white;
-	text-align: center;
-}
+
 
 .btn-default{
 	background-color:rgb(79,44,115);
@@ -420,6 +447,12 @@ nav.navbar.navbar-default{
 	background-color: rgba(53,20,86,1);
 	border-color: rgba(31,4,57,1);
 	border-bottom: 1px solid black;
+	/*height: 46px;*/
+}
+
+nav.navbar.navbar-inverse{
+	background-color: rgba(255,255,255,1);
+	border-color: #ddd;
 	/*height: 46px;*/
 }
 
