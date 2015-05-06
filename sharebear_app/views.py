@@ -155,7 +155,6 @@ def users(request, username="", edit_form=None):
 		print share_message_list
 		like_form=MessageLikeForm()
 
-
 		return render(request, 'profile.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'following': following, 'share_message_list': share_message_list, 'like_form': like_form, })
 	users = User.objects.all()
 	return redirect('/')
