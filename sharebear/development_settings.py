@@ -1,0 +1,7 @@
+# -*- coding: utf-8 -*-
+
+from .settings import *
+
+DEBUG = True
+
+TEMPLATE_DEBUT = True
