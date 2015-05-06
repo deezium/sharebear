@@ -54,17 +54,21 @@ body {
 	font-size: 4em;
 }
 
+.vertical-center{
+	vertical-align: middle;
+}
+
 #home-strip-1{
 	margin-top: -20px;
 	padding-bottom: 30px;
 }
 
 #home-strip-2{
-	background-color: rgba(0,0,0,0.3);
+	background-color: #ddd;
 }
 
 #home-strip-4{
-	background-color: rgba(0,0,0,0.3);
+	background-color: #ddd;
 }
 
 .home-container{

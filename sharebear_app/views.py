@@ -350,7 +350,7 @@ def compose(request, form_class=ComposeForm, success_url=None):
 		user = request.user
 		form = form_class(data=request.POST)
 
-		recipient_list = User.objects.order_by('?')[:10]
+		recipient_list = User.objects.order_by('?')[:12]
 
 		print recipient_list
 

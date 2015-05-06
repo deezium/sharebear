@@ -24,14 +24,14 @@
 				<a href="{% url 'social:begin' 'facebook'%}?next={{request.path}}"><img src='{{ STATIC_URL }}/facebooklogin.png'/></a>
 			</div>
 	</div>
-<!--	<div class='featurette' id='home-strip-2'>
+	<div class='featurette' id='home-strip-2'>
 		<div class='container home-container'>
 			<div class='row'>
 				<div class='col-xs-6'>
-					<h3>Grow your fan base by reaching new listeners most likely to engage with your music.</h3>
+					<h2>Grow your fan base by reaching new listeners who are most likely to engage with your music.</h2>
 				</div>
 				<div class='col-xs-6'>
-					Pic
+					<img src='{{ STATIC_URL }}/home-recipients.png' class='img-responsive'/>
 				</div>
 			</div>
 		</div>
@@ -40,10 +40,10 @@
 		<div class='container home-container'>
 			<div class='row'>
 				<div class='col-xs-6'>
-					Pic
+					<img src='{{ STATIC_URL }}/home-stats.png' class='img-responsive'/>
 				</div>
 				<div class='col-xs-6'>
-					<h3>Track how listeners and fans are engaging with your posts.</h3>
+					<h2>Track how listeners and fans are engaging with your posts.</h2>
 				</div>
 			</div>
 		</div>
@@ -52,13 +52,13 @@
 		<div class='container home-container'>
 			<div class='row'>
 				<div class='col-xs-6'>
-					<h3>Wavelength helps you spend less time on marketing and promotion so you can spend more time doing what you love- making awesome music.</h3>
+					<h2>Wavelength helps you spend less time on marketing and promotion so you can spend more time doing what you love- making awesome music.</h2>
 				</div>
 				<div class='col-xs-6'>
-					Pic
+					<img src='{{ STATIC_URL }}/home-music.png' class='img-responsive'/>
 				</div>
 			</div>
 		</div>
 	</div>
-!-->
+
 {% endblock %}
