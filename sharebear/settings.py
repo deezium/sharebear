@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'sharebear_app',
     'bootstrap3',
     'social.apps.django_app.default',
+    'storages',
     #'allauth',
     #'allauth.account',
     #'allauth.socialaccount',
@@ -177,4 +178,11 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+#MEDIA_URL = '/media/'
+
+AWS_QUERYSTRING_AUTH = False
+AWS_ACCESS_KEY_ID = 'AKIAJ467ZTMQXQQ6RGBA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'sharebear-media'
+MEDIA_URL = 'http://%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
