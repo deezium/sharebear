@@ -28,12 +28,12 @@ class UsernameEditForm(forms.ModelForm):
 		model = User
 
 class EditProfileForm(forms.ModelForm):
-	pic = forms.ImageField(required=False)
+	#pic = forms.ImageField(required=False)
 	aboutme = forms.CharField(required=False, label='About me', widget=forms.Textarea(attrs={'placeholder': 'You are awesome.'}))
 	location = forms.CharField(required=False, widget=forms.widgets.TextInput(attrs={'placeholder': 'Where you at?'}))
 
 	class Meta:
-		fields = ['pic', 'location', 'aboutme']
+		fields = ['location', 'aboutme']
 		model = UserProfile
 
 class AuthenticateForm(AuthenticationForm):
