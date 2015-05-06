@@ -151,8 +151,6 @@ def users(request, username="", edit_form=None):
 		for i in parameter_list:
 			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3]])
 		
-
-		print share_message_list
 		like_form=MessageLikeForm()
 
 		return render(request, 'profile.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'following': following, 'share_message_list': share_message_list, 'like_form': like_form, })
