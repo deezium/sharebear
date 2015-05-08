@@ -46,7 +46,7 @@
 	</ul>
 </div>
 
-{% for message, like_status, ever_like_status, youtube_id, view_count, prop_count in share_message_list %}
+{% for message, like_status, ever_like_status, youtube_id, soundcloud_info, view_count, prop_count in share_message_list %}
 <div class='row message-header'>
 	<div class='col-xs-8'>
 		<div id='feed-profile'>
@@ -81,6 +81,11 @@
 		{% if youtube_id %}
 	    	 <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
 	    {% endif %}
+   	    {% autoescape off %}
+
+	    {{ soundcloud_info }}
+
+	    {% endautoescape %}
     </div>
 </div>
 

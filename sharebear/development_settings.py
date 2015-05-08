@@ -4,4 +4,4 @@ from .settings import *
 
 DEBUG = True
 
-TEMPLATE_DEBUT = True
+TEMPLATE_DEBUG = True

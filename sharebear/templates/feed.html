@@ -3,7 +3,7 @@
 {% load humanize %}
 
 
-{% for message, like_status, ever_like_status, youtube_id in feed_message_list %}
+{% for message, like_status, ever_like_status, youtube_id, soundcloud_info in feed_message_list %}
 
 <script>
 
@@ -43,8 +43,15 @@
 		{% if youtube_id %}
 	    	 <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
 	    {% endif %}
+	    {% autoescape off %}
+
+	    {{ soundcloud_info }}
+
+	    {% endautoescape %}
     </div>
 </div>
+
+
 
 <div class='row' id='likeSpreadDiv_{{message.id}}' style='display:none; padding-bottom:20px;'>
     <div class='col-xs-12' style='text-align:center;'>

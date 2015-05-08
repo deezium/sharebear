@@ -122,9 +122,13 @@ def users(request, username="", edit_form=None):
 		view_count_list = []
 		prop_count_list = []
 		full_youtube_list = []
+		full_soundcloud_list = []
+
+		client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
 
 		for message in full_message_list:
 			youtube_id = None
+			soundcloud_info = ''
 			view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
 			prop_count = message.message_likes.filter(ever_liked=1).count()
 
@@ -140,9 +144,19 @@ def users(request, username="", edit_form=None):
 				youtube_id = query["v"][0]
 			full_youtube_list.append(youtube_id)
 
+			if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
+				soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
+				track_url = "http://"+soundcloud_s
+
+				embed_info = client.get('/oembed', url=track_url)
+
+				soundcloud_info = embed_info.html
+
+			full_soundcloud_list.append(soundcloud_info)
+
 		#print full_youtube_list
 
-		parameter_list = [[full_message_list[i], full_youtube_list[i], view_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
+		parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i], view_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
 		#print parameter_list
 
 		#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
@@ -150,7 +164,7 @@ def users(request, username="", edit_form=None):
 
 		share_message_list = []
 		for i in parameter_list:
-			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3]])
+			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
 		
 		like_form=MessageLikeForm()
 
@@ -181,9 +195,14 @@ def likes(request, username="", edit_form=None):
 		view_count_list = []
 		prop_count_list = []
 		full_youtube_list = []
+		full_soundcloud_list = []
+
+		client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
+
 
 		for message in full_message_list:
 			youtube_id = None
+			soundcloud_info = ''
 			view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
 			prop_count = message.message_likes.filter(ever_liked=1).count()
 
@@ -199,9 +218,19 @@ def likes(request, username="", edit_form=None):
 				youtube_id = query["v"][0]
 			full_youtube_list.append(youtube_id)
 
+			if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
+				soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
+				track_url = "http://"+soundcloud_s
+
+				embed_info = client.get('/oembed', url=track_url)
+
+				soundcloud_info = embed_info.html
+
+			full_soundcloud_list.append(soundcloud_info)
+
 		#print full_youtube_list
 
-		parameter_list = [[full_message_list[i], full_youtube_list[i], view_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
+		parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i], view_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
 		#print parameter_list
 
 		#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
@@ -209,7 +238,7 @@ def likes(request, username="", edit_form=None):
 
 		share_message_list = []
 		for i in parameter_list:
-			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3]])
+			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
 		
 		print share_message_list
 
@@ -228,9 +257,15 @@ def shares(request, username=""):
 	view_count_list = []
 	prop_count_list = []
 	full_youtube_list = []
+	full_soundcloud_list = []
+
+	client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
+
 
 	for message in full_message_list:
 		youtube_id = None
+		soundcloud_info = ''
+
 		view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
 		prop_count = message.message_likes.filter(ever_liked=1).count()
 
@@ -246,9 +281,19 @@ def shares(request, username=""):
 			youtube_id = query["v"][0]
 		full_youtube_list.append(youtube_id)
 
+		if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
+			soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
+			track_url = "http://"+soundcloud_s
+
+			embed_info = client.get('/oembed', url=track_url)
+
+			soundcloud_info = embed_info.html
+
+		full_soundcloud_list.append(soundcloud_info)
+
 	#print full_youtube_list
 
-	parameter_list = [[full_message_list[i], full_youtube_list[i], view_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
+	parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i], view_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
 	#print parameter_list
 
 	#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
@@ -256,7 +301,7 @@ def shares(request, username=""):
 
 	share_message_list = []
 	for i in parameter_list:
-		share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3]])
+		share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
 	
 	like_form=MessageLikeForm()
 	return render(request, 'shares.html', {'share_message_list': share_message_list, 'user': user, 'profile_user': profile_user, 'like_form': like_form, })
@@ -299,9 +344,13 @@ def feed(request, like_form=None):
 	full_message_list.sort(key=lambda m: m.creation_time, reverse=True)
 
 	full_youtube_list = []
+	full_soundcloud_list = []
+
+	client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
 
 	for message in full_message_list:
 		youtube_id = None
+		soundcloud_info = ''
 		if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
 			youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
 			youtube_string = "http://"+youtube_s
@@ -311,17 +360,29 @@ def feed(request, like_form=None):
 			youtube_id = query["v"][0]
 		full_youtube_list.append(youtube_id)
 
+		if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
+			soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
+			track_url = "http://"+soundcloud_s
+
+			embed_info = client.get('/oembed', url=track_url)
+
+			soundcloud_info = embed_info.html
+
+		full_soundcloud_list.append(soundcloud_info)
+
+
+	print len(full_message_list), len(full_youtube_list), len(full_soundcloud_list)
 	#print full_youtube_list
 
-	parameter_list = [[full_message_list[i], full_youtube_list[i]] for i in range(len(full_youtube_list))]
-	#print parameter_list
+	parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i]] for i in range(len(full_youtube_list))]
+	print parameter_list
 
 	#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
 	# print feed_message_list
 
 	feed_message_list = []
 	for i in parameter_list:
-		feed_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1]])
+		feed_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2]])
 
 	print feed_message_list
 
