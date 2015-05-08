@@ -53,6 +53,12 @@
     </div>
     {% endif %}
 
+    {% autoescape off %}
+
+    {{ soundcloud_info }}
+
+    {% endautoescape %}
+
     <div class='row' id='likeSpreadDiv' style='display:none; padding-bottom:20px;'>
         <div class='col-xs-12' style='text-align:center;'>
             Thanks for liking {{ message.creator }}'s shared track!  You've spread this track to five new people!

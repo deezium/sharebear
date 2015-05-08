@@ -17,6 +17,7 @@ from urllib2 import urlopen
 import json
 import re
 import urlparse
+import soundcloud
 
 User = get_user_model()
 
@@ -516,14 +517,26 @@ def messageview(request, message_id):
 		query = urlparse.parse_qs(url_data.query)
 		youtube_id = query["v"][0]
 	print youtube_id
-	
+
+	client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
+
+	soundcloud_info = ''
+
+	if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
+		soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
+		track_url = "http://"+soundcloud_s
+
+		embed_info = client.get('/oembed', url=track_url)
+
+		soundcloud_info = embed_info.html
+
 	like_status = message.is_liked_by_user(user)
 	ever_like_status = message.ever_liked_by_user(user)
-	print like_status
-	print ever_like_status
+	# print like_status
+	# print ever_like_status
 
 	like_form = MessageLikeForm(initial={'is_liked': like_status, })
-	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'like_form': like_form, 'like_status': like_status, 'ever_like_status': ever_like_status, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, })
+	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'like_form': like_form, 'like_status': like_status, 'ever_like_status': ever_like_status, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, 'soundcloud_info': soundcloud_info, })
 
 @login_required
 def view(request, message_id, form_class=ComposeForm, like_form=None, subject_template=u"Re: %(subject)s"):
