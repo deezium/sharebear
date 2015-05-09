@@ -33,11 +33,11 @@ class UserProfile(models.Model):
 		return self.user.username
 
 	def profile_image_url(self):
-		# fb_uid = UserSocialAuth.objects.filter(user_id=self.user.id, provider='facebook')
+		fb_uid = UserSocialAuth.objects.filter(user_id=self.user.id, provider='facebook')
 
-		# if len(fb_uid):
-		# 	print fb_uid[0].uid
-		# 	return "http://graph.facebook.com/{}/picture?width=400&height=400".format(fb_uid[0].uid)
+		if len(fb_uid) and self.pic == 'avatars/user_icon.jpg':
+			print fb_uid[0].uid
+			return "http://graph.facebook.com/{}/picture?width=400&height=400".format(fb_uid[0].uid)
 
 		return self.pic.url
 
