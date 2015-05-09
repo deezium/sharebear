@@ -21,9 +21,9 @@ LOGIN_URL = '/'
 SECRET_KEY = '9l+sc14qef6d0!7fc9%klzw5&ykuvf9-fwb=i7rwt!x)l$7tk!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -177,12 +177,13 @@ STATICFILES_DIRS = (
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #MEDIA_URL = '/media/'
 
 AWS_QUERYSTRING_AUTH = False
+AWS_STORAGE_BUCKET_NAME = 'sharebear-media'
 AWS_ACCESS_KEY_ID = 'AKIAJ467ZTMQXQQ6RGBA'
 AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'sharebear-media'
 MEDIA_URL = 'http://%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
-#DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#MEDIAFILES_LOCATION = 'media'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'

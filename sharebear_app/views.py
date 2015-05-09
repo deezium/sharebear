@@ -199,7 +199,6 @@ def likes(request, username="", edit_form=None):
 
 		client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
 
-
 		for message in full_message_list:
 			youtube_id = None
 			soundcloud_info = ''
