@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
+{% load bootstrap3 %}
 {% block content %}
+
+<div class='row feed-share-form'>
+	<div class = 'col-xs-12'>
+		<h2>Share Track</h2>
+		<form role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+			{% bootstrap_form compose_form %}
+			<button type="submit" class='btn btn-default' style="float: right;">Share</button>
+		</form>
+	</div>
+</div>
+
 
 {% for message, like_status, ever_like_status, youtube_id, soundcloud_info, view_count, prop_count in share_message_list %}
 <div class='row message-header'>

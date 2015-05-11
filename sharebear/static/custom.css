@@ -341,6 +341,14 @@ body {
 	border-top-color: transparent;
 }
 
+.feed-share-form{
+	padding-bottom: 10px;
+}
+
+.feed-share-form .form-control{
+	height: 100px;
+}
+
 .feed-message {
 	padding-top: 10px;
 	padding-bottom: 10px;

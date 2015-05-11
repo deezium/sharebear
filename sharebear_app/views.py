@@ -247,7 +247,7 @@ def likes(request, username="", edit_form=None):
 	users = User.objects.all()
 	return redirect('/')
 
-def shares(request, username=""):
+def shares(request, username="", compose_form=ComposeForm, success_url=None):
 	user = request.user
 	profile_user = User.objects.get(username=username)
 	#message_list = Message.objects.feed_for(request.user)
@@ -303,7 +303,36 @@ def shares(request, username=""):
 		share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
 	
 	like_form=MessageLikeForm()
-	return render(request, 'shares.html', {'share_message_list': share_message_list, 'user': user, 'profile_user': profile_user, 'like_form': like_form, })
+
+	if request.method == "POST":
+		user = request.user
+		compose_form = compose_form(data=request.POST)
+
+		recipient_list = User.objects.order_by('?')[:12]
+
+		print recipient_list
+
+		if compose_form.is_valid():
+			f = compose_form.save(commit=False)
+			f.creator = request.user
+			f.creation_time = timezone.now()
+			f.save()
+			print f
+
+			for i in range(len(recipient_list)):
+				new_spread_message = SpreadMessage(user=recipient_list[i],msg=f)
+				new_spread_message.save()
+			messages.info(request, u"Message successfully sent.")
+			if success_url is None:
+				success_url = reverse('messages_recipients', kwargs={'message_id': f.id})
+				#success_url = reverse('messages_recipients', kwargs={'meta_message_id': m.id})
+			if 'next' in request.GET:
+				success_url = request.GET['next']
+			if 'next' in request.POST:
+				success_url = request.POST['next']
+			return HttpResponseRedirect(success_url)
+
+	return render(request, 'shares.html', {'share_message_list': share_message_list, 'user': user, 'profile_user': profile_user, 'like_form': like_form, 'compose_form': compose_form, })
 
 def edit(request, username="", edit_form=None):
 	user = request.user
@@ -326,7 +355,7 @@ def edit(request, username="", edit_form=None):
 	#return render(request, 'users.html', {'users': users, 'username': request.user.username, })
 
 @login_required
-def feed(request, like_form=None):
+def feed(request, like_form=None, compose_form=ComposeForm, success_url=None):
 	user = request.user
 	#message_list = Message.objects.feed_for(request.user)
 	spread_list = SpreadMessage.objects.filter(user=request.user)
@@ -386,7 +415,36 @@ def feed(request, like_form=None):
 	print feed_message_list
 
 	like_form=MessageLikeForm()
-	return render(request, 'feed.html', {'feed_message_list': feed_message_list, 'user': user, 'like_form': like_form, })
+
+	if request.method == "POST":
+		user = request.user
+		compose_form = compose_form(data=request.POST)
+
+		recipient_list = User.objects.order_by('?')[:12]
+
+		print recipient_list
+
+		if compose_form.is_valid():
+			f = compose_form.save(commit=False)
+			f.creator = request.user
+			f.creation_time = timezone.now()
+			f.save()
+			print f
+
+			for i in range(len(recipient_list)):
+				new_spread_message = SpreadMessage(user=recipient_list[i],msg=f)
+				new_spread_message.save()
+			messages.info(request, u"Message successfully sent.")
+			if success_url is None:
+				success_url = reverse('messages_recipients', kwargs={'message_id': f.id})
+				#success_url = reverse('messages_recipients', kwargs={'meta_message_id': m.id})
+			if 'next' in request.GET:
+				success_url = request.GET['next']
+			if 'next' in request.POST:
+				success_url = request.POST['next']
+			return HttpResponseRedirect(success_url)
+
+	return render(request, 'feed.html', {'feed_message_list': feed_message_list, 'user': user, 'like_form': like_form, 'compose_form': compose_form, })
 
 def initial_feed(request, user, *args, **kwargs):
 
