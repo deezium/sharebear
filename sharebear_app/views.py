@@ -135,18 +135,18 @@ def users(request, username="", edit_form=None):
 			view_count_list.append(view_count)
 			prop_count_list.append(prop_count)
 		
-			if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
-				youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
-				youtube_string = "http://"+youtube_s
+			if re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body):
+				youtube_s = re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body).group(0)
+				youtube_string = "https://"+youtube_s
 
 				url_data = urlparse.urlparse(youtube_string)
 				query = urlparse.parse_qs(url_data.query)
 				youtube_id = query["v"][0]
 			full_youtube_list.append(youtube_id)
 
-			if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
-				soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
-				track_url = "http://"+soundcloud_s
+			if re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body):
+				soundcloud_s = re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body).group(0)
+				track_url = "https://"+soundcloud_s
 
 				embed_info = client.get('/oembed', url=track_url)
 
@@ -208,18 +208,18 @@ def likes(request, username="", edit_form=None):
 			view_count_list.append(view_count)
 			prop_count_list.append(prop_count)
 		
-			if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
-				youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
-				youtube_string = "http://"+youtube_s
+			if re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body):
+				youtube_s = re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body).group(0)
+				youtube_string = "https://"+youtube_s
 
 				url_data = urlparse.urlparse(youtube_string)
 				query = urlparse.parse_qs(url_data.query)
 				youtube_id = query["v"][0]
 			full_youtube_list.append(youtube_id)
 
-			if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
-				soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
-				track_url = "http://"+soundcloud_s
+			if re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body):
+				soundcloud_s = re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body).group(0)
+				track_url = "https://"+soundcloud_s
 
 				embed_info = client.get('/oembed', url=track_url)
 
@@ -271,18 +271,18 @@ def shares(request, username=""):
 		view_count_list.append(view_count)
 		prop_count_list.append(prop_count)
 	
-		if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
-			youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
-			youtube_string = "http://"+youtube_s
+		if re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body):
+			youtube_s = re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body).group(0)
+			youtube_string = "https://"+youtube_s
 
 			url_data = urlparse.urlparse(youtube_string)
 			query = urlparse.parse_qs(url_data.query)
 			youtube_id = query["v"][0]
 		full_youtube_list.append(youtube_id)
 
-		if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
-			soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
-			track_url = "http://"+soundcloud_s
+		if re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body):
+			soundcloud_s = re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body).group(0)
+			track_url = "https://"+soundcloud_s
 
 			embed_info = client.get('/oembed', url=track_url)
 
@@ -335,7 +335,7 @@ def feed(request, like_form=None):
 	spread_message_list = [x.msg for x in spread_list]
 	
 	followed_message_list = [x.user.sent_messages.all() for x in followed_users]
-	
+
 	flattened_followed_message_list = [item for sublist in followed_message_list for item in sublist]
 
 	full_message_list = spread_message_list + flattened_followed_message_list
@@ -350,18 +350,20 @@ def feed(request, like_form=None):
 	for message in full_message_list:
 		youtube_id = None
 		soundcloud_info = ''
-		if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
-			youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
-			youtube_string = "http://"+youtube_s
+		if re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body):
+			youtube_s = re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body).group(0)
+			youtube_string = "https://"+youtube_s
 
 			url_data = urlparse.urlparse(youtube_string)
 			query = urlparse.parse_qs(url_data.query)
 			youtube_id = query["v"][0]
 		full_youtube_list.append(youtube_id)
 
-		if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
-			soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
-			track_url = "http://"+soundcloud_s
+		if re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body):
+			soundcloud_s = re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body).group(0)
+			track_url = "https://"+soundcloud_s
+
+			print track_url
 
 			embed_info = client.get('/oembed', url=track_url)
 
@@ -569,9 +571,9 @@ def messageview(request, message_id):
 	print proppers
 
 	youtube_id = None
-	if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body):
-		youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$", message.body).group(0)
-		youtube_string = "http://"+youtube_s
+	if re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body):
+		youtube_s = re.search("(www\.)?((youtube\.com/)|(youtu.be)|(youtube))\S+", message.body).group(0)
+		youtube_string = "https://"+youtube_s
 
 		url_data = urlparse.urlparse(youtube_string)
 		query = urlparse.parse_qs(url_data.query)
@@ -582,9 +584,12 @@ def messageview(request, message_id):
 
 	soundcloud_info = ''
 
-	if re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body):
-		soundcloud_s = re.search("(http\:\/\/)?(www\.)?(soundcloud\.com)\/.+$", message.body).group(0)
-		track_url = "http://"+soundcloud_s
+	if re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body):
+		soundcloud_s = re.search("(www\.)?((soundcloud\.com/)|(soundcloud))\S+", message.body).group(0)
+		track_url = "https://"+soundcloud_s
+		print soundcloud_s
+
+		print track_url
 
 		embed_info = client.get('/oembed', url=track_url)
 
