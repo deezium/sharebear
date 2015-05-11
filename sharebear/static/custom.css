@@ -133,10 +133,11 @@ body {
 #compose-button{
 	margin-bottom:10px;
 	text-align: center;
+	vertical-align: middle;
 	height: 39px;
-	width: 46px;
 	background-color: white;
 	border-color: rgb(53,20,86);
+	color: black;
 }
 
 #compose-button:hover{
@@ -145,6 +146,8 @@ body {
 
 #compose-pencil{
 	color: rgb(31,4,57);
+	vertical-align: middle;
+	margin-right: 10px;
 }
 
 .compose-button{
@@ -234,7 +237,7 @@ body {
 }
 
 .glyphicon-pencil{
-	font-size: 20px;
+	font-size: 25px;
 }
 
 .stats-header {
