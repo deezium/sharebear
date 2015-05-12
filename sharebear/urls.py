@@ -51,6 +51,7 @@ urlpatterns = patterns('',
     url(r'^edit/(?P<username>\w.{0,30})/$', 'sharebear_app.views.edit', name='user_edit'),
     url('',include('social.apps.django_app.urls', namespace='social')),
     url('', include('django.contrib.auth.urls', namespace='auth')),
+    url(r'^comments/', include('django_comments.urls')),
    ) 
 
 if settings.DEBUG:

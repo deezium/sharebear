@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
+{% load comments %}
 
 {% block head %}
 
@@ -155,6 +156,20 @@
         </div>
     </div>
 
+    {% endif %}
+
+    <div class='row'>
+        <div class='col-xs-12'>
+            {% get_comment_count for message as comment_count %}
+            <p>{{ comment_count }} comments have been posted. </p>
+            {% render_comment_list for message %}
+
+            {% render_comment_form for message %}
+        </div>
+    </div>
+
+    {% if user == message.creator %}
+
     <div class='row' id='delete-button-row'>
         <div class='col-xs-12'>
             <form action="{% url 'messages_delete' message.id %}" method="post">{% csrf_token %}
@@ -165,6 +180,7 @@
 
 
     {% endif %}
+
 
 
 <script>
