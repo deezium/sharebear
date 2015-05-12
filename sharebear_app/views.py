@@ -367,9 +367,17 @@ def feed(request, like_form=None, compose_form=ComposeForm, success_url=None):
 
 	flattened_followed_message_list = [item for sublist in followed_message_list for item in sublist]
 
-	full_message_list = spread_message_list + flattened_followed_message_list
+	full_message_list_duped = spread_message_list + flattened_followed_message_list
+
+	full_message_set = set(full_message_list_duped)
+
+	print full_message_set
+
+	full_message_list = list(full_message_set)
 
 	full_message_list.sort(key=lambda m: m.creation_time, reverse=True)
+
+	print full_message_list
 
 	full_youtube_list = []
 	full_soundcloud_list = []
@@ -399,11 +407,11 @@ def feed(request, like_form=None, compose_form=ComposeForm, success_url=None):
 		full_soundcloud_list.append(soundcloud_info)
 
 
-	print len(full_message_list), len(full_youtube_list), len(full_soundcloud_list)
+	#print len(full_message_list), len(full_youtube_list), len(full_soundcloud_list)
 	#print full_youtube_list
 
 	parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i]] for i in range(len(full_youtube_list))]
-	print parameter_list
+	#print parameter_list
 
 	#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
 	# print feed_message_list
@@ -412,7 +420,7 @@ def feed(request, like_form=None, compose_form=ComposeForm, success_url=None):
 	for i in parameter_list:
 		feed_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2]])
 
-	print feed_message_list
+	#print feed_message_list
 
 	like_form=MessageLikeForm()
 
@@ -422,7 +430,7 @@ def feed(request, like_form=None, compose_form=ComposeForm, success_url=None):
 
 		recipient_list = User.objects.order_by('?')[:12]
 
-		print recipient_list
+		#print recipient_list
 
 		if compose_form.is_valid():
 			f = compose_form.save(commit=False)
