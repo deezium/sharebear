@@ -158,38 +158,57 @@
 
     {% endif %}
 
-    <div class='row'>
+    <div class='row' id='comment-section'>
         <div class='col-xs-12'>
-            {% get_comment_count for message as comment_count %}
-            {% ifequal comment_count 1 %}
-                <p>{{ comment_count }} comment</p>
-            {% else %}
-                <p>{{ comment_count }} comments</p>
-            {% endifequal %}
+            <div class='row' style='padding-bottom:10px;'>
+                <div class='col-xs-12'>
+                    {% get_comment_count for message as comment_count %}
+                    {% ifequal comment_count 1 %}
+                        <p class='comment-count'>{{ comment_count }} comment</p>
+                    {% else %}
+                        <p class='comment-count'>{{ comment_count }} comments</p>
+                    {% endifequal %}
+                    
+                    {% get_comment_form for message as form %}
+                    <form action="{% comment_form_target %}" method="post">{% csrf_token %}
+                        {% for field in form %}
+                            {% if field.is_hidden %}
+                                {{ field }}
+                            {% else %}
+                                {% ifequal field.name "comment" %}
+                                    {% bootstrap_field field %}
+                                {% endifequal %}
+                            {% endif %}
+                        {% endfor %}
+                        <input name="next" type="hidden" value="{{ request.path }}" />
+                        <button type="submit" class='btn btn-default' style="float: right;">Post Comment!</button>
+                    </form>
+                </div>
+            </div>
 
             {% get_comment_list for message as comment_list %}
             {% for comment in comment_list %}
 
-            <p>Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
-            <p>{{ comment.comment }}</p>
-            
+            <div class='row comment-header' style="padding-top: 10px">
+                <div class='col-xs-8'>
+                    <div id='feed-profile'>
+                        <span><a href="/users/{{ comment.user.username }}"><img src="{{ comment.user.profile.pic.url }}" width="30" height="30" /></a></span> 
+                        <span id='feed-username'><a href="/users/{{ comment.user.username }}">{{ comment.user.username }}</a></span>
+                    </div>
+                </div>
+                <div class='col-xs-4'>
+                    <div id='feed-timestamp'>
+                        <time>{{ comment.submit_date|date:_("DATETIME_FORMAT") }}</time> 
+                    </div>
+                </div>
+            </div>
+            <div class='row comment-body'>
+                <div class='col-xs-12'>
+                    <p>{{ comment.comment }}</p>
+                </div>
+            </div>
             {% endfor %}
 
-
-            {% get_comment_form for message as form %}
-            <form action="{% comment_form_target %}" method="post">{% csrf_token %}
-                {% for field in form %}
-                    {% if field.is_hidden %}
-                        {{ field }}
-                    {% else %}
-                        {% ifequal field.name "comment" %}
-                            {% bootstrap_field field %}
-                        {% endifequal %}
-                    {% endif %}
-                {% endfor %}
-                <input name="next" type="hidden" value="{{ request.path }}" />
-                <button type="submit" class='btn btn-default' style="float: right;">Post Comment!</button>
-            </form>
         </div>
     </div>
 

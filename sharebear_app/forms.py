@@ -43,7 +43,7 @@ class AuthenticateForm(AuthenticationForm):
 	
 
 class ComposeForm(forms.ModelForm):
-	body = forms.CharField(label="", widget=forms.Textarea(attrs={'placeholder': 'Enter your message here'}))
+	body = forms.CharField(label="", widget=forms.Textarea(attrs={'placeholder': 'Post your latest hotness.'}))
 	
 	class Meta:
 		fields = ['body']

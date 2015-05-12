@@ -12,6 +12,31 @@
 	padding-bottom: 30px;
 }
 
+.comment-count {
+	font-size: 20px;
+}
+
+#comment-section {
+	border-top: 1px solid #eee;
+	padding-top: 10px;
+}
+
+.comment-header {
+	padding-top: 10px;
+}
+
+.comment-body {
+	border-bottom: 1px solid #eee;	
+}
+
+#id_comment {
+	height: 50px;
+}
+
+[for="id_comment"] {
+	display: none;
+}
+
 .centered {
 	margin-left: auto;
 	margin-right: auto;
