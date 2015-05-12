@@ -7,6 +7,7 @@
 <meta property="og:title" content="Posted on Wavelength"/>
 <meta property="og:url" content="{{ request.path }}"/>
 <meta property="og:description" content="Wavelength helps electronic music artists find new fans."/>
+<meta property="og:type" content="track"/>
 
 {% endblock %}
 
@@ -104,7 +105,7 @@
                   method: 'share_open_graph',
                   action_type: 'og.likes',
                   action_properties: JSON.stringify({
-                      object:'http://http://www.trywavelength.com/message/15/',
+                      object:'http://www.trywavelength.com/message/15/',
                   })
                     }, function(response){
                     if (response && !response.error_code) {
