@@ -101,8 +101,11 @@
         <script>
             function facebookShare(){
                 FB.ui({
-                  method: 'share',
-                    href: 'http://www.trywavelength.com/',
+                  method: 'share_open_graph',
+                  action_type: 'og.likes',
+                  action_properties: JSON.stringify({
+                      object:'https://developers.facebook.com/docs/',
+                  })
                     }, function(response){
                     if (response && !response.error_code) {
                       alert('Posting completed.');
