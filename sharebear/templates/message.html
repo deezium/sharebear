@@ -161,10 +161,35 @@
     <div class='row'>
         <div class='col-xs-12'>
             {% get_comment_count for message as comment_count %}
-            <p>{{ comment_count }} comments have been posted. </p>
-            {% render_comment_list for message %}
+            {% ifequal comment_count 1 %}
+                <p>{{ comment_count }} comment</p>
+            {% else %}
+                <p>{{ comment_count }} comments</p>
+            {% endifequal %}
 
-            {% render_comment_form for message %}
+            {% get_comment_list for message as comment_list %}
+            {% for comment in comment_list %}
+
+            <p>Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
+            <p>{{ comment.comment }}</p>
+            
+            {% endfor %}
+
+
+            {% get_comment_form for message as form %}
+            <form action="{% comment_form_target %}" method="post">{% csrf_token %}
+                {% for field in form %}
+                    {% if field.is_hidden %}
+                        {{ field }}
+                    {% else %}
+                        {% ifequal field.name "comment" %}
+                            {% bootstrap_field field %}
+                        {% endifequal %}
+                    {% endif %}
+                {% endfor %}
+                <input name="next" type="hidden" value="{{ request.path }}" />
+                <button type="submit" class='btn btn-default' style="float: right;">Post Comment!</button>
+            </form>
         </div>
     </div>
 
@@ -178,10 +203,7 @@
         </div>
     </div>
 
-
     {% endif %}
-
-
 
 <script>
 
