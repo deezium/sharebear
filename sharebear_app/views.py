@@ -11,7 +11,7 @@ from django.conf import settings
 from datetime import datetime
 from collections import OrderedDict
 from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm, UsernameEditForm
-from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage
+from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage, TrackPlay
 from sharebear_app.utils import get_user_model, get_username_field
 from urllib2 import urlopen
 import json
@@ -153,6 +153,7 @@ def users(request, username="", edit_form=None):
 				soundcloud_info = embed_info.html
 
 			full_soundcloud_list.append(soundcloud_info)
+
 
 		#print full_youtube_list
 
@@ -566,6 +567,26 @@ def like(request, message_id):
 	return HttpResponse(json.dumps(response_data), content_type='application/json')
 #	return redirect('/')
 
+def play(request, message_id):
+	user = request.user
+	profile = UserProfile.objects.get(user=user)
+	message_id = request.POST.get('identifier')
+	platform = request.POST.get('platform')
+	print message_id, platform
+
+	response_data = {}
+
+	try:
+		message=get_object_or_404(Message, id=message_id)
+	except:
+		pass
+	if request.method == "POST":
+		track_play = TrackPlay.objects.create(user=user, msg=message, platform=platform, played_at=timezone.now())
+
+	response_data['message'] = message.id
+
+	return HttpResponse(json.dumps(response_data), content_type='application/json')
+
 @login_required
 def delete(request, message_id):
 	user = request.user
@@ -718,4 +739,3 @@ def follow(request, user_id):
 		response_data['next_action'] = 'Unfollow'
 	return HttpResponse(json.dumps(response_data), content_type='application/json')
 #	return redirect('/')
-

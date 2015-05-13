@@ -56,11 +56,15 @@
     </div>
     {% endif %}
 
+    {% if soundcloud_info %}
+    <div id='soundcloud-player'>
     {% autoescape off %}
 
     {{ soundcloud_info }}
 
     {% endautoescape %}
+    </div>
+    {% endif %}
 
     <div class='row' id='likeSpreadDiv' style='display:none; padding-bottom:20px;'>
         <div class='col-xs-12' style='text-align:center;'>
@@ -121,7 +125,6 @@
                 
         </script>
     </div>
-
 
     {% if user == message.creator %}
 
@@ -243,6 +246,56 @@
         like();
     });
 
+    focus();
+    var youtubeListener = addEventListener('blur', function() {
+        if(document.activeElement = document.getElementById('ytplayer'))
+        {
+            trackYTClick();
+        }
+        removeEventListener(youtubeListener);
+    });
+    var soundcloudListener = addEventListener('blur', function() {
+        if(document.activeElement = document.getElementById('soundcloud-player'))
+        {
+            trackSCClick();
+        }
+        removeEventListener(soundcloudListener);
+    });
+
+    function trackYTClick() {
+        $.ajax({
+            url : '/play/{{ message.id }}/',
+            type : "POST",
+            data : { identifier : '{{ message.id }}', platform : 'youtube' },
+        
+            success : function(json) {
+                console.log(json);
+                console.log("success");
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+        console.log('youtube play');
+    };
+
+    function trackSCClick() {
+        $.ajax({
+            url : '/play/{{ message.id }}/',
+            type : "POST",
+            data : { identifier : '{{ message.id }}', platform : 'soundcloud' },
+        
+            success : function(json) {
+                console.log(json);
+                console.log("success");
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+        console.log('soundcloud play');
+    };
+
     function like() {
         $.ajax({
             url : '/like/{{ message.id }}/',
@@ -258,7 +311,8 @@
                 console.log(xhr.status + ": " + xhr.responseText);
             }
         });
-        console.log("create post works!")    };
+        console.log("create post works!")    
+    };
 
 </script>
 
