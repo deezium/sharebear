@@ -261,6 +261,14 @@ body {
 	font-size: 50px;
 }
 
+#message-glyphicon-play{
+	font-size: 50px;
+}
+
+.stats-glyphicon{
+	font-size: 50px;
+}
+
 .glyphicon-pencil{
 	font-size: 25px;
 }
@@ -281,6 +289,13 @@ body {
 .stats-user-list {
 	text-align: center;
 	height: 40px;
+}
+
+
+.stats-row {
+	border-top: 1px solid #eee;
+	padding-top: 20px;
+	padding-bottom: 20px;	
 }
 
 .navbar-inverse{

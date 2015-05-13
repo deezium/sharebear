@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load comments %}
+{% block content %}
+
+    <div class='row' style="padding-top: 10px">
+        <div class='col-xs-8'>
+            <div id='feed-profile'>
+                <span><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></span> 
+                <span id='feed-username'><a href="/users/{{ message.creator }}">{{ message.creator }}</a></span>
+            </div>
+        </div>
+        <div class='col-xs-4'>
+            <div id='feed-timestamp'>
+                <time>{{ message.creation_time|date:_("DATETIME_FORMAT") }}</time> 
+            </div>
+        </div>
+    </div>
+    <div class='row message-body'>
+        <div class='col-xs-12'>
+            <p>{{ message.body|urlize }}</p>
+        </div>
+    </div>
+
+    {% if youtube_id %}
+    <div class='row'>
+        <div class='col-xs-12'>
+        <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if soundcloud_info %}
+    <div id='soundcloud-player'>
+    {% autoescape off %}
+
+    {{ soundcloud_info }}
+
+    {% endautoescape %}
+    </div>
+    {% endif %}
+
+
+    <div class='row stats-row' id='reach-stats'>
+        <div class='col-xs-6' style='border-right: 1px solid #ddd;'>
+            <div class='stats-header'>
+                <span class="glyphicon glyphicon-user stats-glyphicon" aria-hidden="true"></span>
+                <span class='stats-header-text'>People Reached</span>
+            </div>
+            <div class='stats-number'>
+            {{ view_count }}
+            </div>
+            {% for r in recipients %}
+            <div class='message-user-list'>
+                <a href="/users/{{ r.user }}">
+                <img class='center-block' src="{{ r.user.profile.profile_image_url }}" width="40" height="40" />
+                </a>
+            </div>
+
+            {% endfor %}
+        </div>
+        <div class='col-xs-6'>
+            <div class='stats-header'>
+                <span class="glyphicon glyphicon-play stats-glyphicon" aria-hidden="true"></span>
+                <span class='stats-header-text'>Plays</span>
+            </div>
+            <div class='stats-number'>
+            {{ play_count }}
+            </div>
+        </div>
+    </div>
+
+    <div class='row stats-row' id='engagement-stats'>
+        <div class='col-xs-6' style='border-right: 1px solid #ddd;'>
+            <div class='stats-header'>
+                <span class="glyphicon glyphicon-heart stats-glyphicon" aria-hidden="true"></span>
+                <span class='stats-header-text'>Likes</span>
+            </div>
+            <div class='stats-number'>
+            {{ prop_count }}
+            </div>
+            {% for p in proppers %}
+            <div class='message-user-list'>
+                <a href="/users/{{ p.user }}">
+                <img class='center-block' src="{{ p.user.profile.profile_image_url }}" width="40" height="40" />
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class='col-xs-6'>
+            <div class='stats-header'>
+                <span class="glyphicon glyphicon-comment stats-glyphicon" aria-hidden="true"></span>
+                <span class='stats-header-text'>Comments</span>
+            </div>
+            <div class='stats-number'>
+            {% get_comment_count for message as comment_count %}
+            {{ comment_count }}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

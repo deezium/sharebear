@@ -739,3 +739,42 @@ def follow(request, user_id):
 		response_data['next_action'] = 'Unfollow'
 	return HttpResponse(json.dumps(response_data), content_type='application/json')
 #	return redirect('/')
+
+@login_required
+def stats(request, message_id):
+	user = request.user
+	message = get_object_or_404(Message, id=message_id)
+
+	view_count = message.message_spreadmessages.all().count() + user.profile.get_followers().count()
+	prop_count = message.message_likes.filter(ever_liked=1).count()
+	play_count = message.message_track_plays.all().count()
+
+	recipients = [m.user.profile for m in message.message_spreadmessages.all()][:6]
+	proppers = [m.user.profile for m in message.message_likes.all()][:6] 
+
+	youtube_id = None
+	if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body):
+		youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body).group(0)
+		youtube_string = "http://"+youtube_s
+
+		url_data = urlparse.urlparse(youtube_string)
+		query = urlparse.parse_qs(url_data.query)
+		youtube_id = query["v"][0]
+	print youtube_id
+
+	client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
+
+	soundcloud_info = ''
+
+	if re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body):
+		soundcloud_s = re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body).group(0)
+		track_url = "https://"+soundcloud_s
+
+		print soundcloud_s
+		print track_url
+
+		embed_info = client.get('/oembed', url=track_url)
+
+		soundcloud_info = embed_info.html
+
+	return render(request, 'stats.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'play_count': play_count, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, 'soundcloud_info': soundcloud_info, })
