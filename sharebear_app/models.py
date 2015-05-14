@@ -97,6 +97,18 @@ class UserProfile(models.Model):
 		view_count = spread_view_count + follower_view_count
 		return view_count
 
+	def get_plays(self):
+		messages = self.user.sent_messages.all()
+		play_count_list = [m.message_track_plays.all().count() for m in messages]
+		play_count = sum(play_count_list)
+		return play_count
+
+	def get_likes(self):
+		messages = self.user.sent_messages.all()
+		prop_count_list = [m.message_likes.filter(ever_liked=1).count() for m in messages]
+		prop_count = sum(prop_count_list)
+		return prop_count
+
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 

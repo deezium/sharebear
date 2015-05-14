@@ -269,6 +269,14 @@ body {
 	font-size: 50px;
 }
 
+.medium-stats-glyphicon{
+	font-size: 40px;
+}
+
+.small-stats-glyphicon{
+	font-size: 1em;
+}
+
 .glyphicon-pencil{
 	font-size: 25px;
 }
@@ -284,6 +292,12 @@ body {
 .stats-number {
 	text-align: center;
 	font-size: 50px;
+}
+
+.user-share-stats {
+	text-align: center;
+	font-size: 30px;
+	padding-top: 40px;
 }
 
 .stats-user-list {
@@ -426,6 +440,11 @@ body {
 	padding-bottom: 20px;
 }
 
+#share-body {
+	font-size: 1em;
+	padding-top: 10px;
+}
+
 #feed-body>a{
 	font-size: 1em;
 }
@@ -453,6 +472,12 @@ body {
 	font-size: 0.8em;
 	color: #aaa;
 	text-align: right;
+}
+
+.share-view-message {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-top: 1px solid #eee;
 }
 
 #feed-username a {

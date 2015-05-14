@@ -255,12 +255,12 @@ def shares(request, username="", compose_form=ComposeForm, success_url=None):
 	full_message_list = profile_user.sent_messages.all()
 
 	view_count_list = []
+	play_count_list = []
 	prop_count_list = []
 	full_youtube_list = []
 	full_soundcloud_list = []
 
 	client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
-
 
 	for message in full_message_list:
 		youtube_id = None
@@ -268,9 +268,11 @@ def shares(request, username="", compose_form=ComposeForm, success_url=None):
 
 		view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
 		prop_count = message.message_likes.filter(ever_liked=1).count()
+		play_count = message.message_track_plays.all().count()
 
 		view_count_list.append(view_count)
 		prop_count_list.append(prop_count)
+		play_count_list.append(play_count)
 	
 		if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body):
 			youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body).group(0)
@@ -291,9 +293,12 @@ def shares(request, username="", compose_form=ComposeForm, success_url=None):
 
 		full_soundcloud_list.append(soundcloud_info)
 
+	print user.profile.get_likes()
+	
+
 	#print full_youtube_list
 
-	parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i], view_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
+	parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i], view_count_list[i], play_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
 	#print parameter_list
 
 	#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
@@ -301,7 +306,7 @@ def shares(request, username="", compose_form=ComposeForm, success_url=None):
 
 	share_message_list = []
 	for i in parameter_list:
-		share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
+		share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4],i[5]])
 	
 	like_form=MessageLikeForm()
 
@@ -653,7 +658,6 @@ def messageview(request, message_id):
 
 	recipients = [m.user.profile for m in message.message_spreadmessages.all()][:6]
 	proppers = [m.user.profile for m in message.message_likes.all()][:6] 
-	print proppers
 
 	youtube_id = None
 	if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body):
