@@ -51,7 +51,7 @@
     {% if youtube_id %}
     <div class='row'>
         <div class='col-xs-12'>
-        <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
+        <iframe id="ytplayer" class="center-block ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
         </div>
     </div>
     {% endif %}
@@ -206,7 +206,7 @@
         like();
     });
 
-/*    focus();
+   focus();
     var youtubeListener = addEventListener('blur', function() {
         if(document.activeElement === document.getElementById('ytplayer'))
         {
@@ -214,31 +214,28 @@
         }
         removeEventListener(youtubeListener);
     });
-    var soundcloudListener = addEventListener('blur', function() {
-        if(document.activeElement = document.getElementById('soundcloud-player'))
-        {
-            trackSCClick();
-        }
-        removeEventListener(soundcloudListener);
-    });
-*/
+
+    var playFlag = false;
+
     var myConfObj = {
-        iframeMouseOver : false
+        scMouseOver : false, 
     }
+
     window.addEventListener('blur',function(){
-      if(myConfObj.iframeMouseOver){
+      if(myConfObj.scMouseOver){
         trackSCClick();
       }
     });
      
     document.getElementById('soundcloud-player').addEventListener('mouseover',function(){
-       myConfObj.iframeMouseOver = true;
+       myConfObj.scMouseOver = true;
     });
     document.getElementById('soundcloud-player').addEventListener('mouseout',function(){
-        myConfObj.iframeMouseOver = false;
+        myConfObj.scMouseOver = false;
     });
 
     function trackYTClick() {
+        if (!playFlag) {
         $.ajax({
             url : '/play/{{ message.id }}/',
             type : "POST",
@@ -253,9 +250,12 @@
             }
         });
         console.log('youtube play');
+        playFlag = true;
+    };
     };
 
     function trackSCClick() {
+        if (!playFlag) {
         $.ajax({
             url : '/play/{{ message.id }}/',
             type : "POST",
@@ -270,6 +270,8 @@
             }
         });
         console.log('soundcloud play');
+        playFlag = true;
+    };
     };
 
     function like() {
