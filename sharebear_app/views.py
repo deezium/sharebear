@@ -795,7 +795,7 @@ def stats(request, message_id):
 def trap(request):
 	user = request.user
 
-	message_list = Message.objects.filter(genre=1)
+	message_list = Message.objects.filter(genre=1).order_by('-creation_time')
 	prop_count_list = []
 
 	for message in message_list:
@@ -811,7 +811,7 @@ def trap(request):
 def house(request):
 	user = request.user
 
-	message_list = Message.objects.filter(genre=2)
+	message_list = Message.objects.filter(genre=2).order_by('-creation_time')
 	prop_count_list = []
 
 	for message in message_list:
@@ -827,7 +827,7 @@ def house(request):
 def trance(request):
 	user = request.user
 
-	message_list = Message.objects.filter(genre=3)
+	message_list = Message.objects.filter(genre=3).order_by('-creation_time')
 	prop_count_list = []
 
 	for message in message_list:
@@ -843,7 +843,7 @@ def trance(request):
 def bass(request):
 	user = request.user
 
-	message_list = Message.objects.filter(genre=4)
+	message_list = Message.objects.filter(genre=4).order_by('-creation_time')
 	prop_count_list = []
 
 	for message in message_list:
@@ -859,7 +859,7 @@ def bass(request):
 def harddance(request):
 	user = request.user
 
-	message_list = Message.objects.filter(genre=5)
+	message_list = Message.objects.filter(genre=5).order_by('-creation_time')
 	prop_count_list = []
 
 	for message in message_list:
@@ -875,7 +875,7 @@ def harddance(request):
 def fuckgenres(request):
 	user = request.user
 
-	message_list = Message.objects.filter(genre=6)
+	message_list = Message.objects.filter(genre=6).order_by('-creation_time')
 	prop_count_list = []
 
 	for message in message_list:
