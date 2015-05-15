@@ -142,9 +142,26 @@ User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 
 class Message(models.Model):
+	TRAP = 1
+	HOUSE = 2
+	TRANCE = 3
+	BASS = 4
+	HARD_DANCE = 5
+	FUCK_GENRES = 6
+
+	GENRE_CHOICES = (
+		(TRAP, 'Trap'),
+		(HOUSE, 'House'),
+		(TRANCE, 'Trance'),
+		(BASS, 'Bass'),
+		(HARD_DANCE, 'Hard Dance'),
+		(FUCK_GENRES, 'Fuck Genres'),
+		)
+
 	body = models.TextField("Body")
 	creator = models.ForeignKey(AUTH_USER_MODEL, related_name='sent_messages', verbose_name="Sender")
 	creation_time = models.DateTimeField("Sent at", null=True, blank=True)
+	genre = models.IntegerField(max_length=40, choices=GENRE_CHOICES, default=TRAP, blank=False)
 
 	# objects = MessageManager()
 

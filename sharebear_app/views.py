@@ -385,13 +385,9 @@ def feed(request, like_form=None, compose_form=ComposeForm, success_url=None):
 
 	full_message_set = set(full_message_list_duped)
 
-	print full_message_set
-
 	full_message_list = list(full_message_set)
 
 	full_message_list.sort(key=lambda m: m.creation_time, reverse=True)
-
-	print full_message_list
 
 	full_youtube_list = []
 	full_soundcloud_list = []
@@ -422,19 +418,9 @@ def feed(request, like_form=None, compose_form=ComposeForm, success_url=None):
 
 			soundcloud_info = old_soundcloud_info + " class='iframeplayer' m='"+ str(message.id) +"'></iframe>"
 
-			print soundcloud_info
-
 		full_soundcloud_list.append(soundcloud_info)
 
-
-	#print len(full_message_list), len(full_youtube_list), len(full_soundcloud_list)
-	#print full_youtube_list
-
 	parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i]] for i in range(len(full_youtube_list))]
-	#print parameter_list
-
-	#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
-	# print feed_message_list
 
 	feed_message_list = []
 	for i in parameter_list:
@@ -804,3 +790,29 @@ def stats(request, message_id):
 		soundcloud_info = embed_info.html
 
 	return render(request, 'stats.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'play_count': play_count, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, 'soundcloud_info': soundcloud_info, })
+
+@login_required
+def trap(request):
+	user = request.user
+
+	message_list = Message.objects.filter(genre=1)
+
+	print message_list
+	return render(request, 'trap.html', {'message_list': message_list, 'user': user, })
+
+@login_required
+def house(request):
+	user = request.user
+
+	message_list = Message.objects.filter(genre=2)
+	prop_count_list = []
+
+	for message in message_list:
+		prop_count = message.message_likes.filter(ever_liked=1).count()
+		prop_count_list.append(prop_count)
+
+	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
+
+	print message_list
+	return render(request, 'house.html', {'parameter_list': parameter_list, 'user': user, })
+

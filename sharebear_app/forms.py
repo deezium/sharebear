@@ -46,7 +46,7 @@ class ComposeForm(forms.ModelForm):
 	body = forms.CharField(label="", widget=forms.Textarea(attrs={'placeholder': 'Post your latest hotness.'}))
 	
 	class Meta:
-		fields = ['body']
+		fields = ['body', 'genre']
 		model = Message
 
 class MessageLikeForm(forms.ModelForm):

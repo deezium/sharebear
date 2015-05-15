@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block content %}
+{% load humanize %}
+
+{% for message, prop_count in parameter_list %}
+
+<div class='row category-message' style='height:80px;'>
+	<div class='col-xs-2' style='height:100%;'>
+		<div>
+			<div class='category-profile'><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></div> 
+			<div id='category-username' ><a href="/users/{{ message.creator }}">{{ message.creator }}</a></div>
+		</div>
+	</div>
+	<div class='col-xs-8' style='height:100%;'>
+		<div style='vertical-align: top;'>
+			<p>{{ message.body }}</p> 
+		</div>
+	</div>
+	<div class='col-xs-2' style='height:100%;'>
+		<span class="glyphicon glyphicon-heart medium-stats-glyphicon" aria-hidden="true"></span>
+		<span style='font-size: 40px; padding-left: 5px;'>{{ prop_count }}</span>
+	</div>
+</div>
+
+{% endfor %}
+
+{% endblock %}

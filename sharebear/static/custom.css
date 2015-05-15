@@ -399,7 +399,13 @@ body {
 	padding-bottom: 10px;
 }
 
-.feed-share-form .form-control{
+ul#genre-nav {
+	font-size: 1.1em;
+	vertical-align: bottom;
+}
+
+
+#id_body.form-control{
 	height: 100px;
 }
 
@@ -415,6 +421,12 @@ body {
 
 #feed-profile {
 	padding-bottom: 10px;
+}
+
+.category-message {
+	padding-top: 20px;
+	padding-bottom: 10px;
+	border-bottom: solid 1px #eee;
 }
 
 #ytplayer{
@@ -492,12 +504,26 @@ body {
 	text-decoration: none;
 }
 
+#category-username a {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#category-username {
+	text-align: center;
+}
+
+
 .promoter-score {
 	color: black;
 }
 
 .profile-message {
 	position: relative;
+}
+
+.category-profile {
+	text-align: center;
 }
 
 .profile-message a {
