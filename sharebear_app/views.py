@@ -796,9 +796,16 @@ def trap(request):
 	user = request.user
 
 	message_list = Message.objects.filter(genre=1)
+	prop_count_list = []
+
+	for message in message_list:
+		prop_count = message.message_likes.filter(ever_liked=1).count()
+		prop_count_list.append(prop_count)
+
+	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
 
 	print message_list
-	return render(request, 'trap.html', {'message_list': message_list, 'user': user, })
+	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
 @login_required
 def house(request):
@@ -814,5 +821,69 @@ def house(request):
 	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
 
 	print message_list
-	return render(request, 'house.html', {'parameter_list': parameter_list, 'user': user, })
+	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
+
+@login_required
+def trance(request):
+	user = request.user
+
+	message_list = Message.objects.filter(genre=3)
+	prop_count_list = []
+
+	for message in message_list:
+		prop_count = message.message_likes.filter(ever_liked=1).count()
+		prop_count_list.append(prop_count)
+
+	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
+
+	print message_list
+	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
+
+@login_required
+def bass(request):
+	user = request.user
+
+	message_list = Message.objects.filter(genre=4)
+	prop_count_list = []
+
+	for message in message_list:
+		prop_count = message.message_likes.filter(ever_liked=1).count()
+		prop_count_list.append(prop_count)
+
+	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
+
+	print message_list
+	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
+
+@login_required
+def harddance(request):
+	user = request.user
+
+	message_list = Message.objects.filter(genre=5)
+	prop_count_list = []
+
+	for message in message_list:
+		prop_count = message.message_likes.filter(ever_liked=1).count()
+		prop_count_list.append(prop_count)
+
+	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
+
+	print message_list
+	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
+
+@login_required
+def fuckgenres(request):
+	user = request.user
+
+	message_list = Message.objects.filter(genre=6)
+	prop_count_list = []
+
+	for message in message_list:
+		prop_count = message.message_likes.filter(ever_liked=1).count()
+		prop_count_list.append(prop_count)
+
+	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
+
+	print message_list
+	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
