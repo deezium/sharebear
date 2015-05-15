@@ -79,13 +79,18 @@
 <div class='row'>
 	<div class='col-xs-12'>
 		{% if youtube_id %}
-	    	 <iframe id="ytplayer" class="center-block" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
+	    	 <iframe m="{{ message.id }}" class="center-block iframeplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
 	    {% endif %}
-	    {% autoescape off %}
+	    
+        {% if soundcloud_info %}
+
+   	    {% autoescape off %}
 
 	    {{ soundcloud_info }}
 
 	    {% endautoescape %}
+
+	    {% endif %}
     </div>
 </div>
 
@@ -240,6 +245,51 @@
 	};
 
 </script>
+
+<script>
+
+	var playFlags = {};
+	var all_iframes = document.getElementsByClassName('iframeplayer');
+
+	for (var i=0, max=all_iframes.length; i<max; i++) {
+		k = all_iframes[i].getAttribute('m');
+		console.log(k);
+		playFlags['playFlag_'+k] = false;
+	}
+
+    focus();
+
+    var iframeListener = addEventListener('blur', function() {
+        if(document.activeElement = document.getElementsByClassName('iframeplayer'))
+        {
+            var m_num = document.activeElement.getAttribute('m');
+            trackIFrameClick(m_num);
+        }
+        removeEventListener(iframeListener);
+    });
+
+    function trackIFrameClick(m_num) {
+    	if (!playFlags['playFlag_'+m_num]){
+        $.ajax({
+            url : '/play/' + m_num + '/',
+            type : "POST",
+            data : { identifier : m_num, platform : 'iframe' },
+        
+            success : function(json) {
+                console.log(json);
+                console.log("success");
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+        console.log('iframe play');
+        playFlags['playFlag_'+m_num] = true;
+    }
+    };
+
+</script>
+
 <script>
 		function like(m_num) {
         $.ajax({

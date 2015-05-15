@@ -51,19 +51,17 @@
     {% if youtube_id %}
     <div class='row'>
         <div class='col-xs-12'>
-        <iframe id="ytplayer" class="center-block ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
+        <iframe id="ytplayer" class="center-block iframeplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
         </div>
     </div>
     {% endif %}
 
     {% if soundcloud_info %}
-    <div id='soundcloud-player'>
     {% autoescape off %}
 
     {{ soundcloud_info }}
 
     {% endautoescape %}
-    </div>
     {% endif %}
 
     <div class='row' id='likeSpreadDiv' style='display:none; padding-bottom:20px;'>
@@ -194,30 +192,18 @@
 
 <script>
 
-
-
-</script>
-
-
-<script>
-    $('.like-form').on('submit', function(event){
-        event.preventDefault();
-        console.log("form submitted!");
-        like();
-    });
-
-   focus();
-    var youtubeListener = addEventListener('blur', function() {
-        if(document.activeElement === document.getElementById('ytplayer'))
+    focus();
+    var iframeListener = addEventListener('blur', function() {
+        if(document.activeElement = document.getElementsByClassName('iframeplayer'))
         {
-            trackYTClick();
+            trackIFrameClick();
         }
-        removeEventListener(youtubeListener);
+        removeEventListener(iframeListener);
     });
 
     var playFlag = false;
 
-    var myConfObj = {
+/*    var myConfObj = {
         scMouseOver : false, 
     }
 
@@ -233,13 +219,13 @@
     document.getElementById('soundcloud-player').addEventListener('mouseout',function(){
         myConfObj.scMouseOver = false;
     });
-
-    function trackYTClick() {
+*/
+    function trackIFrameClick() {
         if (!playFlag) {
         $.ajax({
             url : '/play/{{ message.id }}/',
             type : "POST",
-            data : { identifier : '{{ message.id }}', platform : 'youtube' },
+            data : { identifier : '{{ message.id }}', platform : 'iframe' },
         
             success : function(json) {
                 console.log(json);
@@ -249,12 +235,12 @@
                 console.log(xhr.status + ": " + xhr.responseText);
             }
         });
-        console.log('youtube play');
+        console.log('iframe play');
         playFlag = true;
     };
     };
 
-    function trackSCClick() {
+/*    function trackSCClick() {
         if (!playFlag) {
         $.ajax({
             url : '/play/{{ message.id }}/',
@@ -273,6 +259,17 @@
         playFlag = true;
     };
     };
+*/
+</script>
+
+
+
+<script>
+    $('.like-form').on('submit', function(event){
+        event.preventDefault();
+        console.log("form submitted!");
+        like();
+    });
 
     function like() {
         $.ajax({

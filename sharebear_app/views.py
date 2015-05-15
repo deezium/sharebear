@@ -150,7 +150,13 @@ def users(request, username="", edit_form=None):
 
 				embed_info = client.get('/oembed', url=track_url)
 
-				soundcloud_info = embed_info.html
+				old_soundcloud_info = embed_info.html
+
+				old_soundcloud_info = old_soundcloud_info[:-10]
+
+				soundcloud_info = old_soundcloud_info + " class='iframeplayer' m='"+ str(message.id) +"'></iframe>"
+
+				print soundcloud_info
 
 			full_soundcloud_list.append(soundcloud_info)
 
@@ -191,8 +197,6 @@ def likes(request, username="", edit_form=None):
 
 		full_message_list = [f.msg for f in message_likes_list]
 
-		print full_message_list
-
 		view_count_list = []
 		prop_count_list = []
 		full_youtube_list = []
@@ -224,7 +228,13 @@ def likes(request, username="", edit_form=None):
 
 				embed_info = client.get('/oembed', url=track_url)
 
-				soundcloud_info = embed_info.html
+				old_soundcloud_info = embed_info.html
+
+				old_soundcloud_info = old_soundcloud_info[:-10]
+
+				soundcloud_info = old_soundcloud_info + " class='iframeplayer' m='"+ str(message.id) +"'></iframe>"
+
+				print soundcloud_info
 
 			full_soundcloud_list.append(soundcloud_info)
 
@@ -240,8 +250,6 @@ def likes(request, username="", edit_form=None):
 		for i in parameter_list:
 			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
 		
-		print share_message_list
-
 		like_form=MessageLikeForm()
 
 		return render(request, 'likes.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'following': following, 'share_message_list': share_message_list, 'like_form': like_form, })
@@ -408,7 +416,13 @@ def feed(request, like_form=None, compose_form=ComposeForm, success_url=None):
 
 			embed_info = client.get('/oembed', url=track_url)
 
-			soundcloud_info = embed_info.html
+			old_soundcloud_info = embed_info.html
+
+			old_soundcloud_info = old_soundcloud_info[:-10]
+
+			soundcloud_info = old_soundcloud_info + " class='iframeplayer' m='"+ str(message.id) +"'></iframe>"
+
+			print soundcloud_info
 
 		full_soundcloud_list.append(soundcloud_info)
 
@@ -682,7 +696,15 @@ def messageview(request, message_id):
 
 		embed_info = client.get('/oembed', url=track_url)
 
-		soundcloud_info = embed_info.html
+		old_soundcloud_info = embed_info.html
+
+		print old_soundcloud_info
+		old_soundcloud_info = old_soundcloud_info[:-10]
+		print old_soundcloud_info
+
+		soundcloud_info = old_soundcloud_info + " class='iframeplayer'></iframe>"
+
+		print soundcloud_info
 
 	like_status = message.is_liked_by_user(user)
 	ever_like_status = message.ever_liked_by_user(user)

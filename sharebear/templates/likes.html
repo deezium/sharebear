@@ -7,7 +7,7 @@
 <div class='row'>
 	<div class='col-xs-12'>
 		<div id='profile-pic-container' style='padding-top: 20px'>
-			<img id='profile-pic' src="{{ profile_user.profile.profile_image_url }}" style='float: left;' height="100" width="100"/>
+			<img id='profile-pic' src="{{ profile_user.profile.profile_image_url }}" style='float: left;' height="100" width="100" />
 			<h2> {{ profile_user.username }}</h2>
 			<p>{{ profile_user.profile.aboutme }}</p>
 			<p>{{ profile_user.profile.location }}</p>
@@ -79,11 +79,10 @@
 <div class='row'>
 	<div class='col-xs-12'>
 		{% if youtube_id %}
-	    	 <iframe id="ytplayer_{{ message.id }}" class="center-block ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
+	    	<iframe m="{{ message.id }}" class="center-block iframeplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
 	    {% endif %}
 
         {% if soundcloud_info %}
-	    <div id='soundcloud-player_{{ message.id }}'>
 
    	    {% autoescape off %}
 
@@ -91,9 +90,8 @@
 
 	    {% endautoescape %}
 
-	    </div>
 	    {% endif %}
-	    
+
     </div>
 </div>
 
@@ -248,6 +246,50 @@
 		});
 		console.log("create post works!")
 	};
+</script>
+
+<script>
+
+	var playFlags = {};
+	var all_iframes = document.getElementsByClassName('iframeplayer');
+
+	for (var i=0, max=all_iframes.length; i<max; i++) {
+		k = all_iframes[i].getAttribute('m');
+		console.log(k);
+		playFlags['playFlag_'+k] = false;
+	}
+
+    focus();
+
+    var iframeListener = addEventListener('blur', function() {
+        if(document.activeElement = document.getElementsByClassName('iframeplayer'))
+        {
+            var m_num = document.activeElement.getAttribute('m');
+            trackIFrameClick(m_num);
+        }
+        removeEventListener(iframeListener);
+    });
+
+    function trackIFrameClick(m_num) {
+    	if (!playFlags['playFlag_'+m_num]){
+        $.ajax({
+            url : '/play/' + m_num + '/',
+            type : "POST",
+            data : { identifier : m_num, platform : 'iframe' },
+        
+            success : function(json) {
+                console.log(json);
+                console.log("success");
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+        console.log('iframe play');
+        playFlags['playFlag_'+m_num] = true;
+    }
+    };
+
 </script>
 
 <script>
