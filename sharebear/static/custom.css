@@ -68,6 +68,10 @@ a:hover{
 	color: rgb(31,4,57);
 }
 
+#welcome-text.col-xs-12 > p > a {
+	color: #337ab7;
+}
+
 body {
 	font-family: 'Ek Mukta', helvetica, sans-serif;
 	/*background-color: rgba(145,119,172,0.2);*/
@@ -165,6 +169,17 @@ body {
 	color: black;
 }
 
+#nav-login-button{
+	margin-bottom:10px;
+	text-align: center;
+	vertical-align: middle;
+	height: 39px;
+	background-color: white;
+	border-color: rgb(53,20,86);
+	color: black;
+}
+
+
 #compose-button:hover{
 	background-color: #eee;
 }
@@ -178,6 +193,11 @@ body {
 .compose-button{
 	margin-top: 15px;
 }
+
+.nav-login-button{
+	margin-top: 15px;
+}
+
 
 #random-button{
 	margin-top:10px;
@@ -278,6 +298,10 @@ body {
 }
 
 .glyphicon-pencil{
+	font-size: 25px;
+}
+
+.glyphicon-headphones{
 	font-size: 25px;
 }
 
@@ -400,7 +424,7 @@ body {
 }
 
 ul#genre-nav {
-	font-size: 1.1em;
+	font-size: 1em;
 	vertical-align: bottom;
 }
 

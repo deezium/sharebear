@@ -29,7 +29,7 @@ def index(request, auth_form=None, user_form=None):
 	else:
 		auth_form = auth_form or AuthenticateForm()
 		user_form = user_form or UserCreateForm()
-		return render(request, 'home.html', {'auth_form': auth_form, 'user_form': user_form, })
+		return redirect('/all/')
 
 def login_view(request):
 	if request.method == 'POST':
@@ -792,7 +792,28 @@ def stats(request, message_id):
 
 	return render(request, 'stats.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'play_count': play_count, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, 'soundcloud_info': soundcloud_info, })
 
-@login_required
+def all(request):
+	user = request.user
+
+	message_list = Message.objects.all().order_by('-creation_time')
+	prop_count_list = []
+	hotness_list = []
+
+	for message in message_list:
+		prop_count = message.message_likes.filter(ever_liked=1).count()
+		prop_count_list.append(prop_count)
+		naive_time = message.creation_time.replace(tzinfo=None)
+		
+		hotness = hot(prop_count, naive_time)
+		hotness_list.append(hotness)
+
+	param_list = [[message_list[i], prop_count_list[i], hotness_list[i]] for i in range(len(message_list))]
+	parameter_list = sorted(param_list, key=itemgetter(2), reverse=True)
+	print parameter_list
+	
+	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
+
+
 def trap(request):
 	user = request.user
 
@@ -814,7 +835,6 @@ def trap(request):
 	
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
-@login_required
 def traptop(request):
 	user = request.user
 
@@ -831,7 +851,6 @@ def traptop(request):
 	print message_list
 	return render(request, 'categorytop.html', {'parameter_list': parameter_list, 'user': user, })
 
-@login_required
 def house(request):
 	user = request.user
 
@@ -852,7 +871,6 @@ def house(request):
 	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
-@login_required
 def trance(request):
 	user = request.user
 
@@ -873,7 +891,6 @@ def trance(request):
 	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
-@login_required
 def bass(request):
 	user = request.user
 
@@ -894,7 +911,6 @@ def bass(request):
 	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
-@login_required
 def harddance(request):
 	user = request.user
 
@@ -915,7 +931,6 @@ def harddance(request):
 	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
-@login_required
 def fuckgenres(request):
 	user = request.user
 

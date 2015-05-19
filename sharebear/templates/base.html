@@ -81,6 +81,18 @@
 							</form>
 							</li>
 						</ul>
+
+					{% else %}
+						<ul class='nav navbar-nav'>
+							<li class="nav-login-button">
+								<form action="{% url 'social:begin' 'facebook'%}?next={{request.path}}">
+									<div>
+										<button id='nav-login-button' type="submit" class="btn btn-default"><span id='compose-pencil' class="glyphicon glyphicon-headphones" aria-hidden="true"></span>Sign In</button>
+									</div>
+								</form>
+							</li>
+						</ul>
+
 					{% endif %}
 					</div>
 					<div class='collapse navbar-collapse navbar-right' id='bs-example-navbar-collapse-1'>
@@ -93,7 +105,6 @@
 			</nav>
 		</header>
 
-		{% if user.is_authenticated %}
 
 		<div class='container'>
 			<div class='row'>
@@ -108,6 +119,9 @@
 			<div class='row'>
 				<div class='col-xs-3'>	
 					<div class='col-xs-12' id='sidebar'>
+
+						{% if user.is_authenticated %}
+		
 						{% block sidebar %}
 						<div class='row' id='pill-row'>
 						<ul class='nav nav-pills nav-stacked'>
@@ -122,15 +136,29 @@
 							<span class='text-center'>Total Reach</span>
 							<p>{{user.profile.get_reach }}</p>
 						</div>
-
 						{% endblock %}
+
+						{% else %}
+
+						<div class='row'>
+							<div class='col-xs-12' id='welcome-text'>
+								<p style='text-align: center;'> Welcome to Wavelength!  <a href='#' style='text-color: #337ab7; font-weight: bold;'>Sign up</a> to post tracks and start giving feedback to artists!</p>
+							</div>
+						</div> 
+
+						{% endif %}
 					</div>
 				</div>
 				<div class='col-xs-9'>
 					<div class='col-xs-12' id='main-content'>
 					<div class='row'>
 					<ul class='nav nav-tabs nav-justified' id='genre-nav'>
+						{% if user.is_authenticated %}
+
 						<li><a href={% url 'messages_feed' %}>Recommended</a></li>
+
+						{% endif %}
+						<li><a href={% url 'messages_all' %}>All</a></li>
 						<li><a href={% url 'messages_trap' %}>Trap</a></li>
 						<li><a href={% url 'messages_house' %}>House</a></li>
 						<li><a href={% url 'messages_trance' %}>Trance</a></li>
@@ -146,7 +174,6 @@
 				</div>
 			</div>
 		</div>
-		{% endif %}
 	
 		{% block homepage %}
 		{% endblock %}
