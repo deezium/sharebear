@@ -595,8 +595,6 @@ def like(request, message_id):
 #	return redirect('/')
 
 def play(request, message_id):
-	user = request.user
-	profile = UserProfile.objects.get(user=user)
 	message_id = request.POST.get('identifier')
 	platform = request.POST.get('platform')
 	print message_id, platform
@@ -608,7 +606,12 @@ def play(request, message_id):
 	except:
 		pass
 	if request.method == "POST":
-		track_play = TrackPlay.objects.create(user=user, msg=message, platform=platform, played_at=timezone.now())
+		try:
+			user = request.user
+			profile = UserProfile.objects.get(user=user)
+			track_play = TrackPlay.objects.create(user=user, msg=message, platform=platform, played_at=timezone.now())
+		except:
+			track_play = TrackPlay.objects.create(msg=message, platform=platform, played_at=timezone.now())
 
 	response_data['message'] = message.id
 
