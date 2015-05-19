@@ -12,8 +12,9 @@ from datetime import datetime
 from collections import OrderedDict
 from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm, UsernameEditForm
 from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage, TrackPlay
-from sharebear_app.utils import get_user_model, get_username_field
+from sharebear_app.utils import get_user_model, get_username_field, epoch_seconds, hot
 from urllib2 import urlopen
+from operator import itemgetter
 import json
 import re
 import urlparse
@@ -797,15 +798,38 @@ def trap(request):
 
 	message_list = Message.objects.filter(genre=1).order_by('-creation_time')
 	prop_count_list = []
+	hotness_list = []
+
+	for message in message_list:
+		prop_count = message.message_likes.filter(ever_liked=1).count()
+		prop_count_list.append(prop_count)
+		naive_time = message.creation_time.replace(tzinfo=None)
+		
+		hotness = hot(prop_count, naive_time)
+		hotness_list.append(hotness)
+
+	param_list = [[message_list[i], prop_count_list[i], hotness_list[i]] for i in range(len(message_list))]
+	parameter_list = sorted(param_list, key=itemgetter(2), reverse=True)
+	print parameter_list
+	
+	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
+
+@login_required
+def traptop(request):
+	user = request.user
+
+	message_list = Message.objects.filter(genre=1).order_by('-creation_time')
+	prop_count_list = []
 
 	for message in message_list:
 		prop_count = message.message_likes.filter(ever_liked=1).count()
 		prop_count_list.append(prop_count)
 
-	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
+	param_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
+	parameter_list = sorted(param_list, key=itemgetter(1), reverse=True)
 
 	print message_list
-	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
+	return render(request, 'categorytop.html', {'parameter_list': parameter_list, 'user': user, })
 
 @login_required
 def house(request):
@@ -813,14 +837,19 @@ def house(request):
 
 	message_list = Message.objects.filter(genre=2).order_by('-creation_time')
 	prop_count_list = []
+	hotness_list = []
 
 	for message in message_list:
 		prop_count = message.message_likes.filter(ever_liked=1).count()
 		prop_count_list.append(prop_count)
+		naive_time = message.creation_time.replace(tzinfo=None)
+		
+		hotness = hot(prop_count, naive_time)
+		hotness_list.append(hotness)
 
-	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
-
-	print message_list
+	param_list = [[message_list[i], prop_count_list[i], hotness_list[i]] for i in range(len(message_list))]
+	parameter_list = sorted(param_list, key=itemgetter(2), reverse=True)
+	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
 @login_required
@@ -829,14 +858,19 @@ def trance(request):
 
 	message_list = Message.objects.filter(genre=3).order_by('-creation_time')
 	prop_count_list = []
+	hotness_list = []
 
 	for message in message_list:
 		prop_count = message.message_likes.filter(ever_liked=1).count()
 		prop_count_list.append(prop_count)
+		naive_time = message.creation_time.replace(tzinfo=None)
+		
+		hotness = hot(prop_count, naive_time)
+		hotness_list.append(hotness)
 
-	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
-
-	print message_list
+	param_list = [[message_list[i], prop_count_list[i], hotness_list[i]] for i in range(len(message_list))]
+	parameter_list = sorted(param_list, key=itemgetter(2), reverse=True)
+	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
 @login_required
@@ -845,14 +879,19 @@ def bass(request):
 
 	message_list = Message.objects.filter(genre=4).order_by('-creation_time')
 	prop_count_list = []
+	hotness_list = []
 
 	for message in message_list:
 		prop_count = message.message_likes.filter(ever_liked=1).count()
 		prop_count_list.append(prop_count)
+		naive_time = message.creation_time.replace(tzinfo=None)
+		
+		hotness = hot(prop_count, naive_time)
+		hotness_list.append(hotness)
 
-	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
-
-	print message_list
+	param_list = [[message_list[i], prop_count_list[i], hotness_list[i]] for i in range(len(message_list))]
+	parameter_list = sorted(param_list, key=itemgetter(2), reverse=True)
+	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
 @login_required
@@ -861,14 +900,19 @@ def harddance(request):
 
 	message_list = Message.objects.filter(genre=5).order_by('-creation_time')
 	prop_count_list = []
+	hotness_list = []
 
 	for message in message_list:
 		prop_count = message.message_likes.filter(ever_liked=1).count()
 		prop_count_list.append(prop_count)
+		naive_time = message.creation_time.replace(tzinfo=None)
+		
+		hotness = hot(prop_count, naive_time)
+		hotness_list.append(hotness)
 
-	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
-
-	print message_list
+	param_list = [[message_list[i], prop_count_list[i], hotness_list[i]] for i in range(len(message_list))]
+	parameter_list = sorted(param_list, key=itemgetter(2), reverse=True)
+	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
 @login_required
@@ -877,13 +921,18 @@ def fuckgenres(request):
 
 	message_list = Message.objects.filter(genre=6).order_by('-creation_time')
 	prop_count_list = []
+	hotness_list = []
 
 	for message in message_list:
 		prop_count = message.message_likes.filter(ever_liked=1).count()
 		prop_count_list.append(prop_count)
+		naive_time = message.creation_time.replace(tzinfo=None)
+		
+		hotness = hot(prop_count, naive_time)
+		hotness_list.append(hotness)
 
-	parameter_list = [[message_list[i], prop_count_list[i]] for i in range(len(message_list))]
-
-	print message_list
+	param_list = [[message_list[i], prop_count_list[i], hotness_list[i]] for i in range(len(message_list))]
+	parameter_list = sorted(param_list, key=itemgetter(2), reverse=True)
+	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 

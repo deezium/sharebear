@@ -3,7 +3,7 @@
 {% block content %}
 {% load humanize %}
 
-{% for message, prop_count, hotness in parameter_list %}
+{% for message, prop_count in parameter_list %}
 
 <div class='row category-message' style='height:80px;'>
 	<div class='col-xs-2' style='height:100%;'>
@@ -18,8 +18,8 @@
 		</div>
 	</div>
 	<div class='col-xs-2' style='height:100%;'>
-		<span class="glyphicon glyphicon-fire medium-stats-glyphicon" aria-hidden="true"></span>
-		<span style='font-size: 40px; padding-left: 5px;'>{{ hotness|floatformat:"0" }}</span>
+		<span class="glyphicon glyphicon-heart medium-stats-glyphicon" aria-hidden="true"></span>
+		<span style='font-size: 40px; padding-left: 5px;'>{{ prop_count }}</span>
 	</div>
 </div>
 
