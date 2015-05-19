@@ -128,13 +128,7 @@
         <div class='col-xs-12'>
             <div class='row' style='padding-bottom:10px;'>
                 <div class='col-xs-12'>
-                    {% get_comment_count for message as comment_count %}
-                    {% ifequal comment_count 1 %}
-                        <p class='comment-count'>{{ comment_count }} comment</p>
-                    {% else %}
-                        <p class='comment-count'>{{ comment_count }} comments</p>
-                    {% endifequal %}
-                    
+                    {% if user.is_authenticated %}
                     {% get_comment_form for message as form %}
                     <form action="{% comment_form_target %}" method="post">{% csrf_token %}
                         {% for field in form %}
@@ -149,6 +143,19 @@
                         <input name="next" type="hidden" value="{{ request.path }}" />
                         <button type="submit" class='btn btn-default' style="float: right;">Post Comment!</button>
                     </form>
+                    {% else %}
+                    <div>
+                        <a href='#' style='text-color: #337ab7; font-weight: bold;'>Sign in</a> to give feedback to {{ message.creator }}!
+                    </div>
+
+                    {% endif %}
+                    {% get_comment_count for message as comment_count %}
+                    {% ifequal comment_count 1 %}
+                        <p class='comment-count'>{{ comment_count }} comment</p>
+                    {% else %}
+                        <p class='comment-count'>{{ comment_count }} comments</p>
+                    {% endifequal %}
+                    
                 </div>
             </div>
 

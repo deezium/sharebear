@@ -133,7 +133,7 @@
 						</div>
 						<div class='row text-center' id='sidebar-stats'>
 							<span class='glyphicon glyphicon-user text-center' aria-hidden='true'></span>
-							<span class='text-center'>Total Reach</span>
+							<span class='text-center'>Recommended To</span>
 							<p>{{user.profile.get_reach }}</p>
 						</div>
 						{% endblock %}
@@ -142,7 +142,7 @@
 
 						<div class='row'>
 							<div class='col-xs-12' id='welcome-text'>
-								<p style='text-align: center;'> Welcome to Wavelength!  <a href='#' style='text-color: #337ab7; font-weight: bold;'>Sign up</a> to post tracks and start giving feedback to artists!</p>
+								<p style='text-align: center;'> Welcome to Wavelength!  <a href="{% url 'social:begin' 'facebook'%}?next={{request.path}}" style='text-color: #337ab7; font-weight: bold;'>Sign up</a> to post tracks and start giving feedback to artists!</p>
 							</div>
 						</div> 
 
