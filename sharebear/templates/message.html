@@ -145,7 +145,7 @@
                     </form>
                     {% else %}
                     <div>
-                        <a href='#' style='text-color: #337ab7; font-weight: bold;'>Sign in</a> to give feedback to {{ message.creator }}!
+                        <a href="{% url 'social:begin' 'facebook'%}?next={{request.path}}" style='text-color: #337ab7; font-weight: bold;'>Sign in</a> to give feedback to {{ message.creator }}!
                     </div>
 
                     {% endif %}
