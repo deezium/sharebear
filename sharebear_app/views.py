@@ -105,7 +105,6 @@ def get_latest(user):
 		return ""
 
 def users(request, username="", edit_form=None):
-	user = request.user
 	following=False
 	if username:
 		try:
@@ -113,10 +112,14 @@ def users(request, username="", edit_form=None):
 			userprofile = UserProfile.objects.get_or_create(user=profile_user)
 		except User.DoesNotExist:
 			raise Http404
-		if profile_user == request.user:
-			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
-		if user.profile.is_following(userprofile[0]):
-			following=True
+		try:
+			user = request.user
+			if profile_user == request.user:
+				edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
+			if user.profile.is_following(userprofile[0]):
+				following=True
+		except:
+			pass
 
 		full_message_list = profile_user.sent_messages.all()
 
@@ -171,9 +174,14 @@ def users(request, username="", edit_form=None):
 		# print feed_message_list
 
 		share_message_list = []
-		for i in parameter_list:
-			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
-		
+		try:
+			user = request.user
+
+			for i in parameter_list:
+				share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
+		except:
+			for i in parameter_list:
+				share_message_list.append([i[0],1,1,i[1],i[2],i[3],i[4]])
 		like_form=MessageLikeForm()
 
 		return render(request, 'profile.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'edit_form': edit_form, 'following': following, 'share_message_list': share_message_list, 'like_form': like_form, })
@@ -189,10 +197,14 @@ def likes(request, username="", edit_form=None):
 			userprofile = UserProfile.objects.get_or_create(user=profile_user)
 		except User.DoesNotExist:
 			raise Http404
-		if profile_user == request.user:
-			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
-		if user.profile.is_following(userprofile[0]):
-			following=True
+		try:
+			user = request.user
+			if profile_user == request.user:
+				edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
+			if user.profile.is_following(userprofile[0]):
+				following=True
+		except:
+			pass
 
 		message_likes_list = profile_user.user_likes.filter(is_liked=True).order_by('-liked_at')
 
@@ -248,9 +260,14 @@ def likes(request, username="", edit_form=None):
 		# print feed_message_list
 
 		share_message_list = []
-		for i in parameter_list:
-			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
-		
+		try:
+			user = request.user
+			for i in parameter_list:
+				share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4]])
+		except:
+			for i in parameter_list:
+				share_message_list.append([i[0],1,1,i[1],i[2],i[3],i[4]])
+
 		like_form=MessageLikeForm()
 
 		return render(request, 'likes.html', {'next_url': '/users/%s' % user.username, 'profile_user': profile_user, 'user': user, 'userprofile': userprofile, 'following': following, 'share_message_list': share_message_list, 'like_form': like_form, })
@@ -260,94 +277,98 @@ def likes(request, username="", edit_form=None):
 def shares(request, username="", compose_form=ComposeForm, success_url=None):
 	user = request.user
 	profile_user = User.objects.get(username=username)
-	#message_list = Message.objects.feed_for(request.user)
-	full_message_list = profile_user.sent_messages.all()
 
-	view_count_list = []
-	play_count_list = []
-	prop_count_list = []
-	full_youtube_list = []
-	full_soundcloud_list = []
+	if user == profile_user:
+		#message_list = Message.objects.feed_for(request.user)
+		full_message_list = profile_user.sent_messages.all()
 
-	client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
+		view_count_list = []
+		play_count_list = []
+		prop_count_list = []
+		full_youtube_list = []
+		full_soundcloud_list = []
 
-	for message in full_message_list:
-		youtube_id = None
-		soundcloud_info = ''
+		client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
 
-		view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
-		prop_count = message.message_likes.filter(ever_liked=1).count()
-		play_count = message.message_track_plays.all().count()
+		for message in full_message_list:
+			youtube_id = None
+			soundcloud_info = ''
 
-		view_count_list.append(view_count)
-		prop_count_list.append(prop_count)
-		play_count_list.append(play_count)
-	
-		if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body):
-			youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body).group(0)
-			youtube_string = "http://"+youtube_s
+			view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
+			prop_count = message.message_likes.filter(ever_liked=1).count()
+			play_count = message.message_track_plays.all().count()
 
-			url_data = urlparse.urlparse(youtube_string)
-			query = urlparse.parse_qs(url_data.query)
-			youtube_id = query["v"][0]
-		full_youtube_list.append(youtube_id)
+			view_count_list.append(view_count)
+			prop_count_list.append(prop_count)
+			play_count_list.append(play_count)
+		
+			if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body):
+				youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body).group(0)
+				youtube_string = "http://"+youtube_s
 
-		if re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body):
-			soundcloud_s = re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body).group(0)
-			track_url = "https://"+soundcloud_s
+				url_data = urlparse.urlparse(youtube_string)
+				query = urlparse.parse_qs(url_data.query)
+				youtube_id = query["v"][0]
+			full_youtube_list.append(youtube_id)
 
-			embed_info = client.get('/oembed', url=track_url)
+			if re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body):
+				soundcloud_s = re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body).group(0)
+				track_url = "https://"+soundcloud_s
 
-			soundcloud_info = embed_info.html
+				embed_info = client.get('/oembed', url=track_url)
 
-		full_soundcloud_list.append(soundcloud_info)
+				soundcloud_info = embed_info.html
 
-	print user.profile.get_likes()
-	
+			full_soundcloud_list.append(soundcloud_info)
 
-	#print full_youtube_list
+		print user.profile.get_likes()
+		
 
-	parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i], view_count_list[i], play_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
-	#print parameter_list
+		#print full_youtube_list
 
-	#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
-	# print feed_message_list
+		parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i], view_count_list[i], play_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
+		#print parameter_list
 
-	share_message_list = []
-	for i in parameter_list:
-		share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4],i[5]])
-	
-	like_form=MessageLikeForm()
+		#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
+		# print feed_message_list
 
-	if request.method == "POST":
-		user = request.user
-		compose_form = compose_form(data=request.POST)
+		share_message_list = []
+		for i in parameter_list:
+			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4],i[5]])
+		
+		like_form=MessageLikeForm()
 
-		recipient_list = User.objects.order_by('?')[:12]
+		if request.method == "POST":
+			user = request.user
+			compose_form = compose_form(data=request.POST)
 
-		print recipient_list
+			recipient_list = User.objects.order_by('?')[:12]
 
-		if compose_form.is_valid():
-			f = compose_form.save(commit=False)
-			f.creator = request.user
-			f.creation_time = timezone.now()
-			f.save()
-			print f
+			print recipient_list
 
-			for i in range(len(recipient_list)):
-				new_spread_message = SpreadMessage(user=recipient_list[i],msg=f)
-				new_spread_message.save()
-			messages.info(request, u"Message successfully sent.")
-			if success_url is None:
-				success_url = reverse('messages_recipients', kwargs={'message_id': f.id})
-				#success_url = reverse('messages_recipients', kwargs={'meta_message_id': m.id})
-			if 'next' in request.GET:
-				success_url = request.GET['next']
-			if 'next' in request.POST:
-				success_url = request.POST['next']
-			return HttpResponseRedirect(success_url)
+			if compose_form.is_valid():
+				f = compose_form.save(commit=False)
+				f.creator = request.user
+				f.creation_time = timezone.now()
+				f.save()
+				print f
 
-	return render(request, 'shares.html', {'share_message_list': share_message_list, 'user': user, 'profile_user': profile_user, 'like_form': like_form, 'compose_form': compose_form, })
+				for i in range(len(recipient_list)):
+					new_spread_message = SpreadMessage(user=recipient_list[i],msg=f)
+					new_spread_message.save()
+				messages.info(request, u"Message successfully sent.")
+				if success_url is None:
+					success_url = reverse('messages_recipients', kwargs={'message_id': f.id})
+					#success_url = reverse('messages_recipients', kwargs={'meta_message_id': m.id})
+				if 'next' in request.GET:
+					success_url = request.GET['next']
+				if 'next' in request.POST:
+					success_url = request.POST['next']
+				return HttpResponseRedirect(success_url)
+
+		return render(request, 'shares.html', {'share_message_list': share_message_list, 'user': user, 'profile_user': profile_user, 'like_form': like_form, 'compose_form': compose_form, })
+	else:
+		return redirect('/')
 
 def edit(request, username="", edit_form=None):
 	user = request.user
@@ -650,11 +671,10 @@ def undelete(request, message_id, success_url=None):
 		return HttpResponseRedirect(success_url)
 	raise Http404
 
-@login_required
+
 def messageview(request, message_id):
-	user = request.user
 	message = get_object_or_404(Message, id=message_id)
-	view_count = message.message_spreadmessages.all().count() + user.profile.get_followers().count()
+	# view_count = message.message_spreadmessages.all().count() + user.profile.get_followers().count()
 	prop_count = message.message_likes.filter(ever_liked=1).count()
 
 	recipients = [m.user.profile for m in message.message_spreadmessages.all()][:6]
@@ -693,13 +713,21 @@ def messageview(request, message_id):
 
 		print soundcloud_info
 
-	like_status = message.is_liked_by_user(user)
-	ever_like_status = message.ever_liked_by_user(user)
+
+	try:
+		user = request.user
+
+		like_status = message.is_liked_by_user(user)
+		ever_like_status = message.ever_liked_by_user(user)
+
+	except:
+		like_status = False
+		ever_like_status = False
 	# print like_status
 	# print ever_like_status
 
 	like_form = MessageLikeForm(initial={'is_liked': like_status, })
-	return render(request, 'message.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'like_form': like_form, 'like_status': like_status, 'ever_like_status': ever_like_status, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, 'soundcloud_info': soundcloud_info, })
+	return render(request, 'message.html', {'user': user, 'message': message, 'prop_count': prop_count, 'like_form': like_form, 'like_status': like_status, 'ever_like_status': ever_like_status, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, 'soundcloud_info': soundcloud_info, })
 
 @login_required
 def view(request, message_id, form_class=ComposeForm, like_form=None, subject_template=u"Re: %(subject)s"):
@@ -728,8 +756,11 @@ def view(request, message_id, form_class=ComposeForm, like_form=None, subject_te
 def recipients(request, message_id):
 	user = request.user
 	message = get_object_or_404(Message, id=message_id)
-	spread_messages = message.message_spreadmessages.all()
-	return render(request, 'recipients.html', {'user': user, 'message': message, 'spread_messages': spread_messages, })
+	if user == message.creator:
+		spread_messages = message.message_spreadmessages.all()
+		return render(request, 'recipients.html', {'user': user, 'message': message, 'spread_messages': spread_messages, })
+	else:
+		return redirect('/')
 
 @login_required
 def follow(request, user_id):
@@ -758,39 +789,43 @@ def stats(request, message_id):
 	user = request.user
 	message = get_object_or_404(Message, id=message_id)
 
-	view_count = message.message_spreadmessages.all().count() + user.profile.get_followers().count()
-	prop_count = message.message_likes.filter(ever_liked=1).count()
-	play_count = message.message_track_plays.all().count()
+	if user == message.creator:
 
-	recipients = [m.user.profile for m in message.message_spreadmessages.all()][:6]
-	proppers = [m.user.profile for m in message.message_likes.all()][:6] 
+		view_count = message.message_spreadmessages.all().count() + user.profile.get_followers().count()
+		prop_count = message.message_likes.filter(ever_liked=1).count()
+		play_count = message.message_track_plays.all().count()
 
-	youtube_id = None
-	if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body):
-		youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body).group(0)
-		youtube_string = "http://"+youtube_s
+		recipients = [m.user.profile for m in message.message_spreadmessages.all()][:6]
+		proppers = [m.user.profile for m in message.message_likes.all()][:6] 
 
-		url_data = urlparse.urlparse(youtube_string)
-		query = urlparse.parse_qs(url_data.query)
-		youtube_id = query["v"][0]
-	print youtube_id
+		youtube_id = None
+		if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body):
+			youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body).group(0)
+			youtube_string = "http://"+youtube_s
 
-	client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
+			url_data = urlparse.urlparse(youtube_string)
+			query = urlparse.parse_qs(url_data.query)
+			youtube_id = query["v"][0]
+		print youtube_id
 
-	soundcloud_info = ''
+		client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
 
-	if re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body):
-		soundcloud_s = re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body).group(0)
-		track_url = "https://"+soundcloud_s
+		soundcloud_info = ''
 
-		print soundcloud_s
-		print track_url
+		if re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body):
+			soundcloud_s = re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body).group(0)
+			track_url = "https://"+soundcloud_s
 
-		embed_info = client.get('/oembed', url=track_url)
+			print soundcloud_s
+			print track_url
 
-		soundcloud_info = embed_info.html
+			embed_info = client.get('/oembed', url=track_url)
 
-	return render(request, 'stats.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'play_count': play_count, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, 'soundcloud_info': soundcloud_info, })
+			soundcloud_info = embed_info.html
+
+		return render(request, 'stats.html', {'user': user, 'message': message, 'view_count': view_count, 'prop_count': prop_count, 'play_count': play_count, 'youtube_id': youtube_id, 'recipients': recipients, 'proppers': proppers, 'soundcloud_info': soundcloud_info, })
+	else:
+		return redirect('/')
 
 def all(request):
 	user = request.user

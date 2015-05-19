@@ -19,7 +19,7 @@
 			</form>
 			{% endif %}
 			
-			{% if profile_user != user %}
+			{% if profile_user != user and user.is_authenticated %}
 			
 				{% if following %}
 
@@ -111,7 +111,7 @@
             <a class="btn twitter-button" href="https://twitter.com/intent/tweet?text=Check out this hot new track {{ message.creator }} posted on Wavelength! http://www.trywavelength.com/message/{{ message.id }}"></a>
         </div>
 
-	{% if like_form and user != message.creator %}
+	{% if like_form and user.is_authenticated and user != message.creator %}
 		<div class='col-xs-4'>
 			{% if like_status %}
 
