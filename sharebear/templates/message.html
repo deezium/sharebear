@@ -33,7 +33,7 @@
         <div class='col-xs-12'>
             <div class='row' style='padding-bottom:10px;'>
                 <div class='col-xs-12'>
-                    {% if user.is_authenticated %}
+                    {% if user.is_authenticated and user != message.creator %}
                     <p>Tell {{message.creator}} what you think of their track!</p>
                     {% get_comment_form for message as form %}
                     <form action="{% comment_form_target %}" method="post">{% csrf_token %}
@@ -186,6 +186,65 @@
     </div>
 
     {% if user == message.creator %}
+
+    <div class='row stats-row' id='reach-stats'>
+        <div class='col-xs-6' style='border-right: 1px solid #ddd;'>
+            <div class='stats-header'>
+                <span class="glyphicon glyphicon-user stats-glyphicon" aria-hidden="true"></span>
+                <span class='stats-header-text'>Feedback Requests</span>
+            </div>
+            <div class='stats-number'>
+            {{ view_count }}
+            </div>
+            {% for r in recipients %}
+            <div class='message-user-list'>
+                <a href="/users/{{ r.user }}">
+                <img class='center-block' src="{{ r.user.profile.profile_image_url }}" width="40" height="40" />
+                </a>
+            </div>
+
+            {% endfor %}
+        </div>
+        <div class='col-xs-6'>
+            <div class='stats-header'>
+                <span class="glyphicon glyphicon-play stats-glyphicon" aria-hidden="true"></span>
+                <span class='stats-header-text'>Plays</span>
+            </div>
+            <div class='stats-number'>
+            {{ play_count }}
+            </div>
+        </div>
+    </div>
+
+    <div class='row stats-row' id='engagement-stats'>
+        <div class='col-xs-6' style='border-right: 1px solid #ddd;'>
+            <div class='stats-header'>
+                <span class="glyphicon glyphicon-heart stats-glyphicon" aria-hidden="true"></span>
+                <span class='stats-header-text'>Likes</span>
+            </div>
+            <div class='stats-number'>
+            {{ prop_count }}
+            </div>
+            {% for p in proppers %}
+            <div class='message-user-list'>
+                <a href="/users/{{ p.user }}">
+                <img class='center-block' src="{{ p.user.profile.profile_image_url }}" width="40" height="40" />
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class='col-xs-6'>
+            <div class='stats-header'>
+                <span class="glyphicon glyphicon-comment stats-glyphicon" aria-hidden="true"></span>
+                <span class='stats-header-text'>Comments</span>
+            </div>
+            <div class='stats-number'>
+            {% get_comment_count for message as comment_count %}
+            {{ comment_count }}
+            </div>
+        </div>
+    </div>
+
 
     <div class='row' id='delete-button-row'>
         <div class='col-xs-12'>
