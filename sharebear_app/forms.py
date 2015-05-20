@@ -2,7 +2,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django import forms
-from sharebear_app.models import UserProfile, SpreadMessage, MessageLike
+from sharebear_app.models import UserProfile, SpreadMessage, MessageLike, FeaturedEntry
 from django.conf import settings
 from django.utils import timezone
 from sharebear_app.models import Message
@@ -48,6 +48,19 @@ class ComposeForm(forms.ModelForm):
 	class Meta:
 		fields = ['body', 'genre']
 		model = Message
+
+class FeaturedEntryForm(forms.ModelForm):
+	artist_name = forms.CharField(widget=forms.widgets.TextInput())
+	entry_text = forms.CharField(widget=forms.Textarea())
+	artist_image = forms.ImageField(required=False)
+	profile_link = forms.widgets.TextInput()
+	song_link1 = forms.widgets.TextInput()
+	song_link2 = forms.widgets.TextInput()
+	song_link3 = forms.widgets.TextInput()
+
+	class Meta:
+		fields = ['artist_name', 'entry_text', 'artist_image', 'profile_link', 'song_link1', 'song_link2', 'song_link3']
+		model = FeaturedEntry
 
 class MessageLikeForm(forms.ModelForm):
 	is_liked = forms.BooleanField(widget=forms.widgets.CheckboxInput())

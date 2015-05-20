@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.http import Http404, HttpResponseRedirect, HttpResponse
@@ -10,8 +11,8 @@ from django.utils import timezone
 from django.conf import settings
 from datetime import datetime
 from collections import OrderedDict
-from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm, UsernameEditForm
-from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage, TrackPlay
+from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm, UsernameEditForm, FeaturedEntryForm
+from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage, TrackPlay, FeaturedEntry
 from sharebear_app.utils import get_user_model, get_username_field, epoch_seconds, hot
 from urllib2 import urlopen
 from operator import itemgetter
@@ -23,13 +24,16 @@ import soundcloud
 User = get_user_model()
 
 def index(request, auth_form=None, user_form=None):
-	if request.user.is_authenticated():
-		user = request.user
-		return redirect('/feed/')
-	else:
-		auth_form = auth_form or AuthenticateForm()
-		user_form = user_form or UserCreateForm()
-		return redirect('/all/')
+	entry = FeaturedEntry.objects.last()
+	print entry
+	return render(request, 'featured.html', {'entry': entry, })
+	# if request.user.is_authenticated():
+	# 	user = request.user
+	# 	return redirect('/feed/')
+	# else:
+	# 	auth_form = auth_form or AuthenticateForm()
+	# 	user_form = user_form or UserCreateForm()
+	# 	return redirect('/all/')
 
 def login_view(request):
 	if request.method == 'POST':
@@ -989,3 +993,40 @@ def fuckgenres(request):
 	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
+def featured(request, entry_id):
+	try:
+		user = request.user
+	except:
+		pass
+	entry = get_object_or_404(FeaturedEntry, id=entry_id)
+	return render(request, 'featured.html', {'entry': entry, })
+
+@staff_member_required
+def featuredcompose(request,entry_form=FeaturedEntryForm):
+	if request.method == "POST":
+		form = entry_form(request.POST, request.FILES)
+		if form.is_valid():
+			f = form.save()
+			print f
+			return redirect('/')
+	else:
+		form = entry_form()
+	return render(request, 'featuredcompose.html', {'form': form, })
+	
+@staff_member_required
+def featurededit(request, entry_id):
+	entry = get_object_or_404(FeaturedEntry, id=entry_id)
+	form = FeaturedEntryForm(initial={'artist_name': entry.artist_name, 'entry_text': entry.entry_text, 'artist_image': entry.artist_image, 'song_link1': entry.song_link1, 'song_link2': entry.song_link2, 'song_link3': entry.song_link3, })
+	return render(request, 'featurededit.html', {'entry': entry, 'form': form, })
+
+@staff_member_required
+def update_featuredentry(request, entry_id):
+	try:
+		entry=FeaturedEntry.objects.get(id=entry_id)
+	except:
+		pass
+	if request.method=='POST':
+		form = FeaturedEntryForm(request.POST, request.FILES, instance=entry)
+		if form.is_valid():
+			form.save()
+	return redirect('/')

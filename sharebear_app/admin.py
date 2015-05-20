@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from sharebear_app.models import UserProfile, Message, MessageLike, SpreadMessage, Relationship, TrackPlay, SocialShare
+from sharebear_app.models import UserProfile, Message, MessageLike, SpreadMessage, Relationship, TrackPlay, SocialShare, FeaturedEntry
 
 
 from sharebear_app.utils import get_user_model
@@ -118,3 +118,4 @@ admin.site.register(SpreadMessage)
 admin.site.register(Relationship)
 admin.site.register(TrackPlay)
 admin.site.register(SocialShare)
+admin.site.register(FeaturedEntry)

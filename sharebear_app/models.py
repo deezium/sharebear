@@ -203,6 +203,33 @@ class MessageLike(models.Model):
 	def __unicode__(self):
 		return str(self.id)
 
+class FeaturedEntry(models.Model):
+	artist_name = models.CharField(max_length=40)
+	entry_text = models.TextField()
+	artist_image = models.FileField(upload_to='avatars', default='avatars/user_icon.jpg')
+	profile_link = models.CharField(max_length=200, null=True, blank=True)
+	song_link1 = models.TextField()
+	song_link2 = models.TextField(null=True, blank=True)
+	song_link3 = models.TextField(null=True, blank=True)
+	post_time = models.DateTimeField("Posted at", auto_now=True, null=True, blank=True)
+
+	def __unicode__(self):
+		return str(self.id)
+
+	def get_next(self):
+		next_entry = FeaturedEntry.objects.filter(id__gt=self.id)
+		if next_entry:
+			return next_entry[0].id
+		return False
+
+	def get_prev(self):
+		prev_entry = FeaturedEntry.objects.filter(id__lt=self.id).order_by('-id')
+		print prev_entry
+		if prev_entry:
+			return prev_entry[0].id
+		return False
+
+
 class SocialShare(models.Model):
 	user = models.ForeignKey(AUTH_USER_MODEL, related_name='user_social_shares', verbose_name="Sharing user")
 	msg = models.ForeignKey(Message, related_name='message_social_shares')

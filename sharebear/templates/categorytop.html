@@ -14,7 +14,7 @@
 	</div>
 	<div class='col-xs-8' style='height:100%;'>
 		<div style='vertical-align: top;'>
-			<a href='/message/{{ message.id }}'>{{ message.body }}</a>
+			<a href='/message/{{ message.id }}'>{{ message.body|truncatechars:140 }}</a>
 		</div>
 	</div>
 	<div class='col-xs-2' style='height:100%;'>
