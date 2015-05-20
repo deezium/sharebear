@@ -9,12 +9,12 @@
 	<div class='col-xs-2' style='height:100%;'>
 		<div>
 			<div class='category-profile'><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></div> 
-			<div id='category-username' ><a href="/users/{{ message.creator }}">{{ message.creator }}</a></div>
+			<div id='category-username' ><a href="/users/{{ message.creator }}">{{ message.creator|truncatechars:20 }}</a></div>
 		</div>
 	</div>
 	<div class='col-xs-8' style='height:100%;'>
 		<div style='vertical-align: top;'>
-			<a href='/message/{{ message.id }}'>{{ message.body }}</a>
+			<a href='/message/{{ message.id }}'>{{ message.body|truncatechars:140 }}</a>
 		</div>
 	</div>
 	<div class='col-xs-2' style='height:100%;'>

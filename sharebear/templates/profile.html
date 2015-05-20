@@ -39,10 +39,33 @@
 		</div>
 	</div>
 </div>
+
+<div class='row '>
+	<div class='col-xs-4'>
+		<div class='user-share-stats'>
+		    <span class="glyphicon glyphicon-user medium-stats-glyphicon" aria-hidden="true"></span>
+			<p> {{ profile_user.profile.get_reach }}</p>
+		</div>
+	</div>
+	<div class='col-xs-4'>
+		<div class='user-share-stats'>
+		    <span class="glyphicon glyphicon-play medium-stats-glyphicon" aria-hidden="true"></span>
+				<p> {{ profile_user.profile.get_plays }}</p>
+		</div>
+	</div>
+	<div class='col-xs-4'>
+		<div class='user-share-stats'>
+		    <span class="glyphicon glyphicon-heart medium-stats-glyphicon" aria-hidden="true"></span>
+				<p> {{ profile_user.profile.get_likes }}</p>
+		</div>
+	</div>
+</div>
+
 <div class='row profile-pill-row'>
 	<ul class='nav nav-pills'>
 		<li role='presentation'><a href='/users/{{ profile_user.username }}'>Posted Tracks</a></li>
 		<li role='presentation'><a href='/likes/{{ profile_user.username }}'>Likes</a></li>
+		<li role='presentation'><a href='/comments/{{ profile_user.username }}'>Comments</a></li>
 	</ul>
 </div>
 

@@ -490,7 +490,7 @@ def initial_feed(request, user, *args, **kwargs):
 	except UserProfile.DoesNotExist:
 		UserProfile.objects.create(user=user)
 	
-		message_list = Message.objects.order_by('?')[:5]
+		message_list = Message.objects.order_by('?')[:3]
 
 		for i in range(len(message_list)):
 			new_spread_message = SpreadMessage(user=user,msg=message_list[i])
@@ -505,7 +505,7 @@ def compose(request, form_class=ComposeForm, success_url=None):
 		user = request.user
 		form = form_class(data=request.POST)
 
-		recipient_list = User.objects.order_by('?')[:12]
+		recipient_list = User.objects.order_by('?')[:5]
 
 		print recipient_list
 
@@ -989,3 +989,98 @@ def fuckgenres(request):
 	print parameter_list
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 
+def comments(request, username="", compose_form=ComposeForm, success_url=None):
+	user = request.user
+	profile_user = User.objects.get(username=username)
+
+	if user == profile_user:
+		#message_list = Message.objects.feed_for(request.user)
+		full_message_list = profile_user.sent_messages.all()
+
+		view_count_list = []
+		play_count_list = []
+		prop_count_list = []
+		full_youtube_list = []
+		full_soundcloud_list = []
+
+		client = soundcloud.Client(client_id='0dade5038dabd4be328a885dde4d5e0e')
+
+		for message in full_message_list:
+			youtube_id = None
+			soundcloud_info = ''
+
+			view_count = message.message_spreadmessages.all().count() + profile_user.profile.get_followers().count()
+			prop_count = message.message_likes.filter(ever_liked=1).count()
+			play_count = message.message_track_plays.all().count()
+
+			view_count_list.append(view_count)
+			prop_count_list.append(prop_count)
+			play_count_list.append(play_count)
+		
+			if re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body):
+				youtube_s = re.search("(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.\S+", message.body).group(0)
+				youtube_string = "http://"+youtube_s
+
+				url_data = urlparse.urlparse(youtube_string)
+				query = urlparse.parse_qs(url_data.query)
+				youtube_id = query["v"][0]
+			full_youtube_list.append(youtube_id)
+
+			if re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body):
+				soundcloud_s = re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body).group(0)
+				track_url = "https://"+soundcloud_s
+
+				embed_info = client.get('/oembed', url=track_url)
+
+				soundcloud_info = embed_info.html
+
+			full_soundcloud_list.append(soundcloud_info)
+
+		print user.profile.get_likes()
+		
+
+		#print full_youtube_list
+
+		parameter_list = [[full_message_list[i], full_youtube_list[i], full_soundcloud_list[i], view_count_list[i], play_count_list[i], prop_count_list[i]] for i in range(len(full_youtube_list))]
+		#print parameter_list
+
+		#feed_message_list = [[i, i.is_liked_by_user(user), 1] for i in full_message_list]
+		# print feed_message_list
+
+		share_message_list = []
+		for i in parameter_list:
+			share_message_list.append([i[0],i[0].is_liked_by_user(user),i[0].ever_liked_by_user(user),i[1],i[2],i[3],i[4],i[5]])
+		
+		like_form=MessageLikeForm()
+
+		if request.method == "POST":
+			user = request.user
+			compose_form = compose_form(data=request.POST)
+
+			recipient_list = User.objects.order_by('?')[:12]
+
+			print recipient_list
+
+			if compose_form.is_valid():
+				f = compose_form.save(commit=False)
+				f.creator = request.user
+				f.creation_time = timezone.now()
+				f.save()
+				print f
+
+				for i in range(len(recipient_list)):
+					new_spread_message = SpreadMessage(user=recipient_list[i],msg=f)
+					new_spread_message.save()
+				messages.info(request, u"Message successfully sent.")
+				if success_url is None:
+					success_url = reverse('messages_recipients', kwargs={'message_id': f.id})
+					#success_url = reverse('messages_recipients', kwargs={'meta_message_id': m.id})
+				if 'next' in request.GET:
+					success_url = request.GET['next']
+				if 'next' in request.POST:
+					success_url = request.POST['next']
+				return HttpResponseRedirect(success_url)
+
+		return render(request, 'comments.html', {'share_message_list': share_message_list, 'user': user, 'profile_user': profile_user, 'like_form': like_form, 'compose_form': compose_form, })
+	else:
+		return redirect('/')

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load humanize %}
+
+{% block content %}
+
+<div class='row'>
+	<div class='col-xs-12'>
+		<div id='profile-pic-container' style='padding-top: 20px'>
+			<img id='profile-pic' src="{{ profile_user.profile.profile_image_url }}" style='float: left;' height="100" width="100"/>
+			<h2> {{ profile_user.username }}</h2>
+			<p>{{ profile_user.profile.aboutme }}</p>
+			<p>{{ profile_user.profile.location }}</p>
+		</div>		
+		<div id='profile-button'>	
+			{% if profile_user == user %}
+			<form action ='/edit/{{ profile_user.username }}'>
+				<input id='edit-button' type='submit' class='btn btn-default' value='Edit Profile'>
+			</form>
+			{% endif %}
+			
+			{% if profile_user != user and user.is_authenticated %}
+			
+				{% if following %}
+
+			    <form action="{% url 'user_follow' profile_user.profile.id %}" method="post" class='follow-form'>{% csrf_token %}
+			        <button type="submit" id="fbutton" class="btn follow-button">Unfollow</button>
+			    </form>
+			    
+			    {% else %}
+
+	            <form action="{% url 'user_follow' profile_user.profile.id %}" method="post" class='follow-form'>{% csrf_token %}
+	                <button type="submit" id="fbutton" class="btn btn-default follow-button">Follow</button>
+	            </form>
+
+			    {% endif %}
+
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+<div class='row '>
+	<div class='col-xs-4'>
+		<div class='user-share-stats'>
+		    <span class="glyphicon glyphicon-user medium-stats-glyphicon" aria-hidden="true"></span>
+			<p> {{ profile_user.profile.get_reach }}</p>
+		</div>
+	</div>
+	<div class='col-xs-4'>
+		<div class='user-share-stats'>
+		    <span class="glyphicon glyphicon-play medium-stats-glyphicon" aria-hidden="true"></span>
+				<p> {{ profile_user.profile.get_plays }}</p>
+		</div>
+	</div>
+	<div class='col-xs-4'>
+		<div class='user-share-stats'>
+		    <span class="glyphicon glyphicon-heart medium-stats-glyphicon" aria-hidden="true"></span>
+				<p> {{ profile_user.profile.get_likes }}</p>
+		</div>
+	</div>
+</div>
+
+<div class='row profile-pill-row'>
+	<ul class='nav nav-pills'>
+		<li role='presentation'><a href='/users/{{ profile_user.username }}'>Posted Tracks</a></li>
+		<li role='presentation'><a href='/likes/{{ profile_user.username }}'>Likes</a></li>
+		<li role='presentation'><a href='/comments/{{ profile_user.username }}'>Comments</a></li>
+	</ul>
+</div>
+
+{% endblock %}
