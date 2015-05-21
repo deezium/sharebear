@@ -31,7 +31,7 @@ def epoch_seconds(date):
 
 def hot(likes, date):
     #order = log(max(abs(likes), 1), 10)
-    order = log(likes^4)
+    order = log(max(likes^4, 1), 10)
     seconds = epoch_seconds(date) - 1425253284
     new_score = 10*(order + seconds / 1000000)
     return round(new_score, 7)
