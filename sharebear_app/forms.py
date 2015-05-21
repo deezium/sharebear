@@ -58,9 +58,10 @@ class FeaturedEntryForm(forms.ModelForm):
 	song_link1 = forms.CharField(widget=forms.Textarea())
 	song_link2 = forms.CharField(widget=forms.Textarea())
 	song_link3 = forms.CharField(widget=forms.Textarea())
+	current_followers = forms.IntegerField()
 
 	class Meta:
-		fields = ['artist_name', 'entry_text', 'artist_image', 'profile_link', 'song_link1', 'song_link2', 'song_link3']
+		fields = ['artist_name', 'entry_text', 'artist_image', 'profile_link', 'song_link1', 'song_link2', 'song_link3', 'current_followers']
 		model = FeaturedEntry
 
 class MessageLikeForm(forms.ModelForm):

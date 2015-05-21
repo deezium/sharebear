@@ -215,6 +215,7 @@ class FeaturedEntry(models.Model):
 	song_link2 = models.TextField(null=True, blank=True)
 	song_link3 = models.TextField(null=True, blank=True)
 	post_time = models.DateTimeField("Posted at", auto_now=True, null=True, blank=True)
+	current_followers = models.IntegerField(default=0)
 
 	def __unicode__(self):
 		return str(self.id)

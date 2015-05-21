@@ -9,6 +9,13 @@
 		<link href='http://fonts.googleapis.com/css?family=Ek+Mukta:400' rel='stylesheet' type='text/css'>
 		<script src="{{ STATIC_URL }}less.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<!-- Begin MailChimp Signup Form -->
+		<link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css">
+		<style type="text/css">
+			#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+			/* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+			   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+		</style>
 
 		{% bootstrap_css %}
 		{% bootstrap_javascript %}
@@ -99,7 +106,6 @@
 			</nav>
 		</header>
 
-
 		<div class='container-fluid'>
 			<div class='row'>
 				{% block flash %}
@@ -134,6 +140,11 @@
 						</div> 
 
 						{% endif %}
+						<div class='row text-center' id='sidebar-stats'>
+							<ul class='nav nav-pills nav-stacked'>
+							<li><a href={% url 'mailing_subscribe' %}>Subscribe</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 				<div class='col-md-9'>
@@ -179,7 +190,7 @@
 				<div class='container'>
 					<div class='navbar-right'>
 						<ul class='nav navbar-nav'>
-							<li><a id='contact-url' href='mailto:feedback@trywavelength.com'>Feedback?</a></li>
+							<li><a href='mailto:feedback@trywavelength.com'>Feedback?</a></li>
 						</ul>
 					</div>
 				</div>

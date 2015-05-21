@@ -161,9 +161,11 @@ body {
 
 .featured-nav{
 	padding-top: 20px;
-	font-size: 1.5em;
+	font-size: 1em;
 	text-decoration: none;
 }
+
+.featured-nave-links
 
 .featured-header{
 	padding-bottom: 20px;
@@ -218,8 +220,12 @@ text-align: center;
 float:left;
 }
 
-.navbar-default .navbar-nav .open .dropdown-menu>li>a{
-	color: #fff;
+#mce-EMAIL{
+	margin-top: 20px;
+}
+
+#mc-embedded-subscribe{
+	margin: 0;
 }
 
 #compose-button:hover{
@@ -678,11 +684,11 @@ nav.navbar.navbar-inverse{
 	height: 30px;
 }
 
-#contact-url{
+.navbar-default .navbar-nav>li>a{
 	color: white;
 }
 
-#contact-url:hover{
+.navbar-default .navbar-nav>li>a:hover{
 	color: #eee;
 }
 

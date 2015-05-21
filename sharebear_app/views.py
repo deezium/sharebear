@@ -439,13 +439,17 @@ def feed(request, like_form=None, compose_form=ComposeForm, success_url=None):
 			soundcloud_s = re.search("(www\.)?(soundcloud\.com)\/.\S+", message.body).group(0)
 			track_url = "https://"+soundcloud_s
 
-			embed_info = client.get('/oembed', url=track_url)
+			try:
+				embed_info = client.get('/oembed', url=track_url)
 
-			old_soundcloud_info = embed_info.html
+				old_soundcloud_info = embed_info.html
 
-			old_soundcloud_info = old_soundcloud_info[:-10]
+				old_soundcloud_info = old_soundcloud_info[:-10]
 
-			soundcloud_info = old_soundcloud_info + " class='iframeplayer' m='"+ str(message.id) +"'></iframe>"
+				soundcloud_info = old_soundcloud_info + " class='iframeplayer' m='"+ str(message.id) +"'></iframe>"
+
+			except:
+				soundcloud_info = ''
 
 		full_soundcloud_list.append(soundcloud_info)
 
@@ -1020,7 +1024,7 @@ def featuredcompose(request,entry_form=FeaturedEntryForm):
 @staff_member_required
 def featurededit(request, entry_id):
 	entry = get_object_or_404(FeaturedEntry, id=entry_id)
-	form = FeaturedEntryForm(initial={'artist_name': entry.artist_name, 'entry_text': entry.entry_text, 'artist_image': entry.artist_image, 'song_link1': entry.song_link1, 'song_link2': entry.song_link2, 'song_link3': entry.song_link3, })
+	form = FeaturedEntryForm(initial={'artist_name': entry.artist_name, 'entry_text': entry.entry_text, 'artist_image': entry.artist_image, 'song_link1': entry.song_link1, 'song_link2': entry.song_link2, 'song_link3': entry.song_link3, 'current_followers': entry.current_followers, })
 	return render(request, 'featurededit.html', {'entry': entry, 'form': form, })
 
 @staff_member_required
@@ -1034,3 +1038,6 @@ def update_featuredentry(request, entry_id):
 		if form.is_valid():
 			form.save()
 	return redirect('/')
+
+def subscribe(request):
+	return render(request, 'subscribe.html')
