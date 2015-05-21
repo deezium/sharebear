@@ -79,7 +79,7 @@
 <div class='row'>
 	<div class='col-xs-12'>
 		{% if youtube_id %}
-	    	<iframe m="{{ message.id }}" class="center-block iframeplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
+	    	<iframe m="{{ message.id }}" class="center-block iframeplayer" type="text/html" width="100%" height="390" src="http://www.youtube.com/embed/{{ youtube_id }}" frameborder="0"/></iframe>
 	    {% endif %}
 
         {% if soundcloud_info %}
@@ -104,16 +104,16 @@
 <div class='row engagement-buttons'>
 	<div class='col-xs-3 col-xs-offset-9'>
 
-        <div class="col-xs-4">
+        <div class="col-md-4">
             <button class="btn facebook-button" onclick="facebookShare()"></button>
         </div>
 
-        <div class="col-xs-4">
+        <div class="col-md-4">
             <a class="btn twitter-button" href="https://twitter.com/intent/tweet?text=Check out this hot new track {{ message.creator }} posted on Wavelength! http://www.trywavelength.com/message/{{ message.id }}"></a>
         </div>
 
 	{% if like_form and user.is_authenticated and user != message.creator %}
-		<div class='col-xs-4'>
+		<div class='col-md-4'>
 			{% if like_status %}
 
 			<form action="{% url 'message_like' message.id %}" method="post" class='like-form' id='feed_message_{{message.id}}' m="{{ message.id }}">{% csrf_token %}
@@ -140,7 +140,7 @@
 <div class='col-xs-6' style='border-right: 1px solid #ddd;'>
     <div class='stats-header'>
         <span id='message-glyphicon-user' class="glyphicon glyphicon-user" aria-hidden="true"></span>
-        <span class='stats-header-text'>Recommended To</span>
+        <span class='stats-header-text'>Recommended</span>
     </div>
     <div class='stats-number'>
     {{ view_count }}

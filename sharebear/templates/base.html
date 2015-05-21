@@ -49,64 +49,58 @@
 
 		<header>
 			<nav class="navbar navbar-default" role="navigation">
-				<div class='container'>
-					<div class='navbar-left'>
-					<ul class='nav navbar-nav'>
-						<li><h2><a id='site-name' href="{% url 'index' %}" style="text-decoration:none">Wavelength<sub style="font-size:12px;">BETA</sub></a></h2></li>
-					</ul>
-					</div>
-					<div class='navbar-header navbar-right'>
-						<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1'>
-							<span class='sr-only'>Toggle navigation</span>
-							<span class='icon-bar'></span>
-							<span class='icon-bar'></span>
-							<span class='icon-bar'></span>
-						</button>
-					</div>
-					<div class='navbar-header navbar-right'>
-					{% if user.is_authenticated %}
+				<div class='container-fluid'>
+					<div class='col-md-12'>
+						<div class='navbar-left'>
 						<ul class='nav navbar-nav'>
-							<li class='dropdown'>
-								<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><img src="{{ user.profile.profile_image_url }}" id="navbar-avatar" /><span class='caret'></span></a>
-								<ul class='dropdown-menu' role='menu'>
-									<li><a href='/users/{{ user.username }}'>{{ user.username }}</a></li>
-									<li style='border-top:1px solid #ddd'><a href='/logout'>Log Out</a></li>
-								</ul>
-							</li>
-							<li class="compose-button">
-							<form action="/compose">
-								<div>
-									<button id='compose-button' type="submit" class="btn btn-default"><span id='compose-pencil' class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Share Track</button>
-								</div>
-							</form>
-							</li>
+							<li><h2><a id='site-name' href="{% url 'index' %}" style="text-decoration:none">Wavelength<sub style="font-size:12px;">BETA</sub></a></h2></li>
 						</ul>
-
-					{% else %}
-						<ul class='nav navbar-nav'>
-							<li class="nav-login-button">
-								<form action="{% url 'social:begin' 'facebook'%}?next={{request.path}}">
+						</div>
+						<div class='navbar-header navbar-right'>
+						{% if user.is_authenticated %}
+							<ul class='nav navbar-nav'>
+								<li class='dropdown'>
+									<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><img src="{{ user.profile.profile_image_url }}" id="navbar-avatar" /><span class='caret'></span></a>
+									<ul class='dropdown-menu' role='menu'>
+										<li><a href='/users/{{ user.username }}'>{{ user.username }}</a></li>
+										<li style='border-top:1px solid #ddd'><a href='/logout'>Log Out</a></li>
+									</ul>
+								</li>
+								<li class="compose-button">
+								<form action="/compose">
 									<div>
-										<button id='nav-login-button' type="submit" class="btn btn-default"><span id='compose-pencil' class="glyphicon glyphicon-headphones" aria-hidden="true"></span>Sign In</button>
+										<button id='compose-button' type="submit" class="btn btn-default"><span id='compose-pencil' class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Share Track</button>
 									</div>
 								</form>
-							</li>
-						</ul>
+								</li>
+							</ul>
 
-					{% endif %}
-					</div>
-					<div class='collapse navbar-collapse navbar-right' id='bs-example-navbar-collapse-1'>
-						<ul class='nav navbar-nav'>
-						{% block login %}
-						{% endblock %}
-						</ul>
+						{% else %}
+							<ul class='nav navbar-nav'>
+								<li class="nav-login-button">
+									<form action="{% url 'social:begin' 'facebook'%}?next={{request.path}}">
+										<div>
+											<button id='nav-login-button' type="submit" class="btn btn-default"><span id='compose-pencil' class="glyphicon glyphicon-headphones" aria-hidden="true"></span>Sign In</button>
+										</div>
+									</form>
+								</li>
+							</ul>
+
+						{% endif %}
+						</div>
+						<div class='collapse navbar-collapse navbar-right' id='bs-example-navbar-collapse-1'>
+							<ul class='nav navbar-nav'>
+							{% block login %}
+							{% endblock %}
+							</ul>
+						</div>
 					</div>
 				</div>
 			</nav>
 		</header>
 
 
-		<div class='container'>
+		<div class='container-fluid'>
 			<div class='row'>
 				{% block flash %}
 				{% if auth_form.non_field_errors or user_form.non_field_errors %}
@@ -117,7 +111,7 @@
 			</div>
 
 			<div class='row'>
-				<div class='col-xs-3'>	
+				<div class='col-md-3'>	
 					<div class='col-xs-12' id='sidebar'>
 
 						{% if user.is_authenticated %}
@@ -125,10 +119,8 @@
 						{% block sidebar %}
 						<div class='row' id='pill-row'>
 						<ul class='nav nav-pills nav-stacked'>
-							<li><a href="{% url 'messages_feed' %}">Home</a></li>
+							<li><a href="/">Home</a></li>
 							<li><a href='/users/{{ user.username }}'>My Profile and Tracks</a></li>
-							<li><a href="/shares/{{ user.username }}/ ">My Stats</a>
-							<!--<li><a href="{% url 'social:begin' 'twitter'%}?next={{request.path}}">Login with Twitter</a></li>!-->
 						</ul>
 						</div>
 						{% endblock %}
@@ -137,35 +129,43 @@
 
 						<div class='row'>
 							<div class='col-xs-12' id='welcome-text'>
-								<p style='text-align: center;'> Welcome to Wavelength!  <a href="{% url 'social:begin' 'facebook'%}?next={{request.path}}" style='text-color: #337ab7; font-weight: bold;'>Sign up</a> to post tracks and start giving feedback to artists!</p>
+								<p style='text-align: center;'> Welcome to Wavelength!  <a href="{% url 'social:begin' 'facebook'%}?next={{request.path}}" style='text-color: #337ab7; font-weight: bold;'>Sign in</a> to post tracks and start giving feedback to artists!</p>
 							</div>
 						</div> 
 
 						{% endif %}
 					</div>
 				</div>
-				<div class='col-xs-9'>
+				<div class='col-md-9'>
 					<div class='col-xs-12' id='main-content'>
-					<div class='row'>
-					<ul class='nav nav-tabs nav-justified' id='genre-nav'>
-						<li><a href='/'>Featured</a></li>
-						{% if user.is_authenticated %}
+							<div class='navbar-header' style='border-bottom:1px solid #ddd;'>
+								<button id='category-button' type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#category-headers-collapse' style='text-align: center;'>
+								        <span class='caret' style='font-size:50px;'></span>
+								</button>
+							</div>
 
-						<li><a href={% url 'messages_feed' %}>Recommended</a></li>
+							<div class='collapse navbar-collapse' id='category-headers-collapse'>
+								<ul class='nav nav-tabs nav-justified' id='genre-nav'>
+								<!--	<li><a href='/'>Featured</a></li> !-->
+									{% if user.is_authenticated %}
 
-						{% endif %}
-						<li><a href={% url 'messages_all' %}>All</a></li>
-						<li><a href={% url 'messages_trap' %}>Trap</a></li>
-						<li><a href={% url 'messages_house' %}>House</a></li>
-						<li><a href={% url 'messages_trance' %}>Trance</a></li>
-						<li><a href={% url 'messages_bass' %}>Bass</a></li>
-						<li><a href={% url 'messages_harddance' %}>Hard Dance</a></li>
-						<li><a href={% url 'messages_fuckgenres' %}>Fuck Genres</a></li>
-					</ul>
-					</div>
+									<li><a href={% url 'messages_feed' %}>Recommended</a></li>
+
+									{% endif %}
+									<li><a href={% url 'messages_all' %}>All</a></li>
+									<li><a href={% url 'messages_trap' %}>Trap</a></li>
+									<li><a href={% url 'messages_house' %}>House</a></li>
+									<li><a href={% url 'messages_trance' %}>Trance</a></li>
+									<li><a href={% url 'messages_bass' %}>Bass</a></li>
+									<li><a href={% url 'messages_harddance' %}>Hard Dance</a></li>
+									<li><a href={% url 'messages_fuckgenres' %}>Fuck Genres</a></li>
+								</ul>
+							</div>
 					{% block content %}
 
 					{% endblock %}
+						</div>
+
 					</div>
 				</div>
 			</div>

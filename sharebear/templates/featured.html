@@ -4,6 +4,18 @@
 
 {% block content %}
 
+<div class='row'>
+	<div class='col-xs-12 featured-nav' style='text-align: center;'>
+		{% if entry.get_prev %}
+		<a href='/featured/{{ entry.get_prev }}' style='margin-right:20px; text-decoration:none;'>Previous Feature</a>
+		{% endif %}
+
+		{% if entry.get_next %}
+		<a href='/featured/{{ entry.get_next }}' style='margin-left:20px; text-decoration:none;'>Next Feature</a>
+		{% endif %}
+	</div>
+</div>
+
 {% if user.is_staff %}
 <div class='row'>
 	<div class='col-xs-12'>
@@ -12,7 +24,7 @@
 </div>
 {% endif %}
 
-<div class='row'>
+<div class='row featured-header'>
 	<div class='col-xs-12'>
 		<h2>Today's featured artist...</h2>
 	</div>
@@ -20,49 +32,47 @@
 
 <div class='row'>
 	<div class='col-xs-12'>
-		<img src="{{ entry.artist_image.url }}" width="200" height="200" />
+		<img src="{{ entry.artist_image.url }}" width="200" height="200" class='featured-artist-image' />
 		<h1 style='display: inline;'>{{ entry.artist_name }}</h1>
 	</div>
 </div>
 
-<div class='row'>
+<div class='row featured-timestamp'>
 	<div class='col-xs-12'>
-		<p>{{ entry.post_time }}</p>
+		<p>Posted at {{ entry.post_time }}</p>
 	</div>
 </div>
 
 
-<div class='row'>
+<div class='row featured-text'>
 	<div class='col-xs-12'>
 		<p>{{ entry.entry_text }}</p>
 	</div>
 </div>
 
-<div class='row'>
-	<div class='col-xs-12'>
-		<p>{{ entry.song_link1 }}</p>
+<div class='row featured-song'>
+	<div class='col-xs-12'>	
+		{% autoescape off %}
+		{{ entry.song_link1 }}
+		{% endautoescape %}
 	</div>
 </div>
 
-<div class='row'>
+<div class='row featured-song'>
 	<div class='col-xs-12'>
-		<p>{{ entry.song_link2 }}</p>
+		{% autoescape off %}
+		{{ entry.song_link2 }}
+		{% endautoescape %}
 	</div>
 </div>
 
-<div class='row'>
+<div class='row featured-song'>
 	<div class='col-xs-12'>
-		<p>{{ entry.song_link3 }}</p>
+		{% autoescape off %}
+		{{ entry.song_link3 }}
+		{% endautoescape %}
 	</div>
 </div>
 
-
-{% if entry.get_prev %}
-<a href='/featured/{{ entry.get_prev }}'>Previous</a>
-{% endif %}
-
-{% if entry.get_next %}
-<a href='/featured/{{ entry.get_next }}'>Next</a>
-{% endif %}
 
 {% endblock %}

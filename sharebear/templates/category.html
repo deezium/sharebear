@@ -5,19 +5,19 @@
 
 {% for message, prop_count, hotness in parameter_list %}
 
-<div class='row category-message' style='height:80px;'>
-	<div class='col-xs-2' style='height:100%;'>
+<div class='row category-message'>
+	<div class='col-xs-12 col-md-2' style='height:100%;'>
 		<div>
 			<div class='category-profile'><a href="/users/{{ message.creator }}"><img src="{{ message.creator.profile.profile_image_url }}" width="30" height="30" /></a></div> 
 			<div id='category-username' ><a href="/users/{{ message.creator }}">{{ message.creator|truncatechars:20 }}</a></div>
 		</div>
 	</div>
-	<div class='col-xs-8' style='height:100%;'>
-		<div style='vertical-align: top;'>
+	<div class='col-xs-12 col-md-8' style='height:100%;'>
+		<div style='vertical-align: top; padding-bottom: 5px;'>
 			<a href='/message/{{ message.id }}'>{{ message.body|truncatechars:140 }}</a>
 		</div>
 	</div>
-	<div class='col-xs-2' style='height:100%;'>
+	<div class='col-xs-12 col-md-2' style='height:100%; text-align: center;'>
 		<span class="glyphicon glyphicon-fire medium-stats-glyphicon" aria-hidden="true"></span>
 		<span style='font-size: 40px; padding-left: 5px;'>{{ hotness|floatformat:"0" }}</span>
 	</div>

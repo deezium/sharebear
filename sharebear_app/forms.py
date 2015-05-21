@@ -54,9 +54,9 @@ class FeaturedEntryForm(forms.ModelForm):
 	entry_text = forms.CharField(widget=forms.Textarea())
 	artist_image = forms.ImageField(required=False)
 	profile_link = forms.widgets.TextInput()
-	song_link1 = forms.widgets.TextInput()
-	song_link2 = forms.widgets.TextInput()
-	song_link3 = forms.widgets.TextInput()
+	song_link1 = forms.CharField(widget=forms.Textarea())
+	song_link2 = forms.CharField(widget=forms.Textarea())
+	song_link3 = forms.CharField(widget=forms.Textarea())
 
 	class Meta:
 		fields = ['artist_name', 'entry_text', 'artist_image', 'profile_link', 'song_link1', 'song_link2', 'song_link3']

@@ -39,7 +39,7 @@
 		<div class='row'>
 			<div class='col-xs-10'>
 				<div id='share-body'>
-					{{ message.body|urlize }}
+					<a href='/message/{{ message.id }}'>{{ message.body|truncatechars:140 }}</a>
 				</div>	
 			</div>
 			<div class='col-xs-2'>
@@ -49,21 +49,18 @@
 			</div>
 		</div>
 		<div class='row' style='padding-top: 10px;'>
-			<div class='col-xs-10'>
-		    	<a href="/stats/{{ message.id }}">View Full Stats</a>
-		    </div>
-		    <div class='col-xs-2' style='text-align: right;'>
+		    <div class='col-md-12' style='text-align: center;'>
 		    	<div class='row'>
-		    	<div class='col-xs-4'>
-			    <span class="glyphicon glyphicon-user small-stats-glyphicon" aria-hidden="true"></span>
+		    	<div class='col-xs-4 row-share-stats'>
+			    <span class="glyphicon glyphicon-user medium-stats-glyphicon" aria-hidden="true"></span>
 			    {{ view_count }}
 			    </div>
-			    <div class='col-xs-4'>
-			    <span class="glyphicon glyphicon-play small-stats-glyphicon" aria-hidden="true"></span>
+			    <div class='col-xs-4 row-share-stats'>
+			    <span class="glyphicon glyphicon-play medium-stats-glyphicon" aria-hidden="true"></span>
 			    {{ play_count }}
 			    </div>
-			    <div class='col-xs-4'>
-		    	<span class="glyphicon glyphicon-heart small-stats-glyphicon" aria-hidden="true"></span>
+			    <div class='col-xs-4 row-share-stats'>
+		    	<span class="glyphicon glyphicon-heart medium-stats-glyphicon" aria-hidden="true"></span>
 			    {{ prop_count }}
 			    </div>
 			    </div>

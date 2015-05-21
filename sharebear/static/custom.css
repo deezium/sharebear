@@ -159,6 +159,35 @@ body {
 	border-top: 1px solid gray;
 }
 
+.featured-nav{
+	padding-top: 20px;
+	font-size: 1.5em;
+	text-decoration: none;
+}
+
+.featured-header{
+	padding-bottom: 20px;
+}
+
+.featured-song{
+	padding-top: 20px;
+}
+
+.featured-text{
+	padding-top: 10px;
+}
+
+.featured-timestamp{
+	padding-top: 20px;
+	font-size: 0.8em;
+	color: #aaa;
+	text-align: left;
+}
+
+.featured-artist-image{
+	margin-right: 20px;
+}
+
 #compose-button{
 	margin-bottom:10px;
 	text-align: center;
@@ -179,6 +208,19 @@ body {
 	color: black;
 }
 
+button#category-button.navbar-toggle.collapsed{
+text-align: center;
+float:left;
+}
+
+button#category-button.navbar-toggle{
+text-align: center;
+float:left;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu>li>a{
+	color: #fff;
+}
 
 #compose-button:hover{
 	background-color: #eee;
@@ -196,6 +238,22 @@ body {
 
 .nav-login-button{
 	margin-top: 15px;
+}
+
+.nav-tabs.nav-justified>li>a {
+	border-bottom: none;
+}
+
+ul#genre-nav.nav-tabs.nav-justified {
+	border-bottom: 1px solid #ddd;
+}
+
+ul#genre-nav.nav-tabs.nav-justified>li {
+	vertical-align: bottom;
+}
+
+ul#genre-nav.nav-tabs.nav-justified>li:hover {
+	background-color:#eee;
 }
 
 
@@ -217,6 +275,10 @@ body {
 #pill-row{
 	margin-top: 0px;
 	padding-bottom: 10px;
+}
+
+.navbar-toggle{
+	text-align: center;
 }
 
 .profile-pill-row{
@@ -310,7 +372,7 @@ body {
 }
 
 .stats-header-text {
-	font-size: 30px;
+	font-size: 1.8em;
 }
 
 .stats-number {
@@ -323,6 +385,13 @@ body {
 	font-size: 30px;
 	padding-top: 40px;
 }
+
+.row-share-stats {
+	text-align: center;
+	font-size: 30px;
+	padding-top: 10px;
+}
+
 
 .stats-user-list {
 	text-align: center;
@@ -495,13 +564,17 @@ ul#genre-nav {
 .like-button{
 	height: 40px;
 	width: 40px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .facebook-button{
 	height: 40px;
 	width: 40px;
 	background: url('/static/fblogo_40.png') no-repeat scroll center;
-}
+	margin-top: 5px;
+	margin-bottom: 5px;
+	}
 
 
 .twitter-button{
@@ -509,6 +582,9 @@ ul#genre-nav {
 	height: 40px;
 	width: 40px;
 	background: url('/static/twitterlogo_32x26.png') no-repeat scroll center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+
 }
 #feed-timestamp {
 	padding-top: 10px;
