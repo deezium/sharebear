@@ -856,7 +856,6 @@ def all(request):
 
 	param_list = [[message_list[i], prop_count_list[i], hotness_list[i]] for i in range(len(message_list))]
 	parameter_list = sorted(param_list, key=itemgetter(2), reverse=True)
-	print parameter_list
 	
 	return render(request, 'category.html', {'parameter_list': parameter_list, 'user': user, })
 

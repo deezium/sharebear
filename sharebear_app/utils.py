@@ -27,11 +27,12 @@ epoch = datetime(1970, 1, 1)
 
 def epoch_seconds(date):
     td = date - epoch
-    print td
     return td.days * 86400 + td.seconds + (float(td.microseconds) / 1000000)
 
 def hot(likes, date):
-    order = log(max(abs(likes), 1), 10)
+    #order = log(max(abs(likes), 1), 10)
+    order = log(likes^4)
     seconds = epoch_seconds(date) - 1425253284
-    return round(order + seconds / 45000, 7)
+    new_score = 10*(order + seconds / 1000000)
+    return round(new_score, 7)
 
