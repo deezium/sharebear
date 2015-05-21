@@ -28,6 +28,9 @@ class UserProfile(models.Model):
 	promoter_score_last_updated = models.DateTimeField(null=True, blank=True)
 	promoter_score_update_level = models.IntegerField(default=0)
 	relationships = models.ManyToManyField('self', through='Relationship', symmetrical=False, related_name='related_to')
+	soundcloud_page = models.CharField(max_length=200, null=True, blank=True, default='')
+	facebook_page = models.CharField(max_length=200, null=True, blank=True, default='')
+
 
 	def __unicode__(self):
 		return self.user.username

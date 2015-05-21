@@ -387,7 +387,7 @@ def edit(request, username="", edit_form=None):
 		except User.DoesNotExist:
 			raise Http404
 		if profile_user == request.user:
-			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, })
+			edit_form = EditProfileForm(initial={'location': user.profile.location, 'aboutme':user.profile.aboutme, 'soundcloud_page':user.profile.soundcloud_page, 'facebook_page': user.profile.facebook_page, })
 			username_form = UsernameEditForm(initial={'username': user.username, })
 		if user.profile.is_following(userprofile[0]):
 			following=True

@@ -31,10 +31,11 @@ class EditProfileForm(forms.ModelForm):
 	pic = forms.ImageField(required=False)
 	aboutme = forms.CharField(required=False, label='About me', widget=forms.Textarea(attrs={'placeholder': 'You are awesome.'}))
 	location = forms.CharField(required=False, widget=forms.widgets.TextInput(attrs={'placeholder': 'Where you at?'}))
-
+	soundcloud_page = forms.CharField(required=False, label='', widget=forms.widgets.TextInput(attrs={'placeholder': 'Soundcloud Page'}))
+	facebook_page = forms.CharField(required=False, label='', widget=forms.widgets.TextInput(attrs={'placeholder': 'Facebook Page'}))
 
 	class Meta:
-		fields = ['pic', 'location', 'aboutme']
+		fields = ['pic', 'location', 'aboutme', 'soundcloud_page', 'facebook_page']
 		model = UserProfile
 
 class AuthenticateForm(AuthenticationForm):
