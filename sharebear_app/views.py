@@ -24,16 +24,16 @@ import soundcloud
 User = get_user_model()
 
 def index(request, auth_form=None, user_form=None):
-	# entry = FeaturedEntry.objects.last()
-	# print entry
-	# return render(request, 'featured.html', {'entry': entry, })
-	if request.user.is_authenticated():
-		user = request.user
-		return redirect('/feed/')
-	else:
-		auth_form = auth_form or AuthenticateForm()
-		user_form = user_form or UserCreateForm()
-		return redirect('/all/')
+	entry = FeaturedEntry.objects.last()
+	print entry
+	return render(request, 'featured.html', {'entry': entry, })
+	# if request.user.is_authenticated():
+	# 	user = request.user
+	# 	return redirect('/feed/')
+	# else:
+	# 	auth_form = auth_form or AuthenticateForm()
+	# 	user_form = user_form or UserCreateForm()
+	# 	return redirect('/all/')
 
 def login_view(request):
 	if request.method == 'POST':
