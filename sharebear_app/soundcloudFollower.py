@@ -1,6 +1,7 @@
 import soundcloud
 import time
 import csv
+from operator import itemgetter
 
 def follow():
 	client = soundcloud.Client(access_token='1-129923-153597934-f5c1015d92336')
@@ -13,7 +14,7 @@ def follow():
 
 		csvfile.close()
 
-	for u in userlist[:30]:
+	for u in userlist[:100]:
 		try:
 			client.put('/me/followings/%s' % u)
 			time.sleep(3)
@@ -34,7 +35,7 @@ def like():
 
 		csvfile.close()
 
-	for t in tracklist[:30]:
+	for t in tracklist[:100]:
 		try:
 			client.put('/me/favorites/%s' % t)
 			time.sleep(3)
@@ -61,12 +62,20 @@ def csvUniquer():
 				writer_list.append(row)
 		csvfile.close()
 
-	print len(id_list)
-	print len(writer_list)
+	for w in writer_list:
+		if w[6] == '':
+			w[6] = 0
+		else:
+			w[6] = int(w[6])
+
+	print writer_list
+
+	w_list = sorted(writer_list, key=itemgetter(6))
+	#print w_list
 
 	with open('soundcloudUserDataAllUnique.csv', 'w') as csvfile:
 		writer = csv.writer(csvfile)
-		for row in writer_list:
+		for row in w_list:
 			writer.writerow(row)
 	
 		csvfile.close()
@@ -105,5 +114,6 @@ def likelist():
 	print len(like_set)
 	return like_set
 
-#like()
+like()
 follow()
+#csvUniquer()
