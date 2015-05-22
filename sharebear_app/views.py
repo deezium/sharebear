@@ -1041,3 +1041,32 @@ def update_featuredentry(request, entry_id):
 
 def subscribe(request):
 	return render(request, 'subscribe.html')
+
+def soundcloudlogin(request):
+		# create client object with app credentials
+	client = soundcloud.Client(client_id='0473a0ba44f63d071607ee4d374b4843',
+	                           client_secret='e96da34c90b1ccff5b30a7f60e4eb741',
+	                           redirect_uri='http://localhost:8000/soundcloudredirect')
+
+	authorize_url = client.authorize_url()
+
+	print authorize_url
+	#return render(request, 'soundcloudlogin.html', {'authorize_url': authorize_url, })
+	return redirect(client.authorize_url())
+
+def soundcloudredirect(request):
+	client = soundcloud.Client(client_id='0473a0ba44f63d071607ee4d374b4843',
+	                           client_secret='e96da34c90b1ccff5b30a7f60e4eb741',
+	                           redirect_uri='http://localhost:8000/soundcloudredirect')
+
+	code = request.GET['code']
+	print code
+
+	access_token = client.exchange_token(code)
+	user = client.get('/me')
+	print user.username
+
+	client.put('/me/followings/87693575')
+
+	print access_token
+	return render(request, 'soundcloudlogin.html')

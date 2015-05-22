@@ -1,0 +1,3 @@
+curl -X POST "https://api.soundcloud.com/oauth2/token" -F 'client_id=0473a0ba44f63d071607ee4d374b4843' -F 'client_secret=e96da34c90b1ccff5b30a7f60e4eb741' -F 'grant_type=authorization_code' -F 'redirect_uri=http://localhost:8000/soundcloudredirect' -F 'code=72221c69b2d5ec285b3a97f4a56ae588'
+
+curl -X POST "https://api.soundcloud.com/oauth2/token?client_id=0473a0ba44f63d071607ee4d374b4843&client_secret=e96da34c90b1ccff5b30a7f60e4eb7410&grant_type=authorization_code&redirect_uri=http://localhost:8000/soundcloudredirect&code=72221c69b2d5ec285b3a97f4a56ae588"
