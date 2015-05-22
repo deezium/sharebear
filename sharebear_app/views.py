@@ -1024,7 +1024,7 @@ def featuredcompose(request,entry_form=FeaturedEntryForm):
 @staff_member_required
 def featurededit(request, entry_id):
 	entry = get_object_or_404(FeaturedEntry, id=entry_id)
-	form = FeaturedEntryForm(initial={'artist_name': entry.artist_name, 'entry_text': entry.entry_text, 'artist_image': entry.artist_image, 'song_link1': entry.song_link1, 'song_link2': entry.song_link2, 'song_link3': entry.song_link3, 'current_followers': entry.current_followers, })
+	form = FeaturedEntryForm(initial={'artist_name': entry.artist_name, 'entry_text': entry.entry_text, 'artist_image': entry.artist_image, 'profile_link': entry.profile_link, 'song_link1': entry.song_link1, 'song_link2': entry.song_link2, 'song_link3': entry.song_link3, 'current_followers': entry.current_followers, })
 	return render(request, 'featurededit.html', {'entry': entry, 'form': form, })
 
 @staff_member_required
