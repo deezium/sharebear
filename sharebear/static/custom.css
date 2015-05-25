@@ -1,3 +1,17 @@
+.adsbygoogle {
+	text-align: right;
+}
+
+#google-ad-unit{
+	background-color: black;
+}
+
+@media (min-width: @screen-sm-min) { 
+	#google-ad-unit {
+		background-color: red;
+	}
+}
+
 .subject{
 	border-bottom: 1px solid #eee;
 }
