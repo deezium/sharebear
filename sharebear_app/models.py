@@ -223,14 +223,14 @@ class FeaturedEntry(models.Model):
 	def get_next(self):
 		next_entry = FeaturedEntry.objects.filter(id__gt=self.id)
 		if next_entry:
-			return next_entry[0].id
+			return next_entry[0]
 		return False
 
 	def get_prev(self):
 		prev_entry = FeaturedEntry.objects.filter(id__lt=self.id).order_by('-id')
 		print prev_entry
 		if prev_entry:
-			return prev_entry[0].id
+			return prev_entry[0]
 		return False
 
 

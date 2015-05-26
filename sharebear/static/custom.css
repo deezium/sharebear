@@ -179,7 +179,12 @@ body {
 	text-decoration: none;
 }
 
-.featured-nave-links
+.feature-nav-link div {
+	background-color: rgb(79,44,115);
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+}
 
 .featured-header{
 	padding-bottom: 20px;

@@ -6,7 +6,7 @@
 
 <div class='row' style='border-bottom: 1px solid #eee;'>
 	<div class='col-xs-12' style='text-align: center;'>
-		<h1>Every day, Wavelength brings you the most banging tracks from artists with fewer than 2,000 Soundcloud followers.</h1>
+		<p style='font-size: 2em;'>Wavelength brings you the most banging tracks from artists with fewer than 2,000 Soundcloud followers.</p>
 	</div>
 </div>
 
@@ -18,9 +18,47 @@
 </div>
 {% endif %}
 
+<div class='row'>
+	<div class='col-xs-12 featured-nav' style='text-align: center;'>
+		{% if entry.get_prev and entry.get_next %}
+		<a href='/featured/{{ entry.get_prev }}' style='text-align: center; color: white; text-decoration:none;'>
+			<div class='col-xs-2 col-xs-offset-4 feature-nav-link'>
+				<div>
+					Previous Feature
+				</div>
+			</div>
+		</a>
+		<a href='/featured/{{ entry.get_next }}' style='text-align: center; color: white; text-decoration:none;'>
+			<div class='col-xs-2 feature-nav-link'>
+				<div>
+					Next Feature
+				</div>
+			</div>
+		</a>
+		{% elif entry.get_prev and not entry.get_next %}
+		<a href='/featured/{{ entry.get_prev }}' style='text-align: center; color: white; text-decoration:none;'>
+			<div class='col-xs-2 col-xs-offset-5 feature-nav-link'>
+				<div>
+					Previous Feature
+				</div>
+			</div>
+		</a>
+		{% elif entry.get_next and not entry.get_prev %}
+		<a href='/featured/{{ entry.get_next }}' style='text-align: center; color: white; text-decoration:none;'>
+			<div class='col-xs-2 col-xs-offset-5 feature-nav-link'>
+				<div>
+					Next Feature
+				</div>
+			</div>
+		</a>
+		{% endif %}
+	</div>
+</div>
+
+
 <div class='row featured-header'>
 	<div class='col-xs-12'>
-		<h2 style='padding-bottom: 10px;'>Today's featured artist...</h2>
+		<p style='font-size: 1.5em; margin-bottom: 0px;'>Today's featured artist...</p>
 	</div>
 </div>
 
@@ -52,18 +90,6 @@
 	</div>
 </div>
 
-<div class='row'>
-	<div class='col-xs-12 featured-nav' style='text-align: center;'>
-		{% if entry.get_prev %}
-		<a href='/featured/{{ entry.get_prev }}' style='margin-right:20px; text-decoration:none;'>Previous Feature</a>
-		{% endif %}
-
-		{% if entry.get_next %}
-		<a href='/featured/{{ entry.get_next }}' style='margin-left:20px; text-decoration:none;'>Next Feature</a>
-		{% endif %}
-	</div>
-</div>
-
 <div class='row featured-song'>
 	<div class='col-xs-12'>	
 		{% autoescape off %}
@@ -85,6 +111,43 @@
 		{% autoescape off %}
 		{{ entry.song_link3 }}
 		{% endautoescape %}
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-xs-12 featured-nav' style='text-align: center;'>
+		{% if entry.get_prev and entry.get_next %}
+		<a href='/featured/{{ entry.get_prev }}' style='text-align: center; color: white; text-decoration:none;'>
+			<div class='col-xs-2 col-xs-offset-4 feature-nav-link'>
+				<div>
+					Previous Feature
+				</div>
+			</div>
+		</a>
+		<a href='/featured/{{ entry.get_next }}' style='text-align: center; color: white; text-decoration:none;'>
+			<div class='col-xs-2 feature-nav-link'>
+				<div>
+					Next Feature
+				</div>
+			</div>
+		</a>
+		{% elif entry.get_prev and not entry.get_next %}
+		<a href='/featured/{{ entry.get_prev }}' style='text-align: center; color: white; text-decoration:none;'>
+			<div class='col-xs-2 col-xs-offset-5 feature-nav-link'>
+				<div>
+					Previous Feature
+				</div>
+			</div>
+		</a>
+		{% elif entry.get_next and not entry.get_prev %}
+		<a href='/featured/{{ entry.get_next }}' style='text-align: center; color: white; text-decoration:none;'>
+			<div class='col-xs-2 col-xs-offset-5 feature-nav-link'>
+				<div>
+					Next Feature
+				</div>
+			</div>
+		</a>
+		{% endif %}
 	</div>
 </div>
 
