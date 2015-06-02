@@ -89,16 +89,70 @@ a:hover{
 body {
 	font-family: 'Ek Mukta', helvetica, sans-serif;
 	/*background-color: rgba(145,119,172,0.2);*/
-	background-color: rgba(0,0,0,0.1);
+	background-color: rgba(43,43,36,1);
 	/*background-color: #8FCBD9;*/
 }
 
 #intro-text{
 	font-size: 4em;
+	color: white;
 }
 
 .vertical-center{
 	vertical-align: middle;
+}
+
+#launch-button{
+	background-color: white;
+	color: white;
+	padding: 20px 20px 20px 20px;
+	margin-top: 20px;
+}
+
+#launch-button:hover {
+	background-color: #eee;
+}
+
+#launch-button>a{
+	text-decoration: none;
+	color: black;
+	font-size: 1.5em;
+}
+
+#ads-home-strip-1{
+	margin-top: -20px;
+	padding-bottom: 30px;
+	background-image: url('/static/sinebackground2-min.jpg');
+}
+
+.picture-descriptors{
+	margin-bottom: 20px;
+}
+
+.ads-home-picture{
+	border: solid 1px black;
+}
+
+.descriptor-text{
+	font-size: 2em;
+}
+
+#ads-how-it-works{
+	margin-top: -30px;
+}
+
+#ads-home-strip-2{
+	background-color: white;
+	color: black;
+	text-align: center;
+}
+
+
+#ads-home-strip-3{
+	background-color: rgba(43,43,36,1);
+	color: white;
+	text-align: center;
+	padding-bottom: 60px;
 }
 
 #home-strip-1{
@@ -133,8 +187,6 @@ body {
 .featurette{
 	background-color: white;
 	text-align: center;
-	border-top: 1px solid #ddd;
-
 }
 
 #navbar-avatar{
@@ -142,6 +194,7 @@ body {
 	height: 39px;
 	width: 39px;
 }
+
 
 #main-content{
 	padding-bottom: 15px;
@@ -682,9 +735,11 @@ ul#genre-nav {
 }
 
 nav.navbar.navbar-default{
-	background-color: rgba(53,20,86,1);
-	border-color: rgba(31,4,57,1);
-	border-bottom: 1px solid black;
+	/*background-color: rgba(53,20,86,1);*/
+	/*border-color: rgba(31,4,57,1);*/
+	background-color: white;
+	color: rgba(53,20,86,1);
+	border-bottom: 1px solid #bbb;
 	/*height: 46px;*/
 }
 
@@ -696,7 +751,8 @@ nav.navbar.navbar-inverse{
 
 #site-name{
 	font-family: 'Quicksand', helvetica, sans-serif;
-	color: white;
+	color: rgba(53,20,86,1);
+	font-size: 30px;
 }
 
 #footer-nav{
@@ -704,11 +760,11 @@ nav.navbar.navbar-inverse{
 }
 
 .navbar-default .navbar-nav>li>a{
-	color: white;
+	color: rgba(53,20,86,1);
 }
 
 .navbar-default .navbar-nav>li>a:hover{
-	color: #eee;
+	color: rgba(31,4,57,1);
 }
 
 /*

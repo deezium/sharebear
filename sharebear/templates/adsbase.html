@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+<html>
+	<head>
+		<link href='http://fonts.googleapis.com/css?family=Quicksand:400,700' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Ek+Mukta:400' rel='stylesheet' type='text/css'>
+		<script src="{{ STATIC_URL }}less.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+		{% bootstrap_css %}
+		{% bootstrap_javascript %}
+
+		<link rel='stylesheet' href="/static/custom.css" />
+		<link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}favicon.ico">
+		<meta name="viewport" content="width=device-width, inital-scale=1">
+
+		{% block head %}
+
+		{% endblock %}
+	</head>
+	<body>
+		<!-- Google Tag Manager -->
+		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-P9R627"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-P9R627');</script>
+		<!-- End Google Tag Manager -->
+		<div id="fb-root"></div>
+		<script>
+		(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=357482904425644&version=v2.0";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+		</script>
+		<!-- Google AdSense !-->
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		<header>
+			<nav class="navbar navbar-default" role="navigation">
+				<div class='container-fluid'>
+					<div class='col-md-12'>
+						<div class='navbar-header'>
+							<a id='site-name' class='navbar-brand' href="{% url 'adsindex' %}" style="text-decoration:none">Wavelength<sub style="font-size:12px;">BETA</sub></a>
+						</div>
+						<div class='navbar-header navbar-right'>
+							<ul class='nav navbar-nav'>
+								<li><a href='/index'>Wavelength for Music</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+		<div class='container-fluid'>
+			<div class='row'>
+				{% block flash %}
+				{% if auth_form.non_field_errors or user_form.non_field_errors %}
+					{{ auth_form.non_field_errors }}
+					{{ user_form.non_field_errors }}
+				{% endif %}
+				{% endblock %}
+			</div>
+
+			<div class='row'>
+				{% block content %}
+
+				{% endblock %}
+			</div>		
+				
+		</div>
+	
+
+
+		<footer>
+			<nav id='footer-nav' class='navbar navbar-default navbar-fixed-bottom'>
+				<div class='container'>
+					<div class='navbar-right'>
+						<ul class='nav navbar-nav'>
+							<li><a href='mailto:info@trywavelength.com'>Contact Us</a></li>
+						</ul>
+					</div>
+				</div>
+		</footer>
+
+	</body>
+</html>

@@ -1,0 +1,20 @@
+Hi {{ name }},
+
+Congratulations on setting up your first Facebook ad campaign with Wavelength!  We're currently analyzing your website to determine the best users to target on Facebook and putting together your ad campaign.  Your campaign will be up and running shortly- we'll send you an email when it's live.
+
+Here's what you'll get from us over the next few days:
+
+1.  We'll run a campaign to drive 100 visitors to your website through Facebook.
+
+2.  We'll send you daily performance reports telling you how your campaign is doing.
+
+3.  Once the campaign has ended, we'll send you a final performance report, including some of our analysis on the most relevant interests and visitor demographics for your website.
+
+If you have your own analytics or tracking service integrated with your website, you can confirm that Wavelength has driven visitors to your website.  We highly recommend Google Analytics.
+
+Thanks for trying out Wavelength, and please don't hesitate to reach out to debarshi@trywavelength.com if you have any questions.
+
+Thanks!
+
+Debarshi
+Team Wavelength

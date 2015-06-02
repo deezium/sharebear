@@ -9,10 +9,13 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.utils import timezone
 from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import get_template
+from django.template import Context
 from datetime import datetime
 from collections import OrderedDict
-from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm, UsernameEditForm, FeaturedEntryForm
-from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage, TrackPlay, FeaturedEntry
+from sharebear_app.forms import AuthenticateForm, UserCreateForm, EditProfileForm, ComposeForm, MessageLikeForm, UsernameEditForm, FeaturedEntryForm, CampaignRequestForm
+from sharebear_app.models import UserProfile, Message, MessageLike, Relationship, SpreadMessage, TrackPlay, FeaturedEntry, CampaignRequest
 from sharebear_app.utils import get_user_model, get_username_field, epoch_seconds, hot
 from urllib2 import urlopen
 from operator import itemgetter
@@ -22,6 +25,9 @@ import urlparse
 import soundcloud
 
 User = get_user_model()
+
+def adsindex(request):
+	return render(request, 'adshome.html')
 
 def index(request, auth_form=None, user_form=None):
 	entry = FeaturedEntry.objects.last()
@@ -1041,3 +1047,27 @@ def update_featuredentry(request, entry_id):
 
 def subscribe(request):
 	return render(request, 'subscribe.html')
+
+def campaignrequest(request,form=CampaignRequestForm):
+	if request.method =="POST":
+		form = form(request.POST)
+		if form.is_valid():
+			f = form.save()
+			subject = "Wavelength Campaign Information"
+			from_email = "debarshi@trywavelength.com"
+			to_email = f.email
+
+			plaintext = get_template('confirmationEmail.txt')
+
+			name = Context({ 'name': f.name })
+			message = plaintext.render(name)
+
+			send_mail(subject, message, from_email, [to_email])
+			return redirect('/success')
+	else:
+		form = form()
+	return render(request, 'campaignrequest.html', {'form': form, })
+
+def campaignsuccess(request):
+	return render(request, 'campaignsuccess.html')
+

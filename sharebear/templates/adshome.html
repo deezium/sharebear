@@ -1,0 +1,72 @@
+{% extends 'adsbase.html' %}
+{% load bootstrap3 %}
+{% block login %}
+
+{% endblock %}
+
+{% block content %}
+
+	<div class='featurette' id='ads-home-strip-1'>
+		<div class='container home-container'>
+			<div class='row'>
+				<div id='intro'>
+					<h1 id='intro-text'>Wavelength helps you drive traffic to your website through targeted Facebook advertising.</h1>
+				</div>
+				<button class='btn btn-large btn-default' id='launch-button'><a href='/campaignrequest'>LAUNCH A FREE TRIAL CAMPAIGN</a></button>
+			</div>
+		</div>
+	</div>
+	<div class='featurette' id='ads-home-strip-2'>
+		<div class='container home-container'>
+			<div class='row' id='ads-how-it-works'>
+				<div class='col-xs-12'>
+					<p style='font-size:3em;'>HOW IT WORKS</p>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col-xs-12'>
+					<div>
+					<span class='glyphicon glyphicon-sunglasses' aria-hidden="true"></span>
+					Sup
+					</div>
+				</div>
+			</div>
+			<div class='row picture-descriptors'>
+				<div class='col-xs-4'>
+					<p class='descriptor-text'>You give us a few details about your website.</p>
+				</div>
+				<div class='col-xs-4'>
+					<p class='descriptor-text'>We analyze your website to determine the optimal users to target on Facebook.</p>
+				</div>
+				<div class='col-xs-4'>
+					<p class='descriptor-text'>We run an ad campaign on Facebook to reach the users who are most likely to visit your website.</p>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col-xs-4'>
+					<img src='{{ STATIC_URL }}/home-request2-min.png' class='img-responsive ads-home-picture'/>
+				</div>
+				<div class='col-xs-4'>
+					<img src='{{ STATIC_URL }}/home-elements2-min.png' class='img-responsive ads-home-picture'/>
+				</div>
+				<div class='col-xs-4'>
+					<img src='{{ STATIC_URL }}/home-facebook2-min.png' class='img-responsive ads-home-picture'/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='featurette' id='ads-home-strip-3'>
+		<div class='container home-container'>
+			<div class='row'>
+				<div class='col-xs-6'>
+					<img src='{{ STATIC_URL }}/laptopcoffee-min.jpg' class='img-responsive'/>
+				</div>
+				<div class='col-xs-6'>
+					<h2>Wavelength takes care of your Facebook advertising so you can take care of everything else.</h2>
+					<button class='btn btn-large btn-default' id= 'launch-button'><a href='/campaignrequest'>LAUNCH A FREE TRIAL CAMPAIGN</a></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

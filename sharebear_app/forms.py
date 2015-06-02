@@ -2,7 +2,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django import forms
-from sharebear_app.models import UserProfile, SpreadMessage, MessageLike, FeaturedEntry
+from sharebear_app.models import UserProfile, SpreadMessage, MessageLike, FeaturedEntry, CampaignRequest
 from django.conf import settings
 from django.utils import timezone
 from sharebear_app.models import Message
@@ -63,6 +63,17 @@ class FeaturedEntryForm(forms.ModelForm):
 	class Meta:
 		fields = ['artist_name', 'entry_text', 'artist_image', 'profile_link', 'song_link1', 'song_link2', 'song_link3', 'current_followers']
 		model = FeaturedEntry
+
+class CampaignRequestForm(forms.ModelForm):
+	name = forms.CharField(widget=forms.widgets.TextInput(attrs={'placeholder': 'Donna Moss', }), label="Name")
+	email = forms.CharField(widget=forms.widgets.TextInput(attrs={'placeholder': 'donna@example.com', }), label="Contact email")
+	url = forms.CharField(widget=forms.widgets.TextInput(attrs={'placeholder': 'http://www.google.com/', }), label="Your website URL")
+	details = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'I want to start my campaign on the weekend.', }), required=False, label="Additional details (not required)")
+
+	class Meta:
+		fields = ['name', 'email', 'url', 'details']
+		model = CampaignRequest
+
 
 class MessageLikeForm(forms.ModelForm):
 	is_liked = forms.BooleanField(widget=forms.widgets.CheckboxInput())

@@ -111,7 +111,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'social.apps.django_app.context_processors.login_redirect',
     )
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'debarshi.chaudhuri@gmail.com'
+EMAIL_HOST_PASSWORD = 'hxqkqcxgplyaktna'
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = 'debarshi@trywavelength.com'
+SERVER_EMAIL = 'debarshi@trywavelength.com'
 
 LOGIN_REDIRECT_URL = '/'
 SOCIALACCOUNT_QUERY_EMAIL = True

@@ -268,3 +268,12 @@ class SpreadMessage(models.Model):
 
 	def __unicode__(self):
 		return str(self.id)
+
+class CampaignRequest(models.Model):
+	name = models.CharField(max_length=40)
+	email = models.CharField(max_length=60)
+	url = models.CharField(max_length=200)
+	details = models.TextField(blank=True, null=True)
+
+	def __unicode__(self):
+		return self.url
