@@ -201,7 +201,7 @@ class MessageLike(models.Model):
 	msg = models.ForeignKey(Message, related_name='message_likes')
 	is_liked = models.BooleanField("Liked", default=False)
 	ever_liked = models.BooleanField("Ever Liked", default=False)
-	liked_at = models.DateTimeField(auto_now=True, default=None)
+	liked_at = models.DateTimeField(auto_now=True)
 
 	def __unicode__(self):
 		return str(self.id)
@@ -246,7 +246,7 @@ class TrackPlay(models.Model):
 	user = models.ForeignKey(AUTH_USER_MODEL, related_name='user_track_plays', blank=True, null=True)
 	msg = models.ForeignKey(Message, related_name='message_track_plays')
 	platform = models.CharField(max_length=40)
-	played_at = models.DateTimeField(auto_now=True, default=None)
+	played_at = models.DateTimeField(auto_now=True)
 
 	def __unicode__(self):
 		return str(self.id)
